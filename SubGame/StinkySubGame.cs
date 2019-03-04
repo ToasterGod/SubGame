@@ -13,9 +13,9 @@ namespace SubGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private AnimatedSky[] skies = new AnimatedSky[5];
+        private AnimatedBackground[] skies = new AnimatedBackground[5];
 
-        private AnimatedOcean[] oceans = new AnimatedOcean[5];
+        private AnimatedBackground[] oceans = new AnimatedBackground[5];
 
         private Texture2D boat;
 
@@ -36,13 +36,15 @@ namespace SubGame
 
             for (var i = 0; i < skies.Length; i++)
             {
-                skies[i] = new AnimatedSky();
+                skies[i] = new AnimatedBackground();
+                // Scale size of each image
                 skies[i].Scale = 0.15f;
             }
 
             for (var i = 0; i < oceans.Length; i++)
             {
-                oceans[i] = new AnimatedOcean();
+                oceans[i] = new AnimatedBackground();
+                // Scale size of each image
                 oceans[i].Scale = 0.3f;
             }
 
@@ -121,8 +123,8 @@ namespace SubGame
                 }
             }
 
-            Vector2 aDirection = new Vector2(-1, 0);
-            Vector2 aSpeed = new Vector2(40, 0);
+            Vector2 aDirection = new Vector2(-1, 0); //-1 = move background left
+            Vector2 aSpeed = new Vector2(120, 0); //120 = speed of movement
 
             for (var i = 0; i < skies.Length; i++)
             {
@@ -153,7 +155,7 @@ namespace SubGame
                 skies[i].Draw(this.spriteBatch);
             }
 
-            spriteBatch.Draw(boat, new Vector2(60, 130), Color.White);
+            spriteBatch.Draw(boat, new Vector2(60, 130), Color.White); //Make random y to move boat up and down
 
             for (var i = 0; i < oceans.Length; i++)
             {

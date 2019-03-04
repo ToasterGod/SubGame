@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace SubGame.Animations
 {
     //Source: http://www.xnadevelopment.com/tutorials/scrollinga2dbackground/ScrollingA2DBackground.shtml
-    class AnimatedSky
+    class AnimatedBackground
     {
         //The current position of the Sprite
         public Vector2 Position = new Vector2(0, 0);
@@ -34,7 +34,9 @@ namespace SubGame.Animations
         //Draw the sprite to the screen
         public void Draw(SpriteBatch theSpriteBatch)
         {
-            theSpriteBatch.Draw(mSpriteTexture, Position, new Rectangle(0, 0, mSpriteTexture.Width, mSpriteTexture.Height), Color.White, 0.0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            theSpriteBatch.Draw(mSpriteTexture, Position, 
+                new Rectangle(0, 0, mSpriteTexture.Width, mSpriteTexture.Height), Color.White, 
+                0.0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
     }
 }

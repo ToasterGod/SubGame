@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace SubGame
+namespace SubGame.Animations
 {
+    // Not used right now, only a conceptual example of how to animate a sprite
     class AnimatedSprite
     {
         public Texture2D Texture { get; set; }
