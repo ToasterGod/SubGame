@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGameWindows.Animations;
+using SubGame.Animations;
 
-namespace MonoGameWindows
+namespace SubGame
 {
     /// <summary>
     /// This is the main type for your game.
