@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SubGame.Animations;
@@ -18,6 +19,10 @@ namespace SubGame
         private AnimatedBackground[] oceans = new AnimatedBackground[7];
 
         private Texture2D boat;
+
+        private AnimatedObject[] subs = new AnimatedObject[3];
+
+        private Random rng = new Random();
 
         public BestSubGame()
         {
@@ -48,6 +53,13 @@ namespace SubGame
                 oceans[i].Scale = 0.3f;
             }
 
+            for (int i = 0; i < subs.Length; i++)
+            {
+                subs[i] = new AnimatedObject();
+                subs[i].Scale = 1.0f;
+                subs[i].Speed = new Vector2(rng.Next(40, 130), 0);
+            }
+
             base.Initialize();
         }
 
@@ -59,7 +71,7 @@ namespace SubGame
             // Load all the skies images by calling the AnimatedBackground.LoadContent for each one of them
             for (var i = 0; i < skies.Length; i++)
             {
-                skies[i].LoadContent(this.Content, "Backgrounds/Sky");
+                skies[i].LoadContent(this.Content, "Backgrounds/Himmel");
                 float adjust = 0.0f;
                 if (i == 0)
                     adjust = 0.0f;
@@ -82,8 +94,33 @@ namespace SubGame
                 oceans[i].Position = new Vector2(adjust, 280);
             }
 
+            for (int i = 0; i < subs.Length; i++)
+            {
+                /*
+                 * den långsamma ubåten är en yellow submarine
+                 * den snabba är samma fast med påmålade flammor
+                 */
+                if (subs[i].Speed.X < 70)
+                {
+                    //slow sub
+                    subs[i].LoadContent(this.Content, "Backgrounds/Sub");
+                }
+                else if (subs[i].Speed.X < 100)
+                {
+                    //fast sub
+                    subs[i].LoadContent(this.Content, "Backgrounds/Sub");
+                }
+                else
+                {
+                    // fastestest sub
+                    subs[i].LoadContent(this.Content, "Backgrounds/Sub");
+                }
+                subs[i].Position = new Vector2(myGraphics.PreferredBackBufferWidth + subs[i].Size.Width + i * subs[i].Size.Width,
+                    350 + i * subs[i].Size.Height);
+            }
+
             // Load the boat from the content stream
-            boat = Content.Load<Texture2D>("Backgrounds/Boat"); 
+            boat = Content.Load<Texture2D>("Backgrounds/Boat");
 
             //You could frequently free resources by Content.Unload();
             //It might be a good idea to create multiple ContentManager objects to divide up the content. 
@@ -105,7 +142,7 @@ namespace SubGame
             // Gives a kind of rotating function
             for (var target = 0; target < skies.Length; target++)
             {
-                int source = 4;
+                int source = skies.Length - 1;
                 if (target > 0)
                     source = target - 1;
 
@@ -120,7 +157,7 @@ namespace SubGame
             // Gives a kind of rotating function
             for (var target = 0; target < oceans.Length; target++)
             {
-                int source = 4;
+                int source = oceans.Length - 1;
                 if (target > 0)
                     source = target - 1;
 
@@ -129,6 +166,17 @@ namespace SubGame
                     oceans[target].Position.X = oceans[source].Position.X + oceans[source].Size.Width;
                 }
             }
+
+            for (var target = 0; target < subs.Length; target++)
+            {
+
+                if (subs[target].Position.X < -subs[target].Size.Width)
+                {
+                    subs[target].Position = new Vector2(myGraphics.PreferredBackBufferWidth + subs[target].Size.Width + target * subs[target].Size.Width,
+                    350 + target * subs[target].Size.Height);
+                }
+            }
+
 
             // Set the direction of the background movement
             Vector2 aDirection = new Vector2(-1, 0); //-1 = move background left
@@ -146,6 +194,12 @@ namespace SubGame
             for (var i = 0; i < oceans.Length; i++)
             {
                 oceans[i].Position += aDirection * aSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            for (int i = 0; i < subs.Length; i++)
+            {
+                subs[i].Position += aDirection * subs[i].Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             }
 
             base.Update(gameTime);
@@ -170,6 +224,11 @@ namespace SubGame
 
             // Call draw for the boat, since it's a simple object it will be drawn by the spriteBatch itself
             mySpriteBatch.Draw(boat, new Vector2(60, 130), Color.White); // Make random y(130) to move boat up and down a couple of pixels
+
+            for (int i = 0; i < subs.Length; i++)
+            {
+                subs[i].Draw(this.mySpriteBatch);
+            }
 
             // Call Draw for each ocean object in the oceans array
             for (var i = 0; i < oceans.Length; i++)
