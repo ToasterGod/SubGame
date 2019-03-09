@@ -72,7 +72,7 @@ namespace SubGame
             for (var i = 0; i < skies.Length; i++)
             {
                 skies[i].LoadContent(this.Content, "Backgrounds/Himmel");
-                float adjust = 0.0f;
+                float adjust;
                 if (i == 0)
                     adjust = 0.0f;
                 else
@@ -85,7 +85,7 @@ namespace SubGame
             for (var i = 0; i < oceans.Length; i++)
             {
                 oceans[i].LoadContent(this.Content, "Backgrounds/Ocean");
-                float adjust = 0.0f;
+                float adjust;
                 if (i == 0)
                     adjust = 0.0f;
                 else
