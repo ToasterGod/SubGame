@@ -8,24 +8,24 @@ namespace SubGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class StinkySubGame : Game
+    public class BestSubGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        GraphicsDeviceManager myGraphics;
+        SpriteBatch mySpriteBatch;
 
-        private AnimatedBackground[] skies = new AnimatedBackground[5];
+        private AnimatedBackground[] skies = new AnimatedBackground[7];
 
-        private AnimatedBackground[] oceans = new AnimatedBackground[5];
+        private AnimatedBackground[] oceans = new AnimatedBackground[7];
 
         private Texture2D boat;
 
-        public StinkySubGame()
+        public BestSubGame()
         {
-            graphics = new GraphicsDeviceManager(this);
+            myGraphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth = 1920; // set this value to the desired width of your window, 1280 is better on lower resolution screen
-            graphics.PreferredBackBufferHeight = 1080; // set this value to the desired height of your window, 1024 is better on lower resolution screen
-            graphics.ApplyChanges();
+            myGraphics.PreferredBackBufferWidth = 1920; // set this value to the desired width of your window, 1280 is better on lower resolution screen
+            myGraphics.PreferredBackBufferHeight = 1080; // set this value to the desired height of your window, 1024 is better on lower resolution screen
+            myGraphics.ApplyChanges();
 
             Content.RootDirectory = "Content";
         }
@@ -54,7 +54,7 @@ namespace SubGame
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            mySpriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load all the skies images by calling the AnimatedBackground.LoadContent for each one of them
             for (var i = 0; i < skies.Length; i++)
@@ -160,25 +160,25 @@ namespace SubGame
             GraphicsDevice.Clear(Color.White);
 
             // Begin your drawing code here
-            spriteBatch.Begin();
+            mySpriteBatch.Begin();
 
             // Call Draw for each sky element in the skies array
             for (var i = 0; i < skies.Length; i++)
             {
-                skies[i].Draw(this.spriteBatch);
+                skies[i].Draw(this.mySpriteBatch);
             }
 
             // Call draw for the boat, since it's a simple object it will be drawn by the spriteBatch itself
-            spriteBatch.Draw(boat, new Vector2(60, 130), Color.White); // Make random y(130) to move boat up and down a couple of pixels
+            mySpriteBatch.Draw(boat, new Vector2(60, 130), Color.White); // Make random y(130) to move boat up and down a couple of pixels
 
             // Call Draw for each ocean object in the oceans array
             for (var i = 0; i < oceans.Length; i++)
             {
-                oceans[i].Draw(this.spriteBatch);
+                oceans[i].Draw(this.mySpriteBatch);
             }
 
             // End your drawing code here
-            spriteBatch.End();
+            mySpriteBatch.End();
 
             // Call the Draw method in the base
             base.Draw(gameTime);

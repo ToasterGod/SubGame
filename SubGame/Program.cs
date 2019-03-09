@@ -14,7 +14,7 @@ namespace SubGame
         [STAThread]
         static void Main()
         {
-            using (var game = new StinkySubGame())
+            using (var game = new BestSubGame())
                 game.Run();
         }
     }

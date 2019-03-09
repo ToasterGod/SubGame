@@ -25,10 +25,10 @@ namespace SubGame.Animations
         public float Scale = 1.0f;
 
         //Load the texture for the sprite using the Content Pipeline
-        public void LoadContent(ContentManager theContentManager, string theAssetName)
+        public void LoadContent(ContentManager aContentManager, string anAssetName)
         {
             //Load the image
-            mSpriteTexture = theContentManager.Load<Texture2D>(theAssetName);
+            mSpriteTexture = aContentManager.Load<Texture2D>(anAssetName);
             //Calculate the size
             Size = new Rectangle(0, 0, (int)(mSpriteTexture.Width * Scale), (int)(mSpriteTexture.Height * Scale));
         }
