@@ -13,32 +13,32 @@ namespace SubGame.Animations
     class AnimatedBackground
     {
         //The current position of the Sprite
-        public Vector2 Position = new Vector2(0, 0);
+        public Vector2 aPosition = new Vector2(0, 0);
 
         //The texture object used when drawing the sprite, is loaded from the contentmanager in LoadContent
-        private Texture2D mSpriteTexture;
+        private Texture2D aSpriteTexture;
 
         //The size of the Sprite, initialized in LoadContent
-        public Rectangle Size;
+        public Rectangle aSize;
 
         //Used to size the Sprite up or down from the original image
-        public float Scale = 1.0f;
+        public float aScale = 1.0f;
 
         //Load the texture for the sprite using the Content Pipeline
         public void LoadContent(ContentManager aContentManager, string anAssetName)
         {
             //Load the image
-            mSpriteTexture = aContentManager.Load<Texture2D>(anAssetName);
+            aSpriteTexture = aContentManager.Load<Texture2D>(anAssetName);
             //Calculate the size
-            Size = new Rectangle(0, 0, (int)(mSpriteTexture.Width * Scale), (int)(mSpriteTexture.Height * Scale));
+            aSize = new Rectangle(0, 0, (int)(aSpriteTexture.Width * aScale), (int)(aSpriteTexture.Height * aScale));
         }
 
         //Draw the sprite to the screen, each instance of this class is called from the game class Draw
         public void Draw(SpriteBatch theSpriteBatch)
         {
-            theSpriteBatch.Draw(mSpriteTexture, Position, 
-                new Rectangle(0, 0, mSpriteTexture.Width, mSpriteTexture.Height), Color.White, 
-                0.0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            theSpriteBatch.Draw(aSpriteTexture, aPosition, 
+                new Rectangle(0, 0, aSpriteTexture.Width, aSpriteTexture.Height), Color.White, 
+                0.0f, Vector2.Zero, aScale, SpriteEffects.None, 0);
         }
     }
 }
