@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Backgrounds\Boat.png" />
+    <Content Include="Content\Backgrounds\Boom.png" />
     <Content Include="Content\Backgrounds\FastSub.png" />
     <Content Include="Content\Backgrounds\Himmel.png" />
     <Content Include="Content\Backgrounds\MediumSub.png" />

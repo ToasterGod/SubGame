@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,18 +12,20 @@ namespace SubGame
     /// </summary>
     public class BestSubGame : Game
     {
-        GraphicsDeviceManager myGraphics;
-        SpriteBatch mySpriteBatch;
+        private GraphicsDeviceManager myGraphics;
+        private SpriteBatch mySpriteBatch;
 
-        private AnimatedBackground[] skies = new AnimatedBackground[7];
+        private AnimatedBackground[] mySkies = new AnimatedBackground[7];
 
-        private AnimatedBackground[] oceans = new AnimatedBackground[7];
+        private AnimatedBackground[] myOceans = new AnimatedBackground[7];
 
-        private Texture2D aBoat;
+        private Texture2D myBoat;
+        private Texture2D myBoom;
 
-        private AnimatedObject[] subs = new AnimatedObject[3];
+        private AnimatedObject[] mySubs = new AnimatedObject[3];
 
-        private Random aRNG = new Random();
+        private Random myRNG = new Random();
+        private Rectangle test = new Rectangle(200, 200, 20, 1000);
 
         public BestSubGame()
         {
@@ -39,31 +42,31 @@ namespace SubGame
         protected override void Initialize()
         {
             // Instantiate a new AnimatedBackground object for each element in the skies array and set scale for the size of each
-            for (var i = 0; i < skies.Length; i++)
+            for (var i = 0; i < mySkies.Length; i++)
             {
-                skies[i] = new AnimatedBackground
+                mySkies[i] = new AnimatedBackground
                 {
                     // Scale size of each image
-                    aScale = 0.15f
+                    AccessScale = 0.15f
                 };
             }
 
             // Instantiate a new AnimatedBackground object for each element in the oceans array and set scale for the size of each
-            for (var i = 0; i < oceans.Length; i++)
+            for (var i = 0; i < myOceans.Length; i++)
             {
-                oceans[i] = new AnimatedBackground
+                myOceans[i] = new AnimatedBackground
                 {
                     // Scale size of each image
-                    aScale = 0.5f
+                    AccessScale = 0.5f
                 };
             }
 
-            for (int i = 0; i < subs.Length; i++)
+            for (int i = 0; i < mySubs.Length; i++)
             {
-                subs[i] = new AnimatedObject
+                mySubs[i] = new AnimatedObject
                 {
-                    aScale = 0.6f,
-                    aSpeed = new Vector2(aRNG.Next(40, 130), 0)
+                    AccessScale = 0.6f,
+                    AccessSpeed = new Vector2(myRNG.Next(40, 130), 0)
                 };
             }
 
@@ -76,62 +79,59 @@ namespace SubGame
             mySpriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load all the skies images by calling the AnimatedBackground.LoadContent for each one of them
-            for (var i = 0; i < skies.Length; i++)
+            for (var i = 0; i < mySkies.Length; i++)
             {
-                skies[i].LoadContent(this.Content, "Backgrounds/Himmel");
+                mySkies[i].LoadContent(this.Content, "Backgrounds/Himmel");
                 float tempAdjust;
                 if (i == 0)
                     tempAdjust = 0.0f;
                 else
-                    tempAdjust = skies[i - 1].aPosition.X + skies[i - 1].aSize.Width;
+                    tempAdjust = mySkies[i - 1].AccessPosition.X + mySkies[i - 1].AccessSize.Width;
 
-                skies[i].aPosition = new Vector2(tempAdjust, 0);
+                mySkies[i].AccessPosition = new Vector2(tempAdjust, 0);
             }
 
             // Load all the oceans images by calling the AnimatedBackground.LoadContent for each one of them
-            for (var i = 0; i < oceans.Length; i++)
+            for (var i = 0; i < myOceans.Length; i++)
             {
-                oceans[i].LoadContent(this.Content, "Backgrounds/Ocean");
+                myOceans[i].LoadContent(this.Content, "Backgrounds/Ocean");
                 float tempAdjust;
                 if (i == 0)
                     tempAdjust = 0.0f;
                 else
-                    tempAdjust = oceans[i - 1].aPosition.X + oceans[i - 1].aSize.Width;
+                    tempAdjust = myOceans[i - 1].AccessPosition.X + myOceans[i - 1].AccessSize.Width;
 
-                oceans[i].aPosition = new Vector2(tempAdjust, 280);
+                myOceans[i].AccessPosition = new Vector2(tempAdjust, 225);
             }
 
-            for (int i = 0; i < subs.Length; i++)
+            for (int i = 0; i < mySubs.Length; i++)
             {
                 /*
                  * den långsamma ubåten är en yellow submarine
                  * den snabba är samma fast med påmålade flammor
                  */
-                if (subs[i].aSpeed.X < 70)
+                if (mySubs[i].AccessSpeed.X < 70)
                 {
                     //slow sub
-                    subs[i].LoadContent(this.Content, "Backgrounds/SlowSub");
+                    mySubs[i].LoadContent(this.Content, "Backgrounds/SlowSub");
                 }
-                else if (subs[i].aSpeed.X < 100)
+                else if (mySubs[i].AccessSpeed.X < 100)
                 {
                     //fast sub
-                    subs[i].LoadContent(this.Content, "Backgrounds/MediumSub");
+                    mySubs[i].LoadContent(this.Content, "Backgrounds/MediumSub");
                 }
                 else
                 {
                     // fastestest sub
-                    subs[i].LoadContent(this.Content, "Backgrounds/FastSub");
+                    mySubs[i].LoadContent(this.Content, "Backgrounds/FastSub");
                 }
-                subs[i].aPosition = new Vector2(myGraphics.PreferredBackBufferWidth + subs[i].aSize.Width + i * subs[i].aSize.Width,
-                    350 + i * subs[i].aSize.Height);
+                mySubs[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[i].AccessSize.Width + i * mySubs[i].AccessSize.Width,
+                    360 + i * mySubs[i].AccessSize.Height);
             }
 
             // Load the boat from the content stream
-            aBoat = Content.Load<Texture2D>("Backgrounds/Boat");
-
-            //You could frequently free resources by Content.Unload();
-            //It might be a good idea to create multiple ContentManager objects to divide up the content. 
-            //That way you can call Unload() for the ContentManagers that you are done with.
+            myBoat = Content.Load<Texture2D>("Backgrounds/Boat");
+            myBoom = Content.Load<Texture2D>("Backgrounds/Boom");
         }
 
         protected override void UnloadContent()
@@ -139,7 +139,7 @@ namespace SubGame
             // TODO: Unload any non ContentManager content here
         }
 
-        protected override void Update(GameTime gameTime)
+        protected override void Update(GameTime aGameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -147,40 +147,46 @@ namespace SubGame
             // Move all the images in the skies array and if the first image is fully outside of the screen to the left 
             // then put it as the last element. That way we will feed the first image in as the last image once it has passed by
             // Gives a kind of rotating function
-            for (var target = 0; target < skies.Length; target++)
+            for (var target = 0; target < mySkies.Length; target++)
             {
-                int tempSource = skies.Length - 1;
+                int tempSource = mySkies.Length - 1;
                 if (target > 0)
                     tempSource = target - 1;
 
-                if (skies[target].aPosition.X < -skies[target].aSize.Width)
+                if (mySkies[target].AccessPosition.X < -mySkies[target].AccessSize.Width)
                 {
-                    skies[target].aPosition.X = skies[tempSource].aPosition.X + skies[tempSource].aSize.Width;
+                    mySkies[target].AccessPosition = new Vector2(mySkies[tempSource].AccessPosition.X + mySkies[tempSource].AccessSize.Width,
+                        mySkies[target].AccessPosition.Y);
                 }
             }
 
             // Move all the images in the oceans array and if the first image is fully outside of the screen to the left 
             // then put it as the last element. That way we will feed the first image in as the last image once it has passed by
             // Gives a kind of rotating function
-            for (var target = 0; target < oceans.Length; target++)
+            for (var target = 0; target < myOceans.Length; target++)
             {
-                int tempSource = oceans.Length - 1;
+                int tempSource = myOceans.Length - 1;
                 if (target > 0)
                     tempSource = target - 1;
 
-                if (oceans[target].aPosition.X < -oceans[target].aSize.Width)
+                if (myOceans[target].AccessPosition.X < -myOceans[target].AccessSize.Width)
                 {
-                    oceans[target].aPosition.X = oceans[tempSource].aPosition.X + oceans[tempSource].aSize.Width;
+                    myOceans[target].AccessPosition = new Vector2(myOceans[tempSource].AccessPosition.X + myOceans[tempSource].AccessSize.Width,
+                        myOceans[target].AccessPosition.Y);
                 }
             }
 
-            for (var target = 0; target < subs.Length; target++)
+            for (var target = 0; target < mySubs.Length; target++)
             {
 
-                if (subs[target].aPosition.X < -subs[target].aSize.Width)
+                // If submarine has moved outside of the screen to the far left
+                if (mySubs[target].AccessPosition.X < -mySubs[target].AccessSize.Width)
                 {
-                    subs[target].aPosition = new Vector2(myGraphics.PreferredBackBufferWidth + subs[target].aSize.Width + target * subs[target].aSize.Width,
-                    350 + target * subs[target].aSize.Height);
+                    // Create a new submarine outside the far right side of the screen
+                    mySubs[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[target].AccessSize.Width + target * mySubs[target].AccessSize.Width,
+                    350 + target * mySubs[target].AccessSize.Height);
+                    // Reset the CollisionBox for that new submarine
+                    mySubs[target].AccessCollisionBox = new Rectangle(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
                 }
             }
 
@@ -192,24 +198,24 @@ namespace SubGame
             Vector2 aSpeed = new Vector2(120, 0); //120 = speed of movement
 
             // Calculate the movement of the oceans elements (to the left)
-            for (var i = 0; i < skies.Length; i++)
+            for (var i = 0; i < mySkies.Length; i++)
             {
-                skies[i].aPosition += aDirection * aSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                mySkies[i].AccessPosition += aDirection * aSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
             }
 
             // Calculate the movement of the oceans elements (to the left)
-            for (var i = 0; i < oceans.Length; i++)
+            for (var i = 0; i < myOceans.Length; i++)
             {
-                oceans[i].aPosition += aDirection * aSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                myOceans[i].AccessPosition += aDirection * aSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
             }
 
-            for (int i = 0; i < subs.Length; i++)
+            for (int i = 0; i < mySubs.Length; i++)
             {
-                subs[i].aPosition += aDirection * subs[i].aSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                mySubs[i].AccessPosition += aDirection * mySubs[i].AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
 
             }
 
-            base.Update(gameTime);
+            base.Update(aGameTime);
         }
 
         /// <summary>
@@ -224,23 +230,44 @@ namespace SubGame
             mySpriteBatch.Begin();
 
             // Call Draw for each sky element in the skies array
-            for (var i = 0; i < skies.Length; i++)
+            for (var i = 0; i < mySkies.Length; i++)
             {
-                skies[i].Draw(this.mySpriteBatch);
+                mySkies[i].Draw(this.mySpriteBatch);
             }
 
             // Call draw for the boat, since it's a simple object it will be drawn by the spriteBatch itself
-            mySpriteBatch.Draw(aBoat, new Vector2(60, 130), Color.White); // Make random y(130) to move boat up and down a couple of pixels
+            mySpriteBatch.Draw(myBoat, new Vector2(60, 110), Color.White); // Make random y(130) to move boat up and down a couple of pixels
 
-            for (int i = 0; i < subs.Length; i++)
+            for (int i = 0; i < mySubs.Length; i++)
             {
-                subs[i].Draw(this.mySpriteBatch);
+                // Do collisiondetection
+                if (mySubs[i].AccessCollisionBox.Intersects(test))
+                {
+                    //Bamalamadingdong-woopdidoopdicrashelicrash
+                    mySpriteBatch.Draw(myBoom, new Vector2(mySubs[i].AccessCollisionBox.X, mySubs[i].AccessCollisionBox.Y), Color.White);
+                    // Move submarine outside far left edge of the screen
+                    if (mySubs[i].AccessCollisionTime > TimeSpan.MinValue)
+                    {
+                        if (mySubs[i].AccessCollisionTime.Add(new TimeSpan(0, 0, 2)) < gameTime.ElapsedGameTime)
+                        {
+                        }
+                        else
+                        mySubs[i].AccessPosition = new Vector2(0 - mySubs[i].AccessSize.Width - 1, mySubs[i].AccessSize.Y);
+                    }
+                    else
+                        mySubs[i].AccessCollisionTime = gameTime.ElapsedGameTime;
+                }
+                else
+                {
+                    mySubs[i].Draw(this.mySpriteBatch);
+                }
+
             }
 
             // Call Draw for each ocean object in the oceans array
-            for (var i = 0; i < oceans.Length; i++)
+            for (var i = 0; i < myOceans.Length; i++)
             {
-                oceans[i].Draw(this.mySpriteBatch);
+                myOceans[i].Draw(this.mySpriteBatch);
             }
 
             // End your drawing code here

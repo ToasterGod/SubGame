@@ -12,33 +12,33 @@ namespace SubGame.Animations
     //Source: http://www.xnadevelopment.com/tutorials/scrollinga2dbackground/ScrollingA2DBackground.shtml
     class AnimatedBackground
     {
-        //The current position of the Sprite
-        public Vector2 aPosition = new Vector2(0, 0);
-
         //The texture object used when drawing the sprite, is loaded from the contentmanager in LoadContent
-        private Texture2D aSpriteTexture;
+        private Texture2D mySpriteTexture;
+
+        //The current position of the Sprite
+        public Vector2 AccessPosition { get; set; } = new Vector2(0, 0);
 
         //The size of the Sprite, initialized in LoadContent
-        public Rectangle aSize;
+        public Rectangle AccessSize { get; set; }
 
         //Used to size the Sprite up or down from the original image
-        public float aScale = 1.0f;
+        public float AccessScale { get; set; } = 1.0f;
 
         //Load the texture for the sprite using the Content Pipeline
         public void LoadContent(ContentManager aContentManager, string anAssetName)
         {
             //Load the image
-            aSpriteTexture = aContentManager.Load<Texture2D>(anAssetName);
+            mySpriteTexture = aContentManager.Load<Texture2D>(anAssetName);
             //Calculate the size
-            aSize = new Rectangle(0, 0, (int)(aSpriteTexture.Width * aScale), (int)(aSpriteTexture.Height * aScale));
+            AccessSize = new Rectangle(0, 0, (int)(mySpriteTexture.Width * AccessScale), (int)(mySpriteTexture.Height * AccessScale));
         }
 
         //Draw the sprite to the screen, each instance of this class is called from the game class Draw
-        public void Draw(SpriteBatch theSpriteBatch)
+        public void Draw(SpriteBatch aSpriteBatch)
         {
-            theSpriteBatch.Draw(aSpriteTexture, aPosition, 
-                new Rectangle(0, 0, aSpriteTexture.Width, aSpriteTexture.Height), Color.White, 
-                0.0f, Vector2.Zero, aScale, SpriteEffects.None, 0);
+            aSpriteBatch.Draw(mySpriteTexture, AccessPosition, 
+                new Rectangle(0, 0, mySpriteTexture.Width, mySpriteTexture.Height), Color.White, 
+                0.0f, Vector2.Zero, AccessScale, SpriteEffects.None, 0);
         }
     }
 }
