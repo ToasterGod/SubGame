@@ -62,8 +62,8 @@ namespace SubGame
             {
                 subs[i] = new AnimatedObject
                 {
-                    aScale = 1.0f,
-                    ASpeed = new Vector2(aRNG.Next(40, 130), 0)
+                    aScale = 0.6f,
+                    aSpeed = new Vector2(aRNG.Next(40, 130), 0)
                 };
             }
 
@@ -107,20 +107,20 @@ namespace SubGame
                  * den långsamma ubåten är en yellow submarine
                  * den snabba är samma fast med påmålade flammor
                  */
-                if (subs[i].ASpeed.X < 70)
+                if (subs[i].aSpeed.X < 70)
                 {
                     //slow sub
-                    subs[i].LoadContent(this.Content, "Backgrounds/Sub");
+                    subs[i].LoadContent(this.Content, "Backgrounds/SlowSub");
                 }
-                else if (subs[i].ASpeed.X < 100)
+                else if (subs[i].aSpeed.X < 100)
                 {
                     //fast sub
-                    subs[i].LoadContent(this.Content, "Backgrounds/Sub");
+                    subs[i].LoadContent(this.Content, "Backgrounds/MediumSub");
                 }
                 else
                 {
                     // fastestest sub
-                    subs[i].LoadContent(this.Content, "Backgrounds/Sub");
+                    subs[i].LoadContent(this.Content, "Backgrounds/FastSub");
                 }
                 subs[i].aPosition = new Vector2(myGraphics.PreferredBackBufferWidth + subs[i].aSize.Width + i * subs[i].aSize.Width,
                     350 + i * subs[i].aSize.Height);
@@ -205,7 +205,7 @@ namespace SubGame
 
             for (int i = 0; i < subs.Length; i++)
             {
-                subs[i].aPosition += aDirection * subs[i].ASpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                subs[i].aPosition += aDirection * subs[i].aSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             }
 

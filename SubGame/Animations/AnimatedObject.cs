@@ -14,7 +14,7 @@ namespace SubGame.Animations
         //The current position of the Sprite
         public Vector2 aPosition = new Vector2(0, 0);
 
-        public Vector2 ASpeed { get; set; }
+        public Vector2 aSpeed { get; set; }
 
         //The texture object used when drawing the sprite, is loaded from the contentmanager in LoadContent
         private Texture2D aSpriteTexture;
