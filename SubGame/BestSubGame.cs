@@ -54,7 +54,7 @@ namespace SubGame
                 oceans[i] = new AnimatedBackground
                 {
                     // Scale size of each image
-                    aScale = 0.3f
+                    aScale = 0.5f
                 };
             }
 
