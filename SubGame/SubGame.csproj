@@ -62,7 +62,9 @@
     <Content Include="Content\Backgrounds\FastSub.png" />
     <Content Include="Content\Backgrounds\Himmel.png" />
     <Content Include="Content\Backgrounds\MediumSub.png" />
+    <Content Include="Content\Backgrounds\Mine.png" />
     <Content Include="Content\Backgrounds\Ocean.png" />
+    <Content Include="Content\Backgrounds\SinkBomb.png" />
     <Content Include="Content\Backgrounds\SlowSub.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
