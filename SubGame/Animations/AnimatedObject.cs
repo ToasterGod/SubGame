@@ -37,17 +37,17 @@ namespace SubGame.Animations
 
         public void Draw(SpriteBatch aSpriteBatch)
         {
+            var tempBox = new Rectangle(0, 0, mySpriteTexture.Width, mySpriteTexture.Height);
             aSpriteBatch.Draw(mySpriteTexture, AccessPosition,
-                new Rectangle(0, 0, mySpriteTexture.Width, mySpriteTexture.Height), Color.White,
-                0.0f, Vector2.Zero, AccessScale, SpriteEffects.None, 0);
+                tempBox, Color.White, 0.0f, Vector2.Zero, AccessScale, SpriteEffects.None, 0);
 
             // Calculate left and top position of collision box (BoundingBox)
             int x1 = AccessPosition.ToPoint().X;
             int y1 = AccessPosition.ToPoint().Y;
 
             // Calculate right and bottom position of collision box (BoundingBox)
-            int x2 = AccessPosition.ToPoint().X + mySpriteTexture.Width;
-            int y2 = AccessPosition.ToPoint().Y + mySpriteTexture.Height;
+            int x2 = (int)Math.Round(AccessPosition.ToPoint().X + mySpriteTexture.Width * AccessScale);
+            int y2 = (int)Math.Round(AccessPosition.ToPoint().Y + mySpriteTexture.Height * AccessScale);
 
             // Set new values to BoundingBox to track where the mySpriteTexture is located on the screen
             AccessCollisionBox = new Rectangle(new Point(x1,y1), new Point(x2, y2));

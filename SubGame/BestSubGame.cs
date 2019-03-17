@@ -74,7 +74,7 @@ namespace SubGame
 
             myMine = new AnimatedObject
             {
-                AccessScale = 1.0f,
+                AccessScale = 0.6f,
                 AccessSpeed = new Vector2(0, 100)
             };
 
@@ -114,10 +114,7 @@ namespace SubGame
 
             for (int i = 0; i < mySubs.Length; i++)
             {
-                /*
-                 * den långsamma ubåten är en yellow submarine
-                 * den snabba är samma fast med påmålade flammor
-                 */
+                
                 if (mySubs[i].AccessSpeed.X < 70)
                 {
                     //slow sub
@@ -130,7 +127,7 @@ namespace SubGame
                 }
                 else
                 {
-                    // fastestest sub
+                    // fastest sub
                     mySubs[i].LoadContent(this.Content, "Backgrounds/FastSub");
                 }
                 mySubs[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[i].AccessSize.Width + i * mySubs[i].AccessSize.Width,
@@ -138,7 +135,8 @@ namespace SubGame
             }
 
             myMine.LoadContent(this.Content, "Backgrounds/Mine");
-            myMine.AccessPosition = new Vector2(-1, -1);
+            myMine.AccessPosition = myMine.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMine.AccessSize.Width * 2,
+                    myGraphics.PreferredBackBufferHeight + myMine.AccessSize.Height * 2);
 
             // Load the boat from the content stream
             myBoat = Content.Load<Texture2D>("Backgrounds/Boat");
@@ -228,9 +226,14 @@ namespace SubGame
 
             }
 
-            if (myMine.AccessPosition.X != -1 && myMine.AccessPosition.Y != -1)
+            if (myMine.AccessPosition.X < myGraphics.PreferredBackBufferWidth && myMine.AccessPosition.Y < myGraphics.PreferredBackBufferHeight)
             {
                 myMine.AccessPosition += aMineDirection * myMine.AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (myMine.AccessPosition.Y < 110 + myBoat.Height)
+            {
+                myMine.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMine.AccessSize.Width * 2,
+                    myGraphics.PreferredBackBufferHeight+ myMine.AccessSize.Height * 2);
             }
 
             base.Update(aGameTime);
@@ -267,7 +270,7 @@ namespace SubGame
                     // Move submarine outside far left edge of the screen
                     if (mySubs[i].AccessCollisionTime > TimeSpan.MinValue)
                     {
-                        if (mySubs[i].AccessCollisionTime.Add(new TimeSpan(0, 0, 2)) < gameTime.ElapsedGameTime)
+                        if (mySubs[i].AccessCollisionTime.Add(new TimeSpan(0, 0, 5)) < gameTime.ElapsedGameTime)
                         {
 
                         }
@@ -284,8 +287,27 @@ namespace SubGame
 
             }
 
-            myMine.Draw(this.mySpriteBatch);
-            
+            if (myMine.AccessCollisionBox.Intersects(new Rectangle(myBoat.Bounds.X + 60, myBoat.Bounds.Y + 110, myBoat.Bounds.Width + 60, myBoat.Bounds.Height + 110)))
+            {
+                mySpriteBatch.Draw(myBoom, new Vector2(myMine.AccessCollisionBox.X, myMine.AccessCollisionBox.Y), Color.White);
+                // Move submarine outside far left edge of the screen
+                if (myMine.AccessCollisionTime > TimeSpan.MinValue)
+                {
+                    if (myMine.AccessCollisionTime.Add(new TimeSpan(0, 0, 5)) < gameTime.ElapsedGameTime)
+                    {
+
+                    }
+                    else
+                        myMine.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMine.AccessSize.Width * 2,
+                            myGraphics.PreferredBackBufferHeight + myMine.AccessSize.Height * 2);
+                }
+                else
+                    myMine.AccessCollisionTime = gameTime.ElapsedGameTime;
+            }
+            else
+            {
+                myMine.Draw(this.mySpriteBatch);
+            }
 
             // Call Draw for each ocean object in the oceans array
             for (var i = 0; i < myOceans.Length; i++)
