@@ -23,6 +23,8 @@ namespace SubGame
         private Texture2D myBoom;
 
         private AnimatedObject[] mySubs = new AnimatedObject[3];
+        private AnimatedObject myMine;
+        private AnimatedObject mySinkBomb;
 
         private Random myRNG = new Random();
         private Rectangle test = new Rectangle(200, 200, 20, 1000);
@@ -69,6 +71,12 @@ namespace SubGame
                     AccessSpeed = new Vector2(myRNG.Next(40, 130), 0)
                 };
             }
+
+            myMine = new AnimatedObject
+            {
+                AccessScale = 1.0f,
+                AccessSpeed = new Vector2(0, 100)
+            };
 
             base.Initialize();
         }
@@ -128,6 +136,9 @@ namespace SubGame
                 mySubs[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[i].AccessSize.Width + i * mySubs[i].AccessSize.Width,
                     360 + i * mySubs[i].AccessSize.Height);
             }
+
+            myMine.LoadContent(this.Content, "Backgrounds/Mine");
+            myMine.AccessPosition = new Vector2(-1, -1);
 
             // Load the boat from the content stream
             myBoat = Content.Load<Texture2D>("Backgrounds/Boat");
@@ -191,9 +202,11 @@ namespace SubGame
             }
 
 
+
             // Set the direction of the background movement
             Vector2 aDirection = new Vector2(-1, 0); //-1 = move background left
-            
+            Vector2 aMineDirection = new Vector2(0, -1); //-1 = move upwards
+
             // Set the speed of the background movement
             Vector2 aSpeed = new Vector2(120, 0); //120 = speed of movement
 
@@ -213,6 +226,11 @@ namespace SubGame
             {
                 mySubs[i].AccessPosition += aDirection * mySubs[i].AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
 
+            }
+
+            if (myMine.AccessPosition.X != -1 && myMine.AccessPosition.Y != -1)
+            {
+                myMine.AccessPosition += aMineDirection * myMine.AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
             }
 
             base.Update(aGameTime);
@@ -243,6 +261,7 @@ namespace SubGame
                 // Do collisiondetection
                 if (mySubs[i].AccessCollisionBox.Intersects(test))
                 {
+                    myMine.AccessPosition = new Vector2(mySubs[i].AccessCollisionBox.X, mySubs[i].AccessCollisionBox.Y);
                     //Bamalamadingdong-woopdidoopdicrashelicrash
                     mySpriteBatch.Draw(myBoom, new Vector2(mySubs[i].AccessCollisionBox.X, mySubs[i].AccessCollisionBox.Y), Color.White);
                     // Move submarine outside far left edge of the screen
@@ -250,9 +269,10 @@ namespace SubGame
                     {
                         if (mySubs[i].AccessCollisionTime.Add(new TimeSpan(0, 0, 2)) < gameTime.ElapsedGameTime)
                         {
+
                         }
                         else
-                        mySubs[i].AccessPosition = new Vector2(0 - mySubs[i].AccessSize.Width - 1, mySubs[i].AccessSize.Y);
+                            mySubs[i].AccessPosition = new Vector2(0 - mySubs[i].AccessSize.Width - 1, mySubs[i].AccessSize.Y);
                     }
                     else
                         mySubs[i].AccessCollisionTime = gameTime.ElapsedGameTime;
@@ -263,6 +283,9 @@ namespace SubGame
                 }
 
             }
+
+            myMine.Draw(this.mySpriteBatch);
+            
 
             // Call Draw for each ocean object in the oceans array
             for (var i = 0; i < myOceans.Length; i++)
