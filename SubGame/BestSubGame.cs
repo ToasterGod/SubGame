@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,16 +14,29 @@ namespace SubGame
         private GraphicsDeviceManager myGraphics;
         private SpriteBatch mySpriteBatch;
 
+        private readonly int mySkyTop = 0;
+        private readonly int myOceanTop = 225;
+        private readonly int mySubTop = 360;
+        private readonly int myMineTop = 225;
+        // Set the direction of the background movement.
+        private readonly Vector2 myGameDirection = new Vector2(-1, 0); //-1 = move background left
+        // Set the direction of mine movement.
+        private readonly Vector2 myMineDirection = new Vector2(0, -1); //-1 = move upwards
+        // Set the speed of the background movement.
+        private Vector2 myBackgroundSpeed = new Vector2(120, 0); //120 = speed of movement
+
+        private SpriteFont font;
+        private string status;
+
         private AnimatedBackground[] mySkies = new AnimatedBackground[7];
 
         private AnimatedBackground[] myOceans = new AnimatedBackground[7];
 
         private Texture2D myBoat;
-        private Texture2D myBoom;
 
         private AnimatedObject[] mySubs = new AnimatedObject[3];
-        private AnimatedObject myMine;
-        private AnimatedObject mySinkBomb;
+        private AnimatedObject[] myMines = new AnimatedObject[3];// One mine for each sub
+        private readonly AnimatedObject mySinkBomb;
 
         private Random myRNG = new Random();
         private Rectangle test = new Rectangle(200, 200, 20, 1000);
@@ -44,39 +56,26 @@ namespace SubGame
         protected override void Initialize()
         {
             // Instantiate a new AnimatedBackground object for each element in the skies array and set scale for the size of each
-            for (var i = 0; i < mySkies.Length; i++)
+            for (int i = 0; i < mySkies.Length; i++)
             {
-                mySkies[i] = new AnimatedBackground
-                {
-                    // Scale size of each image
-                    AccessScale = 0.15f
-                };
+                mySkies[i] = new AnimatedBackground(0.15f);
             }
 
             // Instantiate a new AnimatedBackground object for each element in the oceans array and set scale for the size of each
-            for (var i = 0; i < myOceans.Length; i++)
+            for (int i = 0; i < myOceans.Length; i++)
             {
-                myOceans[i] = new AnimatedBackground
-                {
-                    // Scale size of each image
-                    AccessScale = 0.5f
-                };
+                myOceans[i] = new AnimatedBackground(0.5f);
             }
 
             for (int i = 0; i < mySubs.Length; i++)
             {
-                mySubs[i] = new AnimatedObject
-                {
-                    AccessScale = 0.6f,
-                    AccessSpeed = new Vector2(myRNG.Next(40, 130), 0)
-                };
+                mySubs[i] = new AnimatedObject(0.6f, new Vector2(myRNG.Next(40, 130), 0));
             }
 
-            myMine = new AnimatedObject
+            for (int i = 0; i < myMines.Length; i++)
             {
-                AccessScale = 0.6f,
-                AccessSpeed = new Vector2(0, 100)
-            };
+                myMines[i] = new AnimatedObject(0.6f, new Vector2(0, 50));
+            }
 
             base.Initialize();
         }
@@ -87,60 +86,63 @@ namespace SubGame
             mySpriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Load all the skies images by calling the AnimatedBackground.LoadContent for each one of them
-            for (var i = 0; i < mySkies.Length; i++)
+            for (int i = 0; i < mySkies.Length; i++)
             {
-                mySkies[i].LoadContent(this.Content, "Backgrounds/Himmel");
-                float tempAdjust;
-                if (i == 0)
-                    tempAdjust = 0.0f;
-                else
-                    tempAdjust = mySkies[i - 1].AccessPosition.X + mySkies[i - 1].AccessSize.Width;
-
-                mySkies[i].AccessPosition = new Vector2(tempAdjust, 0);
+                LoadBackground(mySkies[i], "Backgrounds/Himmel",
+                    new Vector2(i == 0 ? 0.0f : mySkies[i - 1].AccessPosition.X + mySkies[i - 1].AccessSize.Width, mySkyTop));
             }
 
             // Load all the oceans images by calling the AnimatedBackground.LoadContent for each one of them
-            for (var i = 0; i < myOceans.Length; i++)
+            for (int i = 0; i < myOceans.Length; i++)
             {
-                myOceans[i].LoadContent(this.Content, "Backgrounds/Ocean");
-                float tempAdjust;
-                if (i == 0)
-                    tempAdjust = 0.0f;
-                else
-                    tempAdjust = myOceans[i - 1].AccessPosition.X + myOceans[i - 1].AccessSize.Width;
-
-                myOceans[i].AccessPosition = new Vector2(tempAdjust, 225);
+                LoadBackground(myOceans[i], "Backgrounds/Ocean",
+                    new Vector2(i == 0 ? 0.0f : myOceans[i - 1].AccessPosition.X + myOceans[i - 1].AccessSize.Width, myOceanTop));
             }
 
             for (int i = 0; i < mySubs.Length; i++)
             {
-                
-                if (mySubs[i].AccessSpeed.X < 70)
-                {
-                    //slow sub
-                    mySubs[i].LoadContent(this.Content, "Backgrounds/SlowSub");
-                }
-                else if (mySubs[i].AccessSpeed.X < 100)
-                {
-                    //fast sub
-                    mySubs[i].LoadContent(this.Content, "Backgrounds/MediumSub");
-                }
-                else
-                {
-                    // fastest sub
-                    mySubs[i].LoadContent(this.Content, "Backgrounds/FastSub");
-                }
-                mySubs[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[i].AccessSize.Width + i * mySubs[i].AccessSize.Width,
-                    360 + i * mySubs[i].AccessSize.Height);
+                LoadSub(mySubs[i], i, mySubTop);
             }
 
-            myMine.LoadContent(this.Content, "Backgrounds/Mine");
-            myMine.AccessPosition = myMine.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMine.AccessSize.Width * 2,
-                    myGraphics.PreferredBackBufferHeight + myMine.AccessSize.Height * 2);
+            for (int i = 0; i < myMines.Length; i++)
+            {
+                myMines[i].LoadContent(Content, "Backgrounds/Mine");
+                // Set initial position of the mine to the width and height of 2 mines beyond the right, bottom of the screen
+                myMines[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMines[i].AccessSize.Width * 2,
+                        myGraphics.PreferredBackBufferHeight + myMines[i].AccessSize.Height * 2);
+            }
 
             // Load the boat from the content stream
             myBoat = Content.Load<Texture2D>("Backgrounds/Boat");
-            myBoom = Content.Load<Texture2D>("Backgrounds/Boom");
+            font = Content.Load<SpriteFont>("Status"); // Use the name of your sprite font file here instead of 'Score'.
+        }
+
+        private void LoadBackground(AnimatedBackground aBackground, string aResource, Vector2 aPosition)
+        {
+            aBackground.LoadContent(Content, aResource);
+            aBackground.AccessPosition = aPosition;
+        }
+
+        private void LoadSub(AnimatedObject aSub, int aIndex, int aTop)
+        {
+            if (aSub.AccessSpeed.X < 70)
+            {
+                //slow sub
+                aSub.LoadContent(Content, "Backgrounds/SlowSub");
+            }
+            else if (aSub.AccessSpeed.X < 100)
+            {
+                //fast sub
+                aSub.LoadContent(Content, "Backgrounds/MediumSub");
+            }
+            else
+            {
+                // fastest sub
+                aSub.LoadContent(Content, "Backgrounds/FastSub");
+            }
+            // Start outside the right edge of the screen
+            aSub.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + aSub.AccessSize.Width * 2,
+                aTop + aIndex * aSub.AccessSize.Height);
         }
 
         protected override void UnloadContent()
@@ -151,16 +153,20 @@ namespace SubGame
         protected override void Update(GameTime aGameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
-            // Move all the images in the skies array and if the first image is fully outside of the screen to the left 
+            // Reset the skies array if the first image is fully outside of the screen to the left 
             // then put it as the last element. That way we will feed the first image in as the last image once it has passed by
             // Gives a kind of rotating function
-            for (var target = 0; target < mySkies.Length; target++)
+            for (int target = 0; target < mySkies.Length; target++)
             {
                 int tempSource = mySkies.Length - 1;
                 if (target > 0)
+                {
                     tempSource = target - 1;
+                }
 
                 if (mySkies[target].AccessPosition.X < -mySkies[target].AccessSize.Width)
                 {
@@ -169,14 +175,16 @@ namespace SubGame
                 }
             }
 
-            // Move all the images in the oceans array and if the first image is fully outside of the screen to the left 
+            // Reset the oceans array if the first image is fully outside of the screen to the left 
             // then put it as the last element. That way we will feed the first image in as the last image once it has passed by
             // Gives a kind of rotating function
-            for (var target = 0; target < myOceans.Length; target++)
+            for (int target = 0; target < myOceans.Length; target++)
             {
                 int tempSource = myOceans.Length - 1;
                 if (target > 0)
+                {
                     tempSource = target - 1;
+                }
 
                 if (myOceans[target].AccessPosition.X < -myOceans[target].AccessSize.Width)
                 {
@@ -185,55 +193,66 @@ namespace SubGame
                 }
             }
 
-            for (var target = 0; target < mySubs.Length; target++)
+            // Reset the subs if any of them is outside the left edge
+            for (int target = 0; target < mySubs.Length; target++)
             {
-
                 // If submarine has moved outside of the screen to the far left
                 if (mySubs[target].AccessPosition.X < -mySubs[target].AccessSize.Width)
                 {
                     // Create a new submarine outside the far right side of the screen
-                    mySubs[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[target].AccessSize.Width + target * mySubs[target].AccessSize.Width,
-                    350 + target * mySubs[target].AccessSize.Height);
+                    mySubs[target] = new AnimatedObject(mySubs[target].AccessScale, new Vector2(myRNG.Next(40, 130), 0));
+                    LoadSub(mySubs[target], target, mySubTop);
+                    mySubs[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[target].AccessSize.Width * 2,
+                        mySubTop + target * mySubs[target].AccessSize.Height);
                     // Reset the CollisionBox for that new submarine
                     mySubs[target].AccessCollisionBox = new Rectangle(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
                 }
             }
 
-
-
-            // Set the direction of the background movement
-            Vector2 aDirection = new Vector2(-1, 0); //-1 = move background left
-            Vector2 aMineDirection = new Vector2(0, -1); //-1 = move upwards
-
-            // Set the speed of the background movement
-            Vector2 aSpeed = new Vector2(120, 0); //120 = speed of movement
-
-            // Calculate the movement of the oceans elements (to the left)
-            for (var i = 0; i < mySkies.Length; i++)
+            // Reset the mine if it reach water surface without hit
+            for (int target = 0; target < myMines.Length; target++)
             {
-                mySkies[i].AccessPosition += aDirection * aSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+                // If the mine is at sealevel
+                if (myMines[target].AccessPosition.Y < myMineTop)
+                {
+                    myMines[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMines[target].AccessSize.Width * 2,
+                        myGraphics.PreferredBackBufferHeight + myMines[target].AccessSize.Height * 2);
+                    myMines[target].AccessCollisionDetected = false;
+                }
+
             }
 
-            // Calculate the movement of the oceans elements (to the left)
-            for (var i = 0; i < myOceans.Length; i++)
+            // Calculate the movement of all the skies elements (to the left)
+            for (int i = 0; i < mySkies.Length; i++)
             {
-                myOceans[i].AccessPosition += aDirection * aSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+                mySkies[i].AccessPosition += myGameDirection * myBackgroundSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
             }
 
+            // Calculate the movement of all the oceans elements (to the left)
+            for (int i = 0; i < myOceans.Length; i++)
+            {
+                myOceans[i].AccessPosition += myGameDirection * myBackgroundSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            // Calculate the movement of all the subs (to the left)
             for (int i = 0; i < mySubs.Length; i++)
             {
-                mySubs[i].AccessPosition += aDirection * mySubs[i].AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
-
+                mySubs[i].AccessPosition += myGameDirection * mySubs[i].AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+                // TODO! Check if mine should be dropped
+                if (mySubs[i].AccessPosition.X < 300 && mySubs[i].AccessPosition.X > 250 && myMines[i].AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
+                {
+                    // Drop a mine when sub passes X=500
+                    myMines[i].AccessPosition = new Vector2(mySubs[i].AccessPosition.X, mySubs[i].AccessPosition.Y);
+                }
             }
 
-            if (myMine.AccessPosition.X < myGraphics.PreferredBackBufferWidth && myMine.AccessPosition.Y < myGraphics.PreferredBackBufferHeight)
+            for (int i = 0; i < myMines.Length; i++)
             {
-                myMine.AccessPosition += aMineDirection * myMine.AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (myMine.AccessPosition.Y < 110 + myBoat.Height)
-            {
-                myMine.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMine.AccessSize.Width * 2,
-                    myGraphics.PreferredBackBufferHeight+ myMine.AccessSize.Height * 2);
+                if (myMines[i].AccessPosition.X < myGraphics.PreferredBackBufferWidth && myMines[i].AccessPosition.Y < myGraphics.PreferredBackBufferHeight)
+                {
+                    // Calculate the movement of the mine (to the top)
+                    myMines[i].AccessPosition += myMineDirection * myMines[i].AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+                }
             }
 
             base.Update(aGameTime);
@@ -250,10 +269,16 @@ namespace SubGame
             // Begin your drawing code here
             mySpriteBatch.Begin();
 
+            string text = $"Sub1: {mySubs[0].AccessPosition.X:0.0}x{mySubs[0].AccessPosition.Y:0.0}\n" +
+                $"Sub2: {mySubs[1].AccessPosition.X:0.0}x{mySubs[1].AccessPosition.Y:0.0}\n" +
+                $"Sub3: {mySubs[2].AccessPosition.X:0.0}x{mySubs[2].AccessPosition.Y:0.0}";
+            mySpriteBatch.DrawString(font, text,
+                new Vector2(300, 100), Color.Black);
+
             // Call Draw for each sky element in the skies array
-            for (var i = 0; i < mySkies.Length; i++)
+            for (int i = 0; i < mySkies.Length; i++)
             {
-                mySkies[i].Draw(this.mySpriteBatch);
+                mySkies[i].Draw(mySpriteBatch);
             }
 
             // Call draw for the boat, since it's a simple object it will be drawn by the spriteBatch itself
@@ -261,58 +286,40 @@ namespace SubGame
 
             for (int i = 0; i < mySubs.Length; i++)
             {
-                // Do collisiondetection
-                if (mySubs[i].AccessCollisionBox.Intersects(test))
-                {
-                    myMine.AccessPosition = new Vector2(mySubs[i].AccessCollisionBox.X, mySubs[i].AccessCollisionBox.Y);
-                    //Bamalamadingdong-woopdidoopdicrashelicrash
-                    mySpriteBatch.Draw(myBoom, new Vector2(mySubs[i].AccessCollisionBox.X, mySubs[i].AccessCollisionBox.Y), Color.White);
-                    // Move submarine outside far left edge of the screen
-                    if (mySubs[i].AccessCollisionTime > TimeSpan.MinValue)
-                    {
-                        if (mySubs[i].AccessCollisionTime.Add(new TimeSpan(0, 0, 5)) < gameTime.ElapsedGameTime)
-                        {
-
-                        }
-                        else
-                            mySubs[i].AccessPosition = new Vector2(0 - mySubs[i].AccessSize.Width - 1, mySubs[i].AccessSize.Y);
-                    }
-                    else
-                        mySubs[i].AccessCollisionTime = gameTime.ElapsedGameTime;
-                }
-                else
-                {
-                    mySubs[i].Draw(this.mySpriteBatch);
-                }
-
+                mySubs[i].Draw(mySpriteBatch);
             }
 
-            if (myMine.AccessCollisionBox.Intersects(new Rectangle(myBoat.Bounds.X + 60, myBoat.Bounds.Y + 110, myBoat.Bounds.Width + 60, myBoat.Bounds.Height + 110)))
+            for (int i = 0; i < myMines.Length; i++)
             {
-                mySpriteBatch.Draw(myBoom, new Vector2(myMine.AccessCollisionBox.X, myMine.AccessCollisionBox.Y), Color.White);
-                // Move submarine outside far left edge of the screen
-                if (myMine.AccessCollisionTime > TimeSpan.MinValue)
-                {
-                    if (myMine.AccessCollisionTime.Add(new TimeSpan(0, 0, 5)) < gameTime.ElapsedGameTime)
-                    {
-
-                    }
-                    else
-                        myMine.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMine.AccessSize.Width * 2,
-                            myGraphics.PreferredBackBufferHeight + myMine.AccessSize.Height * 2);
-                }
-                else
-                    myMine.AccessCollisionTime = gameTime.ElapsedGameTime;
+                // The following rectangle is hardcoded position of the boat
+                //myMines[i].AccessCollisionDetected = myMines[i].AccessCollisionBox.Intersects(new Rectangle(myBoat.Bounds.X + 60, myOceanTop, myBoat.Bounds.Width + 60, myOceanTop + 50));
+                //if (myMines[i].AccessCollisionDetected)
+                //{
+                //    if (myMines[i].AccessCollisionTime > TimeSpan.MinValue)
+                //    {
+                //        if (myMines[i].AccessCollisionTime.Add(new TimeSpan(0, 0, 5)) < gameTime.ElapsedGameTime)
+                //        {
+                //        }
+                //        else
+                //        {
+                //            myMines[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMines[i].AccessSize.Width * 2,
+                //                myGraphics.PreferredBackBufferHeight + myMines[i].AccessSize.Height * 2);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        myMines[i].AccessCollisionTime = gameTime.ElapsedGameTime;
+                //    }
+                //}
+                //else
+                //{
+                    myMines[i].Draw(mySpriteBatch);
+                //}
             }
-            else
-            {
-                myMine.Draw(this.mySpriteBatch);
-            }
-
             // Call Draw for each ocean object in the oceans array
-            for (var i = 0; i < myOceans.Length; i++)
+            for (int i = 0; i < myOceans.Length; i++)
             {
-                myOceans[i].Draw(this.mySpriteBatch);
+                myOceans[i].Draw(mySpriteBatch);
             }
 
             // End your drawing code here

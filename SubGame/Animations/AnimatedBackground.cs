@@ -24,6 +24,11 @@ namespace SubGame.Animations
         //Used to size the Sprite up or down from the original image
         public float AccessScale { get; set; } = 1.0f;
 
+        public AnimatedBackground(float aScale)
+        {
+            AccessScale = aScale;
+        }
+
         //Load the texture for the sprite using the Content Pipeline
         public void LoadContent(ContentManager aContentManager, string anAssetName)
         {
