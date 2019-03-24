@@ -1,7 +1,9 @@
 ﻿using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
 using SubGame.Animations;
 
 namespace SubGame
@@ -14,32 +16,37 @@ namespace SubGame
         private GraphicsDeviceManager myGraphics;
         private SpriteBatch mySpriteBatch;
 
-        private readonly int mySkyTop = 0;
-        private readonly int myOceanTop = 225;
-        private readonly int mySubTop = 360;
-        private readonly int myMineTop = 225;
+        private readonly int mySkyTop = 0; // Top position of the Sky graphics
+        private readonly int myOceanTop = 225; // Top position of the Ocean graphics
+        private readonly int mySubTop = 450; // Where the shallowest sub will show up in height
+        private readonly int mySubSpacing = 100; // Constant value for space between subs
+        private readonly int myMineTop = 225 + 100; // 100 is offset from OceanTop, this is where the Mines will seize to exist
+
         // Set the direction of the background movement.
         private readonly Vector2 myGameDirection = new Vector2(-1, 0); //-1 = move background left
+
         // Set the direction of mine movement.
         private readonly Vector2 myMineDirection = new Vector2(0, -1); //-1 = move upwards
+
+        // Set the direction of boat movement.
+        private Vector2 myBoatDirection = new Vector2(0, 0); //0 = Stand still
+
         // Set the speed of the background movement.
         private Vector2 myBackgroundSpeed = new Vector2(120, 0); //120 = speed of movement
 
-        private SpriteFont font;
-        private string status;
+        private SpriteFont font; // Font to be able to write text
 
         private AnimatedBackground[] mySkies = new AnimatedBackground[7];
 
         private AnimatedBackground[] myOceans = new AnimatedBackground[7];
 
-        private Texture2D myBoat;
+        private AnimatedObject myBoat;
 
         private AnimatedObject[] mySubs = new AnimatedObject[3];
         private AnimatedObject[] myMines = new AnimatedObject[3];// One mine for each sub
-        private readonly AnimatedObject mySinkBomb;
+        //private readonly AnimatedObject mySinkBomb;
 
         private Random myRNG = new Random();
-        private Rectangle test = new Rectangle(200, 200, 20, 1000);
 
         public BestSubGame()
         {
@@ -67,15 +74,19 @@ namespace SubGame
                 myOceans[i] = new AnimatedBackground(0.5f);
             }
 
+            // Instantiate three subs
             for (int i = 0; i < mySubs.Length; i++)
             {
                 mySubs[i] = new AnimatedObject(0.6f, new Vector2(myRNG.Next(40, 130), 0));
             }
 
+            // Instantiate three mines
             for (int i = 0; i < myMines.Length; i++)
             {
                 myMines[i] = new AnimatedObject(0.6f, new Vector2(0, 50));
             }
+
+            myBoat = new AnimatedObject(1.0f, new Vector2(120, 0));
 
             base.Initialize();
         }
@@ -99,11 +110,13 @@ namespace SubGame
                     new Vector2(i == 0 ? 0.0f : myOceans[i - 1].AccessPosition.X + myOceans[i - 1].AccessSize.Width, myOceanTop));
             }
 
+            // Load subs
             for (int i = 0; i < mySubs.Length; i++)
             {
                 LoadSub(mySubs[i], i, mySubTop);
             }
 
+            // Load mines
             for (int i = 0; i < myMines.Length; i++)
             {
                 myMines[i].LoadContent(Content, "Backgrounds/Mine");
@@ -113,8 +126,11 @@ namespace SubGame
             }
 
             // Load the boat from the content stream
-            myBoat = Content.Load<Texture2D>("Backgrounds/Boat");
-            font = Content.Load<SpriteFont>("Status"); // Use the name of your sprite font file here instead of 'Score'.
+            myBoat.LoadContent(Content, "Backgrounds/Boat");
+            myBoat.AccessPosition = new Vector2(60, 110);
+
+            // Load the selected font
+            font = Content.Load<SpriteFont>("Status");
         }
 
         private void LoadBackground(AnimatedBackground aBackground, string aResource, Vector2 aPosition)
@@ -142,7 +158,8 @@ namespace SubGame
             }
             // Start outside the right edge of the screen
             aSub.AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + aSub.AccessSize.Width * 2,
-                aTop + aIndex * aSub.AccessSize.Height);
+                aTop + aIndex * (aSub.AccessSize.Height + mySubSpacing));
+            aSub.AccessFireAt = myRNG.Next(100, myGraphics.PreferredBackBufferWidth - 100);
         }
 
         protected override void UnloadContent()
@@ -157,7 +174,14 @@ namespace SubGame
                 Exit();
             }
 
-            // Reset the skies array if the first image is fully outside of the screen to the left 
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                myBoatDirection = new Vector2(1, 0);
+            }
+            else
+                myBoatDirection = new Vector2(-1, 0);
+
+            // Reset the skies array if the first image is fully outside of the screen to the left
             // then put it as the last element. That way we will feed the first image in as the last image once it has passed by
             // Gives a kind of rotating function
             for (int target = 0; target < mySkies.Length; target++)
@@ -175,7 +199,7 @@ namespace SubGame
                 }
             }
 
-            // Reset the oceans array if the first image is fully outside of the screen to the left 
+            // Reset the oceans array if the first image is fully outside of the screen to the left
             // then put it as the last element. That way we will feed the first image in as the last image once it has passed by
             // Gives a kind of rotating function
             for (int target = 0; target < myOceans.Length; target++)
@@ -202,11 +226,21 @@ namespace SubGame
                     // Create a new submarine outside the far right side of the screen
                     mySubs[target] = new AnimatedObject(mySubs[target].AccessScale, new Vector2(myRNG.Next(40, 130), 0));
                     LoadSub(mySubs[target], target, mySubTop);
-                    mySubs[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[target].AccessSize.Width * 2,
-                        mySubTop + target * mySubs[target].AccessSize.Height);
+                    //mySubs[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + mySubs[target].AccessSize.Width * 2,
+                    //    mySubTop + target * mySubs[target].AccessSize.Height);
                     // Reset the CollisionBox for that new submarine
                     mySubs[target].AccessCollisionBox = new Rectangle(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
                 }
+            }
+
+            // If submarine has moved outside of the screen to the far left
+            if (myBoat.AccessPosition.X <= 60 && myBoatDirection.X == -1)
+            {
+                myBoatDirection = new Vector2(0, 0);
+            }
+            else if (myBoat.AccessPosition.X > myGraphics.PreferredBackBufferWidth - myBoat.AccessSize.Width - 60 && myBoatDirection.X == 1)
+            {
+                myBoatDirection = new Vector2(0, 0);
             }
 
             // Reset the mine if it reach water surface without hit
@@ -219,7 +253,6 @@ namespace SubGame
                         myGraphics.PreferredBackBufferHeight + myMines[target].AccessSize.Height * 2);
                     myMines[target].AccessCollisionDetected = false;
                 }
-
             }
 
             // Calculate the movement of all the skies elements (to the left)
@@ -238,8 +271,8 @@ namespace SubGame
             for (int i = 0; i < mySubs.Length; i++)
             {
                 mySubs[i].AccessPosition += myGameDirection * mySubs[i].AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
-                // TODO! Check if mine should be dropped
-                if (mySubs[i].AccessPosition.X < 300 && mySubs[i].AccessPosition.X > 250 && myMines[i].AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
+
+                if (mySubs[i].AccessPosition.X > mySubs[i].AccessFireAt - 50 && mySubs[i].AccessPosition.X < mySubs[i].AccessFireAt + 50 && myMines[i].AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
                 {
                     // Drop a mine when sub passes X=500
                     myMines[i].AccessPosition = new Vector2(mySubs[i].AccessPosition.X, mySubs[i].AccessPosition.Y);
@@ -255,6 +288,9 @@ namespace SubGame
                 }
             }
 
+            //if (myBoat.AccessPosition.X >= 60 || myBoat.AccessPosition.X >= myGraphics.PreferredBackBufferWidth - myBoat.AccessSize.Width - 60)
+            myBoat.AccessPosition += myBoatDirection * myBoat.AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+
             base.Update(aGameTime);
         }
 
@@ -269,9 +305,7 @@ namespace SubGame
             // Begin your drawing code here
             mySpriteBatch.Begin();
 
-            string text = $"Sub1: {mySubs[0].AccessPosition.X:0.0}x{mySubs[0].AccessPosition.Y:0.0}\n" +
-                $"Sub2: {mySubs[1].AccessPosition.X:0.0}x{mySubs[1].AccessPosition.Y:0.0}\n" +
-                $"Sub3: {mySubs[2].AccessPosition.X:0.0}x{mySubs[2].AccessPosition.Y:0.0}";
+            string text = $"myBoat: {myBoat.AccessPosition.X}x{myBoat.AccessPosition.Y}, {myBoat.AccessPosition.X + myBoat.AccessSize.Width}x{myBoat.AccessPosition.Y + myBoat.AccessSize.Height}";
             mySpriteBatch.DrawString(font, text,
                 new Vector2(300, 100), Color.Black);
 
@@ -281,41 +315,20 @@ namespace SubGame
                 mySkies[i].Draw(mySpriteBatch);
             }
 
-            // Call draw for the boat, since it's a simple object it will be drawn by the spriteBatch itself
-            mySpriteBatch.Draw(myBoat, new Vector2(60, 110), Color.White); // Make random y(130) to move boat up and down a couple of pixels
+            // Call draw for the boat
+            myBoat.Draw(mySpriteBatch, myGraphics.GraphicsDevice);
 
             for (int i = 0; i < mySubs.Length; i++)
             {
-                mySubs[i].Draw(mySpriteBatch);
+                mySubs[i].Draw(mySpriteBatch, myGraphics.GraphicsDevice);
             }
 
             for (int i = 0; i < myMines.Length; i++)
             {
-                // The following rectangle is hardcoded position of the boat
-                //myMines[i].AccessCollisionDetected = myMines[i].AccessCollisionBox.Intersects(new Rectangle(myBoat.Bounds.X + 60, myOceanTop, myBoat.Bounds.Width + 60, myOceanTop + 50));
-                //if (myMines[i].AccessCollisionDetected)
-                //{
-                //    if (myMines[i].AccessCollisionTime > TimeSpan.MinValue)
-                //    {
-                //        if (myMines[i].AccessCollisionTime.Add(new TimeSpan(0, 0, 5)) < gameTime.ElapsedGameTime)
-                //        {
-                //        }
-                //        else
-                //        {
-                //            myMines[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMines[i].AccessSize.Width * 2,
-                //                myGraphics.PreferredBackBufferHeight + myMines[i].AccessSize.Height * 2);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        myMines[i].AccessCollisionTime = gameTime.ElapsedGameTime;
-                //    }
-                //}
-                //else
-                //{
-                    myMines[i].Draw(mySpriteBatch);
-                //}
+                myMines[i].AccessCollisionDetected = myMines[i].AccessCollisionBox.Intersects(myBoat.AccessCollisionBox);
+                myMines[i].Draw(mySpriteBatch, myGraphics.GraphicsDevice);
             }
+
             // Call Draw for each ocean object in the oceans array
             for (int i = 0; i < myOceans.Length; i++)
             {

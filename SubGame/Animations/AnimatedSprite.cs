@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 
 namespace SubGame.Animations
 {
     // Not used right now, only a conceptual example of how to animate a sprite
-    class AnimatedSprite
+    internal class AnimatedSprite
     {
         public Texture2D AccessTexture { get; set; }
         public int AccessRows { get; set; }

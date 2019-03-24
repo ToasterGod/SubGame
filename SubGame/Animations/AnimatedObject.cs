@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,6 +10,7 @@ namespace SubGame.Animations
     {
         //The texture object used when drawing the sprite, is loaded from the contentmanager in LoadContent
         private Texture2D mySpriteTexture;
+
         private Texture2D myBoom; //This should be for when sinkbomb hits the sub or when mine hits the ship, ship should be animatedobject too but without movement
 
         // The absolute position of mySpriteTexture on the screen, used for collisiondetection
@@ -25,6 +27,9 @@ namespace SubGame.Animations
 
         // Defines speed for movement
         public Vector2 AccessSpeed { get; set; }
+
+        // Defines speed for movement
+        public int AccessFireAt { get; set; }
 
         // The true size of the Sprite, initialized in LoadContent, mySpriteTexture.Bounds cannot be used since it is unscaled measures
         public Rectangle AccessSize { get; set; }
@@ -48,29 +53,40 @@ namespace SubGame.Animations
             AccessCollisionBox = new Rectangle(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
         }
 
-        public void Draw(SpriteBatch aSpriteBatch)
+        public void Draw(SpriteBatch aSpriteBatch, GraphicsDevice device)
         {
+#if DEBUG
+            //This code will only be compiled if we are compiling Debug, will not be included in Release
+            //var t = new Texture2D(device, 1, 1);
+            //t.SetData(new[] { Color.White });
+#endif
+
             Rectangle tempBox = new Rectangle(0, 0, mySpriteTexture.Width, mySpriteTexture.Height);
 
             aSpriteBatch.Draw(mySpriteTexture, AccessPosition, tempBox, Color.White, 0.0f,
                 Vector2.Zero, AccessScale, SpriteEffects.None, 0);
 
             //Bamalamadingdong-woopdidoopdicrashelicrash
-            if(AccessCollisionDetected)
+            if (AccessCollisionDetected)
             {
-                aSpriteBatch.Draw(myBoom, new Vector2(100, 100), Color.White);
+                aSpriteBatch.Draw(myBoom, new Vector2(AccessPosition.X - (myBoom.Width / 2) + (AccessSize.Height / 2), AccessPosition.Y - (myBoom.Height / 2) + (AccessSize.Height / 2)), Color.White);
             }
 
-            // Calculate left and top position of collision box
-            int x1 = AccessPosition.ToPoint().X;
-            int y1 = AccessPosition.ToPoint().Y;
-
-            // Calculate right and bottom position of collision box
-            int x2 = AccessPosition.ToPoint().X + AccessSize.Width;
-            int y2 = AccessPosition.ToPoint().Y + AccessSize.Height;
-
             // Set new values to BoundingBox to track where the mySpriteTexture is located on the screen
-            AccessCollisionBox = new Rectangle(new Point(x1, y1), new Point(x2, y2));
+            AccessCollisionBox = new Rectangle(AccessPosition.ToPoint(), new Point(AccessSize.Width, AccessSize.Height));
+
+            //Generates output in Visual Studio Output - Debug window
+            //Debug.WriteLine($"{AccessCollisionBox.X}x{AccessCollisionBox.Y}, {AccessCollisionBox.Width}x{AccessCollisionBox.Height}");
+
+#if DEBUG
+            //This code will only be compiled if we are compiling Debug, will not be included in Release
+            //int bw = 2; // Border width
+
+            //aSpriteBatch.Draw(t, new Rectangle(AccessCollisionBox.Left, AccessCollisionBox.Top, bw, AccessCollisionBox.Height), Color.Black); // Left
+            //aSpriteBatch.Draw(t, new Rectangle(AccessCollisionBox.Right, AccessCollisionBox.Top, bw, AccessCollisionBox.Height), Color.Black); // Right
+            //aSpriteBatch.Draw(t, new Rectangle(AccessCollisionBox.Left, AccessCollisionBox.Top, AccessCollisionBox.Width, bw), Color.Black); // Top
+            //aSpriteBatch.Draw(t, new Rectangle(AccessCollisionBox.Left, AccessCollisionBox.Bottom, AccessCollisionBox.Width, bw), Color.Black); // Bottom
+#endif
         }
     }
 }

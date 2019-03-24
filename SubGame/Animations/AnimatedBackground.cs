@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Animations
 {
     //Source: http://www.xnadevelopment.com/tutorials/scrollinga2dbackground/ScrollingA2DBackground.shtml
-    class AnimatedBackground
+    internal class AnimatedBackground
     {
         //The texture object used when drawing the sprite, is loaded from the contentmanager in LoadContent
         private Texture2D mySpriteTexture;
@@ -41,8 +36,8 @@ namespace SubGame.Animations
         //Draw the sprite to the screen, each instance of this class is called from the game class Draw
         public void Draw(SpriteBatch aSpriteBatch)
         {
-            aSpriteBatch.Draw(mySpriteTexture, AccessPosition, 
-                new Rectangle(0, 0, mySpriteTexture.Width, mySpriteTexture.Height), Color.White, 
+            aSpriteBatch.Draw(mySpriteTexture, AccessPosition,
+                new Rectangle(0, 0, mySpriteTexture.Width, mySpriteTexture.Height), Color.White,
                 0.0f, Vector2.Zero, AccessScale, SpriteEffects.None, 0);
         }
     }

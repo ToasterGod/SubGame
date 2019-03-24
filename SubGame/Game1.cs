@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-namespace SubGame
+﻿namespace SubGame
 {
     /// <summary>
     /// This is the original main type for your game. Not used, we are using StinkySubGame instead
