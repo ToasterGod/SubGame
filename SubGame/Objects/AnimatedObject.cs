@@ -19,6 +19,9 @@ namespace SubGame.Objects
         //Bool to indicate collision detected
         public bool AccessCollisionDetected { get; set; }
 
+        //Bool to indicate collision registered
+        public bool AccessCollisionRegistered { get; set; }
+
         //Timer for collision
         public TimeSpan AccessCollisionTime { get; set; } = TimeSpan.MinValue;
 

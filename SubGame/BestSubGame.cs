@@ -261,6 +261,7 @@ namespace SubGame
                     myMines[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMines[target].AccessSize.Width * 2,
                         myGraphics.PreferredBackBufferHeight + myMines[target].AccessSize.Height * 2);
                     myMines[target].AccessCollisionDetected = false;
+                    myMines[target].AccessCollisionRegistered = false;
                 }
             }
 
@@ -331,6 +332,13 @@ namespace SubGame
             for (int i = 0; i < myMines.Length; i++)
             {
                 myMines[i].AccessCollisionDetected = myMines[i].AccessCollisionBox.Intersects(myBoat.AccessCollisionBox);
+
+                if (myMines[i].AccessCollisionDetected && !myMines[i].AccessCollisionRegistered)
+                {
+                    statusPanel.BoatsHit++;
+                    myMines[i].AccessCollisionRegistered = true;
+                }
+
                 myMines[i].Draw(mySpriteBatch);
             }
 
