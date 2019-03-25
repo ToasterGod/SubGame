@@ -41,10 +41,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Animations\AnimatedObject.cs" />
-    <Compile Include="Animations\AnimatedSprite.cs" />
-    <Compile Include="Animations\AnimatedBackground.cs" />
+    <Compile Include="Objects\AnimatedObject.cs" />
+    <Compile Include="Objects\AnimatedSprite.cs" />
+    <Compile Include="Objects\AnimatedBackground.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Objects\StatusPanel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BestSubGame.cs" />
