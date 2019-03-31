@@ -41,14 +41,20 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Elements\Element.cs" />
+    <Compile Include="Elements\EnemyElement.cs" />
+    <Compile Include="Elements\MovingElement.cs" />
+    <Compile Include="Elements\PlayerElement.cs" />
+    <Compile Include="Elements\StaticElement.cs" />
+    <Compile Include="Elements\StaticText.cs" />
     <Compile Include="Objects\AnimatedObject.cs" />
-    <Compile Include="Objects\AnimatedSprite.cs" />
     <Compile Include="Objects\AnimatedBackground.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Objects\StatusPanel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BestSubGame.cs" />
+    <Compile Include="Types\RandomNumber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -58,15 +64,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Backgrounds\Boat.png" />
     <Content Include="Content\Backgrounds\Boom.png" />
-    <Content Include="Content\Backgrounds\FastSub.png" />
     <Content Include="Content\Backgrounds\Himmel.png" />
-    <Content Include="Content\Backgrounds\MediumSub.png" />
     <Content Include="Content\Backgrounds\Mine.png" />
     <Content Include="Content\Backgrounds\Ocean.png" />
     <Content Include="Content\Backgrounds\SinkBomb.png" />
-    <Content Include="Content\Backgrounds\SlowSub.png" />
+    <Content Include="Content\Elements\Boat.png" />
+    <Content Include="Content\Elements\FastSub.png" />
+    <Content Include="Content\Elements\MediumSub.png" />
+    <Content Include="Content\Elements\SlowSub.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
