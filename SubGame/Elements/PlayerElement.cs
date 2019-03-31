@@ -25,7 +25,7 @@ namespace SubGame.Elements
         {
             LoadContent(contentManager, asset);
             //Skapa och Ladda vapen
-            //            textureSinkbomb = contentManager.Load<Texture2D>(weaponAsset);
+            //textureSinkbomb = contentManager.Load<Texture2D>(weaponAsset);
         }
 
         public override void LoadContent(ContentManager contentManager, string asset)
@@ -34,7 +34,7 @@ namespace SubGame.Elements
             //Level boat at sealevel and set left and right endpoints
             leftEdge = 60;
             rightEdge = manager.PreferredBackBufferWidth - 60 - Size.Width;
-            Position = new Vector2(leftEdge, Position.Y - Size.Height * 0.66f);
+            Position = new Vector2(leftEdge, Position.Y - Size.Height * 0.7f);
         }
 
         public override void Update(GameTime gameTime)

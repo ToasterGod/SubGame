@@ -24,7 +24,8 @@ namespace SubGame
         // Set the speed of the background movement.
         private Vector2 myBackgroundSpeed = new Vector2(120, 0); //120 = speed of movement
 
-        private AnimatedBackground[] myOceans = new AnimatedBackground[7];
+        //private AnimatedBackground[] myOceans = new AnimatedBackground[7];
+        private StaticElement ocean;
 
         // All the new
         private readonly int surfaceLevel = 280;
@@ -51,13 +52,14 @@ namespace SubGame
         {
             //All the old, should be replaced with better functionality
             // Instantiate a new AnimatedBackground object for each element in the oceans array and set scale for the size of each
-            for (int i = 0; i < myOceans.Length; i++)
-            {
-                myOceans[i] = new AnimatedBackground(0.5f);
-            }
+            //for (int i = 0; i < myOceans.Length; i++)
+            //{
+            //    myOceans[i] = new AnimatedBackground(0.5f);
+            //}
 
             // All the new
             mySkies = new List<SkyElement>();
+            ocean = new StaticElement(1.0f, 0.0f, new Vector2(0, surfaceLevel));
             myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, surfaceLevel), myGraphics);
             mySubs = new List<EnemyElement>();
             for (int i = 0; i < 3; i++)
@@ -78,13 +80,14 @@ namespace SubGame
             //All the old, should be replaced with better functionality
 
             // Load all the oceans images by calling the AnimatedBackground.LoadContent for each one of them
-            for (int i = 0; i < myOceans.Length; i++)
-            {
-                LoadBackground(myOceans[i], "Backgrounds/Ocean",
-                    new Vector2(i == 0 ? 0.0f : myOceans[i - 1].AccessPosition.X + myOceans[i - 1].AccessSize.Width, surfaceLevel));
-            }
+            //for (int i = 0; i < myOceans.Length; i++)
+            //{
+            //    LoadBackground(myOceans[i], "Backgrounds/Ocean",
+            //        new Vector2(i == 0 ? 0.0f : myOceans[i - 1].AccessPosition.X + myOceans[i - 1].AccessSize.Width, surfaceLevel));
+            //}
 
             // All the new
+            ocean.LoadContent(Content, "Backgrounds/SolidOcean");
             foreach (var sub in mySubs)
             {
                 sub.LoadContent(Content, new string[] { "Elements/SlowSub", "Elements/MediumSub", "Elements/FastSub" }, "Elements/Mine");
@@ -107,27 +110,28 @@ namespace SubGame
             }
 
             //All the old, should be replaced with better functionality
-            for (int target = 0; target < myOceans.Length; target++)
-            {
-                int tempSource = myOceans.Length - 1;
-                if (target > 0)
-                {
-                    tempSource = target - 1;
-                }
+            //for (int target = 0; target < myOceans.Length; target++)
+            //{
+            //    int tempSource = myOceans.Length - 1;
+            //    if (target > 0)
+            //    {
+            //        tempSource = target - 1;
+            //    }
 
-                if (myOceans[target].AccessPosition.X < -myOceans[target].AccessSize.Width)
-                {
-                    myOceans[target].AccessPosition = new Vector2(myOceans[tempSource].AccessPosition.X + myOceans[tempSource].AccessSize.Width,
-                        myOceans[target].AccessPosition.Y);
-                }
-            }
+            //    if (myOceans[target].AccessPosition.X < -myOceans[target].AccessSize.Width)
+            //    {
+            //        myOceans[target].AccessPosition = new Vector2(myOceans[tempSource].AccessPosition.X + myOceans[tempSource].AccessSize.Width,
+            //            myOceans[target].AccessPosition.Y);
+            //    }
+            //}
 
-            for (int i = 0; i < myOceans.Length; i++)
-            {
-                myOceans[i].AccessPosition += myGameDirection * myBackgroundSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
-            }
+            //for (int i = 0; i < myOceans.Length; i++)
+            //{
+            //    myOceans[i].AccessPosition += myGameDirection * myBackgroundSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
+            //}
 
             //All the new
+            //ocean.Update(aGameTime);
             foreach (var sky in mySkies)
             {
                 sky.Update(aGameTime);
@@ -174,14 +178,17 @@ namespace SubGame
             {
                 subs += $"{sub.Position.X:N1}x{sub.Position.Y:N1}, Speed: {sub.Speed:N1}\n";
             }
+
+            ocean.Draw(mySpriteBatch);
             statusPanel.Draw(mySpriteBatch, $"Boats hit: {myBoatsHit}\n{subs}");
+
 
             //All the old, should be replaced with better functionality
             // Call Draw for each ocean object in the oceans array
-            for (int i = 0; i < myOceans.Length; i++)
-            {
-                myOceans[i].Draw(mySpriteBatch);
-            }
+            //for (int i = 0; i < myOceans.Length; i++)
+            //{
+            //    myOceans[i].Draw(mySpriteBatch);
+            //}
 
 
             // End your drawing code here
