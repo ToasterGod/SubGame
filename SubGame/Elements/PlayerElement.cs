@@ -25,7 +25,7 @@ namespace SubGame.Elements
         {
             LoadContent(contentManager, asset);
             //Skapa och Ladda vapen
-            textureSinkbomb = contentManager.Load<Texture2D>(weaponAsset);
+            //            textureSinkbomb = contentManager.Load<Texture2D>(weaponAsset);
         }
 
         public override void LoadContent(ContentManager contentManager, string asset)

@@ -67,7 +67,7 @@
   <ItemGroup>
     <Content Include="Content\Backgrounds\Boom.png" />
     <Content Include="Content\Backgrounds\Himmel.png" />
-    <Content Include="Content\Backgrounds\Mine.png" />
+    <Content Include="Content\Elements\Mine.png" />
     <Content Include="Content\Backgrounds\Ocean.png" />
     <Content Include="Content\Backgrounds\SinkBomb.png" />
     <Content Include="Content\Elements\Boat.png" />

@@ -23,6 +23,8 @@ namespace SubGame.Elements
         private int startPoint;
         private ContentManager contentManager;
         private string[] assets;
+        private string weaponAsset;
+
         private int behindLeftEdge;
         private int behindRightEdge;
 
@@ -32,10 +34,11 @@ namespace SubGame.Elements
             GenerateNewEnemy();
         }
 
-        public void LoadContent(ContentManager contentManager, string[] assets)
+        public void LoadContent(ContentManager contentManager, string[] assets, string weaponAsset)
         {
             this.contentManager = contentManager;
             this.assets = assets;
+            this.weaponAsset = weaponAsset;
             if (subSpeed < 70)
             {
                 //slow sub
@@ -73,6 +76,10 @@ namespace SubGame.Elements
             }
         }
 
+        public void LoadWeapon()
+        {
+        }
+
         public override void Update(GameTime gameTime)
         {
             // Reset the subs if any of them is outside the left edge
@@ -80,13 +87,13 @@ namespace SubGame.Elements
             {
                 //Sub going left outside of left edge
                 GenerateNewEnemy();
-                LoadContent(contentManager, assets);
+                LoadContent(contentManager, assets, weaponAsset);
             }
             else if (Position.X > manager.PreferredBackBufferWidth && Direction > 0.0f)
             {
                 //Sub going right outside of right edge
                 GenerateNewEnemy();
-                LoadContent(contentManager, assets);
+                LoadContent(contentManager, assets, weaponAsset);
             }
 
             // Calculate the movement of all the subs (to the left)
@@ -103,7 +110,8 @@ namespace SubGame.Elements
         private void GenerateNewEnemy()
         {
             subSpeed = RandomNumber.Between(40, 130);
-            Depth = depthLevels[RandomNumber.Between(1, 3) - 1];
+            //Depth = depthLevels[RandomNumber.Between(1, 3) - 1];
+            Depth = RandomNumber.Between(450, 850);
             Direction = directionLevels[RandomNumber.Between(1, 2) - 1];
             //Only initial position for Depth value, it will be final after LoadContent
             Position = new Vector2(manager.PreferredBackBufferWidth, Depth);

@@ -26,11 +26,6 @@ namespace SubGame
 
         private AnimatedBackground[] myOceans = new AnimatedBackground[7];
 
-        // Set the direction of mine movement.
-        private readonly Vector2 myMineDirection = new Vector2(0, -1); //-1 = move upwards
-        private AnimatedObject[] myMines = new AnimatedObject[3];// One mine for each sub
-
-
         // All the new
         private readonly int surfaceLevel = 280;
         private List<SkyElement> mySkies;
@@ -61,13 +56,6 @@ namespace SubGame
                 myOceans[i] = new AnimatedBackground(0.5f);
             }
 
-            //// Instantiate three mines
-            for (int i = 0; i < myMines.Length; i++)
-            {
-                myMines[i] = new AnimatedObject(0.6f, new Vector2(0, 50));
-            }
-
-
             // All the new
             mySkies = new List<SkyElement>();
             myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, surfaceLevel), myGraphics);
@@ -96,20 +84,10 @@ namespace SubGame
                     new Vector2(i == 0 ? 0.0f : myOceans[i - 1].AccessPosition.X + myOceans[i - 1].AccessSize.Width, surfaceLevel));
             }
 
-            // Load mines
-            for (int i = 0; i < myMines.Length; i++)
-            {
-                myMines[i].LoadContent(Content, "Backgrounds/Mine");
-                // Set initial position of the mine to the width and height of 2 mines beyond the right, bottom of the screen
-                myMines[i].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMines[i].AccessSize.Width * 2,
-                        myGraphics.PreferredBackBufferHeight + myMines[i].AccessSize.Height * 2);
-            }
-
-
             // All the new
             foreach (var sub in mySubs)
             {
-                sub.LoadContent(Content, new string[] { "Elements/SlowSub", "Elements/MediumSub", "Elements/FastSub" });
+                sub.LoadContent(Content, new string[] { "Elements/SlowSub", "Elements/MediumSub", "Elements/FastSub" }, "Elements/Mine");
             }
             myBoat.LoadContent(Content, "Elements/Boat", "Elements/Sinkbomb");
             statusPanel.LoadContent(Content, "Status");
@@ -144,30 +122,10 @@ namespace SubGame
                 }
             }
 
-            for (int target = 0; target < myMines.Length; target++)
-            {
-                if (myMines[target].AccessPosition.Y < surfaceLevel)
-                {
-                    myMines[target].AccessPosition = new Vector2(myGraphics.PreferredBackBufferWidth + myMines[target].AccessSize.Width * 2,
-                        myGraphics.PreferredBackBufferHeight + myMines[target].AccessSize.Height * 2);
-                    myMines[target].AccessCollisionDetected = false;
-                    myMines[target].AccessCollisionRegistered = false;
-                }
-            }
-
             for (int i = 0; i < myOceans.Length; i++)
             {
                 myOceans[i].AccessPosition += myGameDirection * myBackgroundSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
             }
-
-            for (int i = 0; i < myMines.Length; i++)
-            {
-                if (myMines[i].AccessPosition.X < myGraphics.PreferredBackBufferWidth && myMines[i].AccessPosition.Y < myGraphics.PreferredBackBufferHeight)
-                {
-                    myMines[i].AccessPosition += myMineDirection * myMines[i].AccessSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
-                }
-            }
-
 
             //All the new
             foreach (var sky in mySkies)
@@ -188,30 +146,10 @@ namespace SubGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(Color.LightSkyBlue);
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.LightSkyBlue);
+            //GraphicsDevice.Clear(Color.White);
             mySpriteBatch.Begin();
             // Begin your drawing code here
-
-            //All the old, should be replaced with better functionality
-            for (int i = 0; i < myMines.Length; i++)
-            {
-                myMines[i].AccessCollisionDetected = myMines[i].AccessCollisionBox.Intersects(myBoat.CollisionBox);
-
-                if (myMines[i].AccessCollisionDetected && !myMines[i].AccessCollisionRegistered)
-                {
-                    myBoatsHit++;
-                    myMines[i].AccessCollisionRegistered = true;
-                }
-
-                myMines[i].Draw(mySpriteBatch);
-            }
-
-            // Call Draw for each ocean object in the oceans array
-            for (int i = 0; i < myOceans.Length; i++)
-            {
-                myOceans[i].Draw(mySpriteBatch);
-            }
 
             //All the new
             if ((gameTime.TotalGameTime.Seconds % 10) == 0)
@@ -237,6 +175,14 @@ namespace SubGame
                 subs += $"{sub.Position.X:N1}x{sub.Position.Y:N1}, Speed: {sub.Speed:N1}\n";
             }
             statusPanel.Draw(mySpriteBatch, $"Boats hit: {myBoatsHit}\n{subs}");
+
+            //All the old, should be replaced with better functionality
+            // Call Draw for each ocean object in the oceans array
+            for (int i = 0; i < myOceans.Length; i++)
+            {
+                myOceans[i].Draw(mySpriteBatch);
+            }
+
 
             // End your drawing code here
             mySpriteBatch.End();
