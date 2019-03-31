@@ -45,6 +45,7 @@
     <Compile Include="Elements\EnemyElement.cs" />
     <Compile Include="Elements\MovingElement.cs" />
     <Compile Include="Elements\PlayerElement.cs" />
+    <Compile Include="Elements\SkyElement.cs" />
     <Compile Include="Elements\StaticElement.cs" />
     <Compile Include="Elements\StaticText.cs" />
     <Compile Include="Objects\AnimatedObject.cs" />
@@ -53,7 +54,7 @@
     <Compile Include="Objects\StatusPanel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BestSubGame.cs" />
+    <Compile Include="Level1.cs" />
     <Compile Include="Types\RandomNumber.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +71,10 @@
     <Content Include="Content\Backgrounds\Ocean.png" />
     <Content Include="Content\Backgrounds\SinkBomb.png" />
     <Content Include="Content\Elements\Boat.png" />
+    <Content Include="Content\Elements\cloud1.png" />
+    <Content Include="Content\Elements\cloud2.png" />
+    <Content Include="Content\Elements\cloud3.png" />
+    <Content Include="Content\Elements\cloud4.png" />
     <Content Include="Content\Elements\FastSub.png" />
     <Content Include="Content\Elements\MediumSub.png" />
     <Content Include="Content\Elements\SlowSub.png" />

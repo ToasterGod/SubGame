@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,19 +13,17 @@ namespace SubGame
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class BestSubGame : Game
+    public class Level1 : Game
     {
         private GraphicsDeviceManager myGraphics;
         private SpriteBatch mySpriteBatch;
 
         //All the old, should be replaced with better functionality
-        private readonly int mySkyTop = 0; // Top position of the Sky graphics
         // Set the direction of the background movement.
         private readonly Vector2 myGameDirection = new Vector2(-1, 0); //-1 = move background left
         // Set the speed of the background movement.
         private Vector2 myBackgroundSpeed = new Vector2(120, 0); //120 = speed of movement
 
-        private AnimatedBackground[] mySkies = new AnimatedBackground[7];
         private AnimatedBackground[] myOceans = new AnimatedBackground[7];
 
         // Set the direction of mine movement.
@@ -34,13 +33,15 @@ namespace SubGame
 
         // All the new
         private readonly int surfaceLevel = 280;
+        private List<SkyElement> mySkies;
         private List<EnemyElement> mySubs;
         private PlayerElement myBoat;
         StaticText statusPanel;
 
         private int myBoatsHit;
+        private int latestSkyAdded;
 
-        public BestSubGame()
+        public Level1()
         {
             myGraphics = new GraphicsDeviceManager(this)
             {
@@ -54,12 +55,6 @@ namespace SubGame
         protected override void Initialize()
         {
             //All the old, should be replaced with better functionality
-            // Instantiate a new AnimatedBackground object for each element in the skies array and set scale for the size of each
-            for (int i = 0; i < mySkies.Length; i++)
-            {
-                mySkies[i] = new AnimatedBackground(0.15f);
-            }
-
             // Instantiate a new AnimatedBackground object for each element in the oceans array and set scale for the size of each
             for (int i = 0; i < myOceans.Length; i++)
             {
@@ -74,7 +69,8 @@ namespace SubGame
 
 
             // All the new
-            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.0f, new Vector2(0, surfaceLevel), myGraphics);
+            mySkies = new List<SkyElement>();
+            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, surfaceLevel), myGraphics);
             mySubs = new List<EnemyElement>();
             for (int i = 0; i < 3; i++)
             {
@@ -92,12 +88,6 @@ namespace SubGame
             mySpriteBatch = new SpriteBatch(GraphicsDevice);
 
             //All the old, should be replaced with better functionality
-            // Load all the skies images by calling the AnimatedBackground.LoadContent for each one of them
-            for (int i = 0; i < mySkies.Length; i++)
-            {
-                LoadBackground(mySkies[i], "Backgrounds/Himmel",
-                    new Vector2(i == 0 ? 0.0f : mySkies[i - 1].AccessPosition.X + mySkies[i - 1].AccessSize.Width, mySkyTop));
-            }
 
             // Load all the oceans images by calling the AnimatedBackground.LoadContent for each one of them
             for (int i = 0; i < myOceans.Length; i++)
@@ -121,7 +111,7 @@ namespace SubGame
             {
                 sub.LoadContent(Content, new string[] { "Elements/SlowSub", "Elements/MediumSub", "Elements/FastSub" });
             }
-            myBoat.LoadContent(Content, "Elements/Boat");
+            myBoat.LoadContent(Content, "Elements/Boat", "Elements/Sinkbomb");
             statusPanel.LoadContent(Content, "Status");
         }
 
@@ -139,21 +129,6 @@ namespace SubGame
             }
 
             //All the old, should be replaced with better functionality
-            for (int target = 0; target < mySkies.Length; target++)
-            {
-                int tempSource = mySkies.Length - 1;
-                if (target > 0)
-                {
-                    tempSource = target - 1;
-                }
-
-                if (mySkies[target].AccessPosition.X < -mySkies[target].AccessSize.Width)
-                {
-                    mySkies[target].AccessPosition = new Vector2(mySkies[tempSource].AccessPosition.X + mySkies[tempSource].AccessSize.Width,
-                        mySkies[target].AccessPosition.Y);
-                }
-            }
-
             for (int target = 0; target < myOceans.Length; target++)
             {
                 int tempSource = myOceans.Length - 1;
@@ -180,11 +155,6 @@ namespace SubGame
                 }
             }
 
-            for (int i = 0; i < mySkies.Length; i++)
-            {
-                mySkies[i].AccessPosition += myGameDirection * myBackgroundSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
-            }
-
             for (int i = 0; i < myOceans.Length; i++)
             {
                 myOceans[i].AccessPosition += myGameDirection * myBackgroundSpeed * (float)aGameTime.ElapsedGameTime.TotalSeconds;
@@ -198,7 +168,12 @@ namespace SubGame
                 }
             }
 
+
             //All the new
+            foreach (var sky in mySkies)
+            {
+                sky.Update(aGameTime);
+            }
             foreach (var sub in mySubs)
             {
                 sub.Update(aGameTime);
@@ -219,12 +194,6 @@ namespace SubGame
             // Begin your drawing code here
 
             //All the old, should be replaced with better functionality
-            // Call Draw for each sky element in the skies array
-            for (int i = 0; i < mySkies.Length; i++)
-            {
-                mySkies[i].Draw(mySpriteBatch);
-            }
-
             for (int i = 0; i < myMines.Length; i++)
             {
                 myMines[i].AccessCollisionDetected = myMines[i].AccessCollisionBox.Intersects(myBoat.CollisionBox);
@@ -245,6 +214,18 @@ namespace SubGame
             }
 
             //All the new
+            if ((gameTime.TotalGameTime.Seconds % 10) == 0)
+            {
+                if (gameTime.TotalGameTime.Seconds != latestSkyAdded)
+                {
+                    latestSkyAdded = gameTime.TotalGameTime.Seconds;
+                    HandleSkies();
+                }
+            }
+            foreach (var sky in mySkies)
+            {
+                sky.Draw(mySpriteBatch);
+            }
             foreach (var sub in mySubs)
             {
                 sub.Draw(mySpriteBatch);
@@ -260,6 +241,17 @@ namespace SubGame
             // End your drawing code here
             mySpriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        private void HandleSkies()
+        {
+            var skyElement = new SkyElement(0.6f, -1.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
+            skyElement.LoadContent(Content, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
+            mySkies.Add(skyElement);
+            foreach (var sky in mySkies.Where(s => s.OutOfBounds).ToList())
+            {
+                mySkies.Remove(sky);
+            }
         }
     }
 }

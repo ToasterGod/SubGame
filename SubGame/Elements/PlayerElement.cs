@@ -11,6 +11,7 @@ namespace SubGame.Elements
     {
         private int leftEdge;
         private int rightEdge;
+        private Texture2D textureSinkbomb;
 
         public Rectangle CollisionBox { get; internal set; }
         public WhereIsTheBoatDelegate WhereIsTheBoat { get; set; }
@@ -18,6 +19,13 @@ namespace SubGame.Elements
         public PlayerElement(float scale, float direction, float rotation, float speed, Vector2 position, GraphicsDeviceManager manager)
             : base(scale, direction, rotation, speed, position, manager)
         {
+        }
+
+        public void LoadContent(ContentManager contentManager, string asset, string weaponAsset)
+        {
+            LoadContent(contentManager, asset);
+            //Skapa och Ladda vapen
+            textureSinkbomb = contentManager.Load<Texture2D>(weaponAsset);
         }
 
         public override void LoadContent(ContentManager contentManager, string asset)

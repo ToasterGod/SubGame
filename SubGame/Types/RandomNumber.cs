@@ -3,6 +3,8 @@ using System.Security.Cryptography;
 
 namespace SubGame.Types
 {
+    //How to generate better random values than Random() by using RNGCryptoServiceProvider
+    //https://scottlilly.com/create-better-random-numbers-in-c/
     public static class RandomNumber
     {
         private static readonly RNGCryptoServiceProvider _generator = new RNGCryptoServiceProvider();

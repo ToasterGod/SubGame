@@ -1,7 +1,7 @@
 ﻿namespace SubGame
 {
     /// <summary>
-    /// This is the original main type for your game. Not used, we are using StinkySubGame instead
+    /// This is the original main type for your game. Not used, we are using BestSubGame instead
     /// </summary>
     //public class Game1 : Game
     //{

@@ -23,18 +23,13 @@ namespace SubGame.Elements
         private int startPoint;
         private ContentManager contentManager;
         private string[] assets;
+        private int behindLeftEdge;
+        private int behindRightEdge;
 
         public EnemyElement(float scale, float direction, float rotation, float speed, Vector2 position, GraphicsDeviceManager manager)
             : base(scale, direction, rotation, speed, position, manager)
         {
-            subSpeed = RandomNumber.Between(40, 130);
-            Depth = depthLevels[RandomNumber.Between(1, 3) - 1];
-            Direction = directionLevels[RandomNumber.Between(1, 2) - 1];
-            if (Direction > 0.0f)
-                Position = new Vector2(Position.X, Depth);
-            else
-                Position = new Vector2(manager.PreferredBackBufferWidth - 200, Depth);
-            //FireAt = myRNG.Next(100, myGraphics.PreferredBackBufferWidth - 100);
+            GenerateNewEnemy();
         }
 
         public void LoadContent(ContentManager contentManager, string[] assets)
@@ -62,7 +57,21 @@ namespace SubGame.Elements
         }
 
         public override void LoadContent(ContentManager contentManager, string asset)
-            => base.LoadContent(contentManager, asset);
+        {
+            base.LoadContent(contentManager, asset);
+
+            //Set left and right startpoints
+            behindLeftEdge = 0 - Size.Width;
+            behindRightEdge = manager.PreferredBackBufferWidth;
+            if (Direction > 0.0f)
+            {
+                Position = new Vector2(behindLeftEdge, Position.Y);
+            }
+            else if (Direction < 0.0f)
+            {
+                Position = new Vector2(behindRightEdge, Position.Y);
+            }
+        }
 
         public override void Update(GameTime gameTime)
         {
@@ -70,12 +79,14 @@ namespace SubGame.Elements
             if (Position.X + Size.Width < 0 && Direction < 0.0f)
             {
                 //Sub going left outside of left edge
-                GenerateNewSub();
+                GenerateNewEnemy();
+                LoadContent(contentManager, assets);
             }
             else if (Position.X > manager.PreferredBackBufferWidth && Direction > 0.0f)
             {
                 //Sub going right outside of right edge
-                GenerateNewSub();
+                GenerateNewEnemy();
+                LoadContent(contentManager, assets);
             }
 
             // Calculate the movement of all the subs (to the left)
@@ -89,17 +100,13 @@ namespace SubGame.Elements
             base.Draw(spriteBatch);
         }
 
-        private void GenerateNewSub()
+        private void GenerateNewEnemy()
         {
             subSpeed = RandomNumber.Between(40, 130);
             Depth = depthLevels[RandomNumber.Between(1, 3) - 1];
             Direction = directionLevels[RandomNumber.Between(1, 2) - 1];
-            if (Direction > 0.0f)
-                Position = new Vector2(Position.X, Depth);
-            else
-                Position = new Vector2(manager.PreferredBackBufferWidth - 200, Depth);
-
-            LoadContent(contentManager, assets);
+            //Only initial position for Depth value, it will be final after LoadContent
+            Position = new Vector2(manager.PreferredBackBufferWidth, Depth);
         }
 
         public void BoatIsFoundAt(Rectangle location)
