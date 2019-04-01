@@ -37,7 +37,7 @@ namespace SubGame.Elements
             }
 
             // Calculate the movement of all the clouds
-            CalcMovement(Speed);
+            CalcHorizontalMovement(Speed);
 
             base.Update(gameTime);
         }

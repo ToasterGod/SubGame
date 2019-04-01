@@ -48,6 +48,7 @@ namespace SubGame
             ocean = new StaticElement(1.0f, 0.0f, new Vector2(0, surfaceLevel));
             myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, surfaceLevel), myGraphics);
             mySubs = new List<EnemyElement>();
+            //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < 3; i++)
             {
                 mySubs.Add(new EnemyElement(0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics));
@@ -85,18 +86,22 @@ namespace SubGame
             {
                 sky.Update(aGameTime);
             }
+
             foreach (var sub in mySubs)
             {
+                //Sub update will call its mines update
                 sub.Update(aGameTime);
+                if ((sub.Position.X < 410.0f && sub.Position.X > 409.5f) || (sub.Position.X < 810.0f && sub.Position.X > 809.5f))
+                {
+                    sub.ReleaseMine();
+                }
             }
+
             myBoat.Update(aGameTime);
+
             base.Update(aGameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.LightSkyBlue);
@@ -107,22 +112,21 @@ namespace SubGame
             {
                 GenerateRandomSkies(gameTime);
             }
+
             foreach (var sky in mySkies)
             {
                 sky.Draw(mySpriteBatch);
             }
+
             foreach (var sub in mySubs)
             {
                 sub.Draw(mySpriteBatch);
             }
+
             myBoat.Draw(mySpriteBatch);
-            string subs = "";
-            foreach (var sub in mySubs)
-            {
-                subs += $"{sub.Position.X:N1}x{sub.Position.Y:N1}, Speed: {sub.Speed:N1}\n";
-            }
 
             ocean.Draw(mySpriteBatch);
+
             statusPanelLeft.Draw(mySpriteBatch, $"Boat hits: {myBoatHits}");
             statusPanelRight.Draw(mySpriteBatch, $"Sub hits: {mySubHits}");
 

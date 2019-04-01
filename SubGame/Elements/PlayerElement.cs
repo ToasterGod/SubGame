@@ -60,7 +60,7 @@ namespace SubGame.Elements
                 Direction = 0.0f;
             }
 
-            CalcMovement(Speed);
+            CalcHorizontalMovement(Speed);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

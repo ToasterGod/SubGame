@@ -13,8 +13,8 @@ namespace SubGame.Elements
 
         public float Direction { get; set; }
         public float Rotation { get; set; }
-        public float Speed { get; set; } = 1.0f;
-        public float Scale { get; set; } = 1.0f;
+        public float Speed { get; set; }
+        public float Scale { get; set; }
         public Texture2D Texture => texture;
 
         public MovingElement(float scale, float direction, float rotation, float speed, Vector2 position, GraphicsDeviceManager manager)
@@ -47,11 +47,21 @@ namespace SubGame.Elements
             spriteBatch.Draw(texture, Position, sourceRectangle, Color.White, Rotation, origin, Scale, effects, 1);
         }
 
-        public void CalcMovement(float speed)
+        protected void CalcHorizontalMovement(float speed)
         {
             if (Direction < 0.0f || Direction > 0.0f)
             {
                 Vector2 direction = new Vector2(Direction, 0);
+                direction.Normalize();
+                Position += direction * speed;
+            }
+        }
+
+        protected void CalcVerticalMovement(float speed)
+        {
+            if (Direction < 0.0f || Direction > 0.0f)
+            {
+                Vector2 direction = new Vector2(0, Direction);
                 direction.Normalize();
                 Position += direction * speed;
             }
