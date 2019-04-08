@@ -9,17 +9,17 @@ namespace SubGame.Types
     {
         private static readonly RNGCryptoServiceProvider _generator = new RNGCryptoServiceProvider();
 
-        public static int Between(int minimumValue, int maximumValue)
+        public static int Between(int aMinimumValue, int aMaximumValue)
         {
-            byte[] randomNumber = new byte[1];
+            byte[] myRandomNumber = new byte[1];
 
-            _generator.GetBytes(randomNumber);
-            double asciiValueOfRandomCharacter = Convert.ToDouble(randomNumber[0]);
-            double multiplier = Math.Max(0, (asciiValueOfRandomCharacter / 255d) - 0.00000000001d);
-            int range = maximumValue - minimumValue + 1;
-            double randomValueInRange = Math.Floor(multiplier * range);
+            _generator.GetBytes(myRandomNumber);
+            double tempAsciiValueOfRandomCharacter = Convert.ToDouble(myRandomNumber[0]);
+            double tempMultiplier = Math.Max(0, (tempAsciiValueOfRandomCharacter / 255d) - 0.00000000001d);
+            int myRange = aMaximumValue - aMinimumValue + 1;
+            double myRandomValueInRange = Math.Floor(tempMultiplier * myRange);
 
-            return (int)(minimumValue + randomValueInRange);
+            return (int)(aMinimumValue + myRandomValueInRange);
         }
     }
 }

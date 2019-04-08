@@ -19,17 +19,17 @@ namespace SubGame
         private SpriteBatch mySpriteBatch;
 
         // All the new
-        private readonly int surfaceLevel = 280;
+        private readonly int mySurfaceLevel = 280;
         private List<SkyElement> mySkies;
-        private StaticElement ocean;
+        private StaticElement myOcean;
         private PlayerElement myBoat;
         private List<EnemyElement> mySubs;
-        StaticText statusPanelLeft;
-        StaticText statusPanelRight;
+        StaticText myStatusPanelLeft;
+        StaticText myStatusPanelRight;
 
         private int myBoatHits;
-        private int mySubHits;
-        private int latestSkyAdded;
+        private int mySubHits; 
+        private int myLatestAddedSky;
 
         public Level1()
         {
@@ -45,18 +45,18 @@ namespace SubGame
         protected override void Initialize()
         {
             mySkies = new List<SkyElement>();
-            ocean = new StaticElement(1.0f, 0.0f, new Vector2(0, surfaceLevel));
-            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, surfaceLevel), myGraphics);
+            myOcean = new StaticElement(1.0f, 0.0f, new Vector2(0, mySurfaceLevel));
+            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics);
             mySubs = new List<EnemyElement>();
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < 3; i++)
             {
                 mySubs.Add(new EnemyElement(0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics));
-                myBoat.WhereIsTheBoat += mySubs[i].BoatIsFoundAt;
+                myBoat.AccessWhereIsTheBoat += mySubs[i].BoatIsFoundAt;
             }
             var staticTextTop = myGraphics.PreferredBackBufferHeight - 100;
-            statusPanelLeft = new StaticText(new Vector2(20, staticTextTop), new Vector2(300, 80), myGraphics);
-            statusPanelRight = new StaticText(new Vector2(myGraphics.PreferredBackBufferWidth - 320, staticTextTop), new Vector2(300, 80), myGraphics);
+            myStatusPanelLeft = new StaticText(new Vector2(20, staticTextTop), new Vector2(300, 80), myGraphics);
+            myStatusPanelRight = new StaticText(new Vector2(myGraphics.PreferredBackBufferWidth - 320, staticTextTop), new Vector2(300, 80), myGraphics);
 
             base.Initialize();
         }
@@ -65,14 +65,14 @@ namespace SubGame
         {
             mySpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ocean.LoadContent(Content, "Backgrounds/SolidOcean");
+            myOcean.LoadContent(Content, "Backgrounds/SolidOcean");
             foreach (var sub in mySubs)
             {
                 sub.LoadContent(Content, new string[] { "Elements/SlowSub", "Elements/MediumSub", "Elements/FastSub" }, "Elements/Mine");
             }
             myBoat.LoadContent(Content, "Elements/Boat", "Elements/Sinkbomb");
-            statusPanelLeft.LoadContent(Content, "Status");
-            statusPanelRight.LoadContent(Content, "Status");
+            myStatusPanelLeft.LoadContent(Content, "Status");
+            myStatusPanelRight.LoadContent(Content, "Status");
         }
 
         protected override void Update(GameTime aGameTime)
@@ -91,7 +91,7 @@ namespace SubGame
             {
                 //Sub update will call its mines update
                 sub.Update(aGameTime);
-                if ((sub.Position.X < 410.0f && sub.Position.X > 409.5f) || (sub.Position.X < 810.0f && sub.Position.X > 809.5f))
+                if ((sub.AccessPosition.X < 410.0f && sub.AccessPosition.X > 409.5f) || (sub.AccessPosition.X < 810.0f && sub.AccessPosition.X > 809.5f))
                 {
                     sub.ReleaseMine();
                 }
@@ -108,7 +108,7 @@ namespace SubGame
             mySpriteBatch.Begin();
             // Begin your drawing code here
 
-            if ((gameTime.TotalGameTime.Seconds % 20) == 0 && gameTime.TotalGameTime.Seconds != latestSkyAdded)
+            if ((gameTime.TotalGameTime.Seconds % 20) == 0 && gameTime.TotalGameTime.Seconds != myLatestAddedSky)
             {
                 GenerateRandomSkies(gameTime);
             }
@@ -125,24 +125,24 @@ namespace SubGame
 
             myBoat.Draw(mySpriteBatch);
 
-            ocean.Draw(mySpriteBatch);
+            myOcean.Draw(mySpriteBatch);
 
-            statusPanelLeft.Draw(mySpriteBatch, $"Boat hits: {myBoatHits}");
-            statusPanelRight.Draw(mySpriteBatch, $"Sub hits: {mySubHits}");
+            myStatusPanelLeft.Draw(mySpriteBatch, $"Boat hits: {myBoatHits}");
+            myStatusPanelRight.Draw(mySpriteBatch, $"Sub hits: {mySubHits}");
 
             // End your drawing code here
             mySpriteBatch.End();
             base.Draw(gameTime);
         }
 
-        private void GenerateRandomSkies(GameTime gameTime)
+        private void GenerateRandomSkies(GameTime aGameTime)
         {
-            float randomSpeed = (float)RandomNumber.Between(3, 8) / 10.0f;
-            latestSkyAdded = gameTime.TotalGameTime.Seconds;
-            var skyElement = new SkyElement(0.6f, -1.0f, 0.0f, randomSpeed, new Vector2(0, 0), myGraphics);
-            skyElement.LoadContent(Content, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
-            mySkies.Add(skyElement);
-            foreach (var sky in mySkies.Where(s => s.OutOfBounds).ToList())
+            float tempRandomSpeed = (float)RandomNumber.Between(3, 8) / 10.0f;
+            myLatestAddedSky = aGameTime.TotalGameTime.Seconds;
+            var aSkyElement = new SkyElement(0.6f, -1.0f, 0.0f, tempRandomSpeed, new Vector2(0, 0), myGraphics);
+            aSkyElement.LoadContent(Content, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
+            mySkies.Add(aSkyElement);
+            foreach (var sky in mySkies.Where(s => s.AccessOutOfBounds).ToList())
             {
                 mySkies.Remove(sky);
             }

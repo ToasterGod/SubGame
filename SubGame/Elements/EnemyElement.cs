@@ -11,155 +11,155 @@ namespace SubGame.Elements
 {
     internal class EnemyElement : MovingElement
     {
-        private readonly float[] directionLevels = { -1.0f, 1.0f };
-        private int subSpeed;
+        private readonly float[] myDirectionLevels = { -1.0f, 1.0f };
+        private int mySubSpeed;
 
-        public int Depth { get; private set; }
+        public int GetDepth { get; private set; }
 
-        private ContentManager contentManager;
-        private string[] assets;
+        private ContentManager myContentManager;
+        private string[] myAssets;
 
-        private int behindLeftEdge;
-        private int behindRightEdge;
+        private int myBehindLeftEdge;
+        private int myBehindRightEdge;
 
         //Mine stuff
-        private List<MineElement> mines;
-        private string weaponAsset;
+        private List<MineElement> myMineList;
+        private string myWeaponAsset;
 
-        public EnemyElement(float scale, float direction, float rotation, float speed, Vector2 position, GraphicsDeviceManager manager)
-            : base(scale, direction, rotation, speed, position, manager)
+        public EnemyElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
             GenerateNewEnemy();
         }
 
         private void GenerateNewEnemy()
         {
-            subSpeed = RandomNumber.Between(40, 130);
+            mySubSpeed = RandomNumber.Between(40, 130);
             //Depth = depthLevels[RandomNumber.Between(1, 3) - 1];
-            Depth = RandomNumber.Between(450, 850);
-            Direction = directionLevels[RandomNumber.Between(1, 2) - 1];
+            GetDepth = RandomNumber.Between(450, 850);
+            AccessDirection = myDirectionLevels[RandomNumber.Between(1, 2) - 1];
             //Only initial position for Depth value, it will be final after LoadContent
-            Position = new Vector2(manager.PreferredBackBufferWidth, Depth);
+            AccessPosition = new Vector2(manager.PreferredBackBufferWidth, GetDepth);
             GenerateNewWeapons();
         }
 
         private void GenerateNewWeapons()
         {
-            mines = new List<MineElement>();
+            myMineList = new List<MineElement>();
             for (int i = 0; i < 4; i++)
             {
-                mines.Add(new MineElement(1.0f, Direction, Rotation, 1.0f, Position, manager));
+                myMineList.Add(new MineElement(1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, manager));
             }
         }
 
-        public void LoadContent(ContentManager contentManager, string[] assets, string weaponAsset)
+        public void LoadContent(ContentManager aContentManager, string[] anAssets, string aWeaponAsset)
         {
-            this.contentManager = contentManager;
-            this.assets = assets;
-            this.weaponAsset = weaponAsset;
-            if (subSpeed < 70)
+            this.myContentManager = aContentManager;
+            this.myAssets = anAssets;
+            this.myWeaponAsset = aWeaponAsset;
+            if (mySubSpeed < 70)
             {
                 //slow sub
-                Speed = 0.5f;
-                LoadContent(contentManager, assets[0]);
+                AccessSpeed = 0.5f;
+                LoadContent(aContentManager, anAssets[0]);
             }
-            else if (subSpeed < 100)
+            else if (mySubSpeed < 100)
             {
                 //fast sub
-                Speed = 0.8f;
-                LoadContent(contentManager, assets[1]);
+                AccessSpeed = 0.8f;
+                LoadContent(aContentManager, anAssets[1]);
             }
             else
             {
                 // fastest sub
-                Speed = 1.2f;
-                LoadContent(contentManager, assets[2]);
+                AccessSpeed = 1.2f;
+                LoadContent(aContentManager, anAssets[2]);
             }
-            foreach (var mine in mines)
+            foreach (var mine in myMineList)
             {
-                mine.LoadContent(contentManager, weaponAsset);
-                mine.Position = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height / 2);
+                mine.LoadContent(aContentManager, aWeaponAsset);
+                mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
             }
         }
 
-        public override void LoadContent(ContentManager contentManager, string asset)
+        public override void LoadContent(ContentManager aContentManager, string anAsset)
         {
-            base.LoadContent(contentManager, asset);
+            base.LoadContent(aContentManager, anAsset);
 
             //Set left and right startpoints
-            behindLeftEdge = 0 - Size.Width;
-            behindRightEdge = manager.PreferredBackBufferWidth;
-            if (Direction > 0.0f)
+            myBehindLeftEdge = 0 - AccessSize.Width;
+            myBehindRightEdge = manager.PreferredBackBufferWidth;
+            if (AccessDirection > 0.0f)
             {
-                Position = new Vector2(behindLeftEdge, Position.Y);
+                AccessPosition = new Vector2(myBehindLeftEdge, AccessPosition.Y);
             }
-            else if (Direction < 0.0f)
+            else if (AccessDirection < 0.0f)
             {
-                Position = new Vector2(behindRightEdge, Position.Y);
+                AccessPosition = new Vector2(myBehindRightEdge, AccessPosition.Y);
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime aGameTime)
         {
             //Add pre update stuff here:
 
             //Then call base update
-            base.Update(gameTime);
+            base.Update(aGameTime);
 
             //Add post update stuff here:
             // Reset the subs if any of them is outside the left edge
-            if (Position.X + Size.Width < 0 && Direction < 0.0f)
+            if (AccessPosition.X + AccessSize.Width < 0 && AccessDirection < 0.0f)
             {
                 //Sub going left outside of left edge
                 GenerateNewEnemy();
-                LoadContent(contentManager, assets, weaponAsset);
+                LoadContent(myContentManager, myAssets, myWeaponAsset);
             }
-            else if (Position.X > manager.PreferredBackBufferWidth && Direction > 0.0f)
+            else if (AccessPosition.X > manager.PreferredBackBufferWidth && AccessDirection > 0.0f)
             {
                 //Sub going right outside of right edge
                 GenerateNewEnemy();
-                LoadContent(contentManager, assets, weaponAsset);
+                LoadContent(myContentManager, myAssets, myWeaponAsset);
             }
 
             // Calculate the movement
-            CalcHorizontalMovement(Speed);
+            CalcHorizontalMovement(AccessSpeed);
 
-            foreach (var mine in mines.Where(m => m.Released == false))
+            foreach (var mine in myMineList.Where(m => m.AccessReleased == false))
             {
-                mine.Update(gameTime);
-                mine.Position = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height / 2);
+                mine.Update(aGameTime);
+                mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
             }
 
-            foreach (var mine in mines.Where(m => m.Released == true))
+            foreach (var mine in myMineList.Where(m => m.AccessReleased == true))
             {
-                mine.Update(gameTime);
+                mine.Update(aGameTime);
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch aSpriteBatch)
         {
             //Mines are drawn before sub, that way they will be hidden behind the sub
-            base.Draw(spriteBatch);
-            foreach (var mine in mines)
+            base.Draw(aSpriteBatch);
+            foreach (var mine in myMineList)
             {
-                mine.Draw(spriteBatch);
+                mine.Draw(aSpriteBatch);
             }
         }
 
-        public void BoatIsFoundAt(Rectangle location)
+        public void BoatIsFoundAt(Rectangle aLocation)
         {
             //throw new NotImplementedException();
         }
 
         public void ReleaseMine()
         {
-            var mine = mines.FirstOrDefault(m => m.Released == false);
-            if (mine != null)
+            var myMine = myMineList.FirstOrDefault(m => m.AccessReleased == false);
+            if (myMine != null)
             {
-                mine.Released = true;
-                mine.Direction = -1.0f;
-                mine.Speed = 10.0f;
-                mine.Position = Position;
+                myMine.AccessReleased = true;
+                myMine.AccessDirection = -1.0f;
+                myMine.AccessSpeed = 10.0f;
+                myMine.AccessPosition = AccessPosition;
             }
         }
     }

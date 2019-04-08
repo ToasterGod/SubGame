@@ -8,43 +8,43 @@ namespace SubGame.Elements
 {
     internal class SkyElement : MovingElement
     {
-        public bool OutOfBounds { get; set; }
+        public bool AccessOutOfBounds { get; set; }
 
-        public SkyElement(float scale, float direction, float rotation, float speed, Vector2 position, GraphicsDeviceManager manager) : base(scale, direction, rotation, speed, position, manager)
+        public SkyElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager) : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
-            Direction = -1.0f;
-            Position = new Vector2(manager.PreferredBackBufferWidth, RandomNumber.Between(1, 50));
+            AccessDirection = -1.0f;
+            AccessPosition = new Vector2(aManager.PreferredBackBufferWidth, RandomNumber.Between(1, 50));
         }
 
-        public void LoadContent(ContentManager contentManager, string[] assets)
+        public void LoadContent(ContentManager aContentManager, string[] someAssets)
         {
-            int random = RandomNumber.Between(1, assets.Length) - 1;
-            LoadContent(contentManager, assets[random]);
+            int tempRandom = RandomNumber.Between(1, someAssets.Length) - 1;
+            LoadContent(aContentManager, someAssets[tempRandom]);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime aGameTime)
         {
             //// Reset the sky if it is outside the left or right edge
-            if (Position.X + Size.Width < 0 && Direction < 0.0f)
+            if (AccessPosition.X + AccessSize.Width < 0 && AccessDirection < 0.0f)
             {
                 //Sky going left outside of left edge
-                OutOfBounds = true;
+                AccessOutOfBounds = true;
             }
-            else if (Position.X > manager.PreferredBackBufferWidth && Direction > 0.0f)
+            else if (AccessPosition.X > manager.PreferredBackBufferWidth && AccessDirection > 0.0f)
             {
                 //Sky going right outside of right edge
-                OutOfBounds = true;
+                AccessOutOfBounds = true;
             }
 
             // Calculate the movement of all the clouds
-            CalcHorizontalMovement(Speed);
+            CalcHorizontalMovement(AccessSpeed);
 
-            base.Update(gameTime);
+            base.Update(aGameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch aSpriteBatch)
         {
-            base.Draw(spriteBatch);
+            base.Draw(aSpriteBatch);
         }
     }
 }

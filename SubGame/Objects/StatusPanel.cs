@@ -6,44 +6,44 @@ namespace SubGame.Objects
 {
     public class StatusPanel
     {
-        private readonly Texture2D frameTexture;
-        private readonly Texture2D textTexture;
+        private readonly Texture2D myFrameTexture;
+        private readonly Texture2D myTextTexture;
         private readonly int margin = 20;
 
-        private Rectangle frameArea;
-        private Rectangle textArea;
-        private SpriteFont font; // Font to be able to write text
+        private Rectangle myFrameArea;
+        private Rectangle myTextArea;
+        private SpriteFont myFont; // Font to be able to write text
 
-        public int SubsHit { get; set; }
-        public int BoatsHit { get; set; }
+        public int AccessSubsHit { get; set; }
+        public int AccessBoatsHit { get; set; }
 
-        public StatusPanel(Rectangle textArea, GraphicsDevice myDevice)
+        public StatusPanel(Rectangle aTextArea, GraphicsDevice aGraphicsDevice)
         {
-            this.textArea = textArea;
-            textTexture = new Texture2D(myDevice, 1, 1, false, SurfaceFormat.Color);
-            textTexture.SetData(new[] { Color.White });
+            this.myTextArea = aTextArea;
+            myTextTexture = new Texture2D(aGraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            myTextTexture.SetData(new[] { Color.White });
 
-            frameArea = new Rectangle(textArea.X - 2, textArea.Y - 2, textArea.Width + 4, textArea.Height + 4);
-            frameTexture = new Texture2D(myDevice, 1, 1, false, SurfaceFormat.Color);
-            frameTexture.SetData(new[] { Color.Black });
+            myFrameArea = new Rectangle(aTextArea.X - 2, aTextArea.Y - 2, aTextArea.Width + 4, aTextArea.Height + 4);
+            myFrameTexture = new Texture2D(aGraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            myFrameTexture.SetData(new[] { Color.Black });
         }
 
         public void LoadContent(ContentManager aContentManager, string anAssetName)
         {
             // Load the selected font
-            font = aContentManager.Load<SpriteFont>(anAssetName);
+            myFont = aContentManager.Load<SpriteFont>(anAssetName);
         }
 
         public void Draw(SpriteBatch mySpriteBatch)
         {
-            mySpriteBatch.Draw(frameTexture, frameArea, Color.Black);
-            mySpriteBatch.Draw(textTexture, textArea, Color.White);
+            mySpriteBatch.Draw(myFrameTexture, myFrameArea, Color.Black);
+            mySpriteBatch.Draw(myTextTexture, myTextArea, Color.White);
 
-            string labels = $"Subs sinked:\nBoat hits:";
-            string values = $"{SubsHit,3}\n{BoatsHit,3}";
+            string tempLabels = $"Subs sinked:\nBoat hits:";
+            string tempValues = $"{AccessSubsHit,3}\n{AccessBoatsHit,3}";
 
-            mySpriteBatch.DrawString(font, labels, new Vector2(textArea.X + margin, textArea.Y + margin), Color.Blue);
-            mySpriteBatch.DrawString(font, values, new Vector2(textArea.X + margin + 300, textArea.Y + margin), Color.Blue);
+            mySpriteBatch.DrawString(myFont, tempLabels, new Vector2(myTextArea.X + margin, myTextArea.Y + margin), Color.Blue);
+            mySpriteBatch.DrawString(myFont, tempValues, new Vector2(myTextArea.X + margin + 300, myTextArea.Y + margin), Color.Blue);
         }
     }
 }

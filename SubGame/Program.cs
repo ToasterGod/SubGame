@@ -15,8 +15,8 @@ namespace SubGame
         [STAThread]
         private static void Main()
         {
-            using (var game = new Level1())
-                game.Run();
+            using (var myGame = new Level1())
+                myGame.Run();
         }
     }
 

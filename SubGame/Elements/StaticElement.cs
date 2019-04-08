@@ -7,13 +7,13 @@ namespace SubGame.Elements
     internal class StaticElement : Element
     {
         private Texture2D texture;
-        public float Angle { get; set; }
-        public float Scale { get; private set; }
+        public float AccessAngle { get; set; }
+        public float GetScale { get; private set; }
 
-        public StaticElement(float scale, float angle, Vector2 position) : base(position)
+        public StaticElement(float aScale, float anAngle, Vector2 aPosition) : base(aPosition)
         {
-            Scale = scale;
-            Angle = angle;
+            GetScale = aScale;
+            AccessAngle = anAngle;
         }
 
         public virtual void LoadContent(ContentManager aContentManager, string anAssetName)
@@ -23,9 +23,9 @@ namespace SubGame.Elements
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            Rectangle tempSourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
 
-            spriteBatch.Draw(texture, Position, sourceRectangle, Color.White, Angle, new Vector2(0, 0), Scale, SpriteEffects.None, 1);
+            spriteBatch.Draw(texture, AccessPosition, tempSourceRectangle, Color.White, AccessAngle, new Vector2(0, 0), GetScale, SpriteEffects.None, 1);
         }
     }
 }

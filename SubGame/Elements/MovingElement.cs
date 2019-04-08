@@ -11,59 +11,59 @@ namespace SubGame.Elements
         protected GraphicsDeviceManager manager;
         protected Texture2D texture;
 
-        public float Direction { get; set; }
-        public float Rotation { get; set; }
-        public float Speed { get; set; }
-        public float Scale { get; set; }
-        public Texture2D Texture => texture;
+        public float AccessDirection { get; set; }
+        public float AccessRotation { get; set; }
+        public float AccessSpeed { get; set; }
+        public float AccessScale { get; set; }
+        public Texture2D MyTexture => texture;
 
-        public MovingElement(float scale, float direction, float rotation, float speed, Vector2 position, GraphicsDeviceManager manager)
-            : base(position)
+        public MovingElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+            : base(aPosition)
         {
-            Scale = scale;
-            Direction = direction;
-            Rotation = rotation;
-            Speed = speed;
-            this.manager = manager;
+            AccessScale = aScale;
+            AccessDirection = aDirection;
+            AccessRotation = aRotation;
+            AccessSpeed = aSpeed;
+            this.manager = aManager;
         }
 
-        public virtual void LoadContent(ContentManager contentManager, string asset)
+        public virtual void LoadContent(ContentManager aContentManager, string anAsset)
         {
-            texture = contentManager.Load<Texture2D>(asset);
-            Size = new Rectangle(0, 0, (int)Math.Round(texture.Width * Scale), (int)Math.Round(texture.Height * Scale));
+            texture = aContentManager.Load<Texture2D>(anAsset);
+            AccessSize = new Rectangle(0, 0, (int)Math.Round(texture.Width * AccessScale), (int)Math.Round(texture.Height * AccessScale));
         }
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime aGameTime)
         {
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch aSpriteBatch)
         {
-            Rectangle sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
-            Vector2 origin = new Vector2(0, 0);
-            SpriteEffects effects = SpriteEffects.None;
-            if (Direction < 0.0f)
-                effects = SpriteEffects.FlipHorizontally;
-            spriteBatch.Draw(texture, Position, sourceRectangle, Color.White, Rotation, origin, Scale, effects, 1);
+            Rectangle mySourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            Vector2 myOrigin = new Vector2(0, 0);
+            SpriteEffects myEffects = SpriteEffects.None;
+            if (AccessDirection < 0.0f)
+                myEffects = SpriteEffects.FlipHorizontally;
+            aSpriteBatch.Draw(texture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
         }
 
-        protected void CalcHorizontalMovement(float speed)
+        protected void CalcHorizontalMovement(float aSpeed)
         {
-            if (Direction < 0.0f || Direction > 0.0f)
+            if (AccessDirection < 0.0f || AccessDirection > 0.0f)
             {
-                Vector2 direction = new Vector2(Direction, 0);
-                direction.Normalize();
-                Position += direction * speed;
+                Vector2 tempDirection = new Vector2(AccessDirection, 0);
+                tempDirection.Normalize();
+                AccessPosition += tempDirection * aSpeed;
             }
         }
 
-        protected void CalcVerticalMovement(float speed)
+        protected void CalcVerticalMovement(float aSpeed)
         {
-            if (Direction < 0.0f || Direction > 0.0f)
+            if (AccessDirection < 0.0f || AccessDirection > 0.0f)
             {
-                Vector2 direction = new Vector2(0, Direction);
-                direction.Normalize();
-                Position += direction * speed;
+                Vector2 tempDirection = new Vector2(0, AccessDirection);
+                tempDirection.Normalize();
+                AccessPosition += tempDirection * aSpeed;
             }
         }
     }

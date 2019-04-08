@@ -9,63 +9,63 @@ namespace SubGame.Elements
 
     internal class PlayerElement : MovingElement
     {
-        private int leftEdge;
-        private int rightEdge;
-        private Texture2D textureSinkbomb;
+        private int myLeftEdge;
+        private int myRightEdge;
+        private Texture2D mySinkbombTexture;
 
-        public Rectangle CollisionBox { get; internal set; }
-        public WhereIsTheBoatDelegate WhereIsTheBoat { get; set; }
+        public Rectangle AccessCollisionBox { get; internal set; }
+        public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
 
-        public PlayerElement(float scale, float direction, float rotation, float speed, Vector2 position, GraphicsDeviceManager manager)
-            : base(scale, direction, rotation, speed, position, manager)
+        public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
         }
 
-        public void LoadContent(ContentManager contentManager, string asset, string weaponAsset)
+        public void LoadContent(ContentManager aContentManager, string anAsset, string aWeaponAsset)
         {
-            LoadContent(contentManager, asset);
+            LoadContent(aContentManager, anAsset);
             //Skapa och Ladda vapen
             //textureSinkbomb = contentManager.Load<Texture2D>(weaponAsset);
         }
 
-        public override void LoadContent(ContentManager contentManager, string asset)
+        public override void LoadContent(ContentManager aContentManager, string anAsset)
         {
-            base.LoadContent(contentManager, asset);
+            base.LoadContent(aContentManager, anAsset);
             //Level boat at sealevel and set left and right endpoints
-            leftEdge = 60;
-            rightEdge = manager.PreferredBackBufferWidth - 60 - Size.Width;
-            Position = new Vector2(leftEdge, Position.Y - Size.Height * 0.7f);
+            myLeftEdge = 60;
+            myRightEdge = manager.PreferredBackBufferWidth - 60 - AccessSize.Width;
+            AccessPosition = new Vector2(myLeftEdge, AccessPosition.Y - AccessSize.Height * 0.7f);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime aGameTime)
         {
-            Direction = 0.0f;
+            AccessDirection = 0.0f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                Direction = -1.0f;
+                AccessDirection = -1.0f;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                Direction = 1.0f;
+                AccessDirection = 1.0f;
             }
 
             //Keep the boat within screens left and right edge
-            if (Position.X <= leftEdge && Direction < 0.0f)
+            if (AccessPosition.X <= myLeftEdge && AccessDirection < 0.0f)
             {
-                Direction = 0.0f;
+                AccessDirection = 0.0f;
             }
-            else if (Position.X > (rightEdge) && Direction > 0.0f)
+            else if (AccessPosition.X > (myRightEdge) && AccessDirection > 0.0f)
             {
-                Direction = 0.0f;
+                AccessDirection = 0.0f;
             }
 
-            CalcHorizontalMovement(Speed);
+            CalcHorizontalMovement(AccessSpeed);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            WhereIsTheBoat?.Invoke(new Rectangle(Position.ToPoint(), Size.Size));
+            AccessWhereIsTheBoat?.Invoke(new Rectangle(AccessPosition.ToPoint(), AccessSize.Size));
 
             base.Draw(spriteBatch);
         }
