@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Elements\Delegates.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Elements\EnemyElement.cs" />
     <Compile Include="Elements\MineElement.cs" />

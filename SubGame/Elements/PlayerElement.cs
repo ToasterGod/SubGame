@@ -8,10 +8,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SubGame.Elements
 {
-    public delegate void WhereIsTheBoatDelegate(Rectangle location);
-
     internal class PlayerElement : MovingElement
     {
+        private bool myReleasePressed;
         private int myLeftEdge;
         private int myRightEdge;
         private List<SinkBombElement> mySinkBombList;
@@ -19,6 +18,7 @@ namespace SubGame.Elements
         private ContentManager myContentManager;
 
         public Rectangle AccessCollisionBox { get; internal set; }
+        public SinkBombReleasedDelegate AccessSinkBombReleased { get; set; }
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
 
         public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
@@ -72,18 +72,25 @@ namespace SubGame.Elements
                 AccessDirection = 1.0f;
             }
 
-            if ((aGameTime.TotalGameTime.Milliseconds % 99) == 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+
+                if (myReleasePressed == false)
                 {
+                    myReleasePressed = true;
                     var sinkBomb = mySinkBombList.FirstOrDefault(s => s.AccessReleased == false);
                     if (sinkBomb != null)
                     {
                         sinkBomb.AccessReleased = true;
+                        AccessSinkBombReleased?.Invoke(sinkBomb);
+                        mySinkBombList.Remove(sinkBomb);
                     }
                 }
             }
-
+            else
+            {
+                myReleasePressed = false;
+            }
 
             //Keep the boat within screens left and right edge
             if (AccessPosition.X <= myLeftEdge && AccessDirection < 0.0f)

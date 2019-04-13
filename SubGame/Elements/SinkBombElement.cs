@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    internal class SinkBombElement: MovingElement
+    public class SinkBombElement: MovingElement
     {
         public bool AccessReleased { get; internal set; }
 

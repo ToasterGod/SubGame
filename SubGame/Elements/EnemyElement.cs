@@ -11,7 +11,9 @@ namespace SubGame.Elements
 {
     internal class EnemyElement : MovingElement
     {
+        public MineReleasedDelegate AccessMineReleased { get; set; }
         private readonly float[] myDirectionLevels = { -1.0f, 1.0f };
+        private int myDropFrequency;
         private int mySubSpeed;
 
         public int GetDepth { get; private set; }
@@ -25,10 +27,12 @@ namespace SubGame.Elements
         //Mine stuff
         private List<MineElement> myMineList;
         private string myWeaponAsset;
+        private readonly int mySurfaceLevel;
 
-        public EnemyElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+        public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
+            mySurfaceLevel = aSurfaceLevel;
             GenerateNewEnemy();
         }
 
@@ -48,7 +52,7 @@ namespace SubGame.Elements
             myMineList = new List<MineElement>();
             for (int i = 0; i < 4; i++)
             {
-                myMineList.Add(new MineElement(1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, myManager));
+                myMineList.Add(new MineElement(mySurfaceLevel, 1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, myManager));
             }
         }
 
@@ -61,18 +65,21 @@ namespace SubGame.Elements
             {
                 //slow sub
                 AccessSpeed = 0.5f;
+                myDropFrequency = RandomNumber.Between(800, 1000);
                 LoadContent(aContentManager, anAssets[0]);
             }
             else if (mySubSpeed < 100)
             {
                 //fast sub
                 AccessSpeed = 0.8f;
+                myDropFrequency = RandomNumber.Between(700, 900);
                 LoadContent(aContentManager, anAssets[1]);
             }
             else
             {
                 // fastest sub
                 AccessSpeed = 1.2f;
+                myDropFrequency = RandomNumber.Between(400, 600);
                 LoadContent(aContentManager, anAssets[2]);
             }
             foreach (var mine in myMineList)
@@ -124,15 +131,15 @@ namespace SubGame.Elements
             // Calculate the movement
             CalcHorizontalMovement(AccessSpeed);
 
-            foreach (var mine in myMineList.Where(m => m.AccessReleased == false))
+            if ((aGameTime.TotalGameTime.Ticks % myDropFrequency) == 0)
+            {
+                ReleaseMine();
+            }
+
+            foreach (var mine in myMineList)
             {
                 mine.Update(aGameTime);
                 mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
-            }
-
-            foreach (var mine in myMineList.Where(m => m.AccessReleased == true))
-            {
-                mine.Update(aGameTime);
             }
         }
 
@@ -153,14 +160,17 @@ namespace SubGame.Elements
 
         public void ReleaseMine()
         {
-            var myMine = myMineList.FirstOrDefault(m => m.AccessReleased == false);
+            var myMine = myMineList.FirstOrDefault();
             if (myMine != null)
             {
-                myMine.AccessReleased = true;
                 myMine.AccessDirection = -1.0f;
-                myMine.AccessSpeed = 10.0f;
+                myMine.AccessSpeed = 1.0f;
                 myMine.AccessPosition = AccessPosition;
+                AccessMineReleased?.Invoke(myMine);
+                myMineList.Remove(myMine);
             }
         }
     }
 }
+
+

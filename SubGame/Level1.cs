@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.Xna.Framework;
@@ -24,11 +25,13 @@ namespace SubGame
         private StaticElement myOcean;
         private PlayerElement myBoat;
         private List<EnemyElement> mySubs;
+        private List<MineElement> myMines;
+        private List<SinkBombElement> mySinkBombs;
         StaticText myStatusPanelLeft;
         StaticText myStatusPanelRight;
 
-        private int myBoatHits;
-        private int mySubHits; 
+        private readonly int myBoatHits;
+        private readonly int mySubHits; 
         private int myLatestAddedSky;
 
         public Level1()
@@ -47,11 +50,15 @@ namespace SubGame
             mySkies = new List<SkyElement>();
             myOcean = new StaticElement(1.0f, 0.0f, new Vector2(0, mySurfaceLevel));
             myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics);
+            myBoat.AccessSinkBombReleased += SinkBombReleased;
             mySubs = new List<EnemyElement>();
+            myMines = new List<MineElement>();
+            mySinkBombs = new List<SinkBombElement>();
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < 3; i++)
             {
-                mySubs.Add(new EnemyElement(0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics));
+                mySubs.Add(new EnemyElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics));
+                mySubs[i].AccessMineReleased += MineReleased;
                 myBoat.AccessWhereIsTheBoat += mySubs[i].BoatIsFoundAt;
             }
             var staticTextTop = myGraphics.PreferredBackBufferHeight - 100;
@@ -59,6 +66,16 @@ namespace SubGame
             myStatusPanelRight = new StaticText(new Vector2(myGraphics.PreferredBackBufferWidth - 320, staticTextTop), new Vector2(300, 80), myGraphics);
 
             base.Initialize();
+        }
+
+        private void SinkBombReleased(SinkBombElement aSinkBomb)
+        {
+            mySinkBombs.Add(aSinkBomb);
+        }
+
+        private void MineReleased(MineElement aMine)
+        {
+            myMines.Add(aMine);
         }
 
         protected override void LoadContent()
@@ -91,13 +108,24 @@ namespace SubGame
             {
                 //Sub update will call its mines update
                 sub.Update(aGameTime);
-                if ((sub.AccessPosition.X < 410.0f && sub.AccessPosition.X > 409.5f) || (sub.AccessPosition.X < 810.0f && sub.AccessPosition.X > 809.5f))
-                {
-                    sub.ReleaseMine();
-                }
+                
             }
 
             myBoat.Update(aGameTime);
+
+            foreach (var mine in myMines)
+            {
+                mine.Update(aGameTime);
+                //if (mine.AccessTimeout == true)
+                //{
+                //    mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
+                //    mine.AccessTimeout = false;
+                //}
+            }
+            foreach (var sinkBomb in mySinkBombs)
+            {
+                sinkBomb.Update(aGameTime);
+            }
 
             base.Update(aGameTime);
         }
@@ -124,6 +152,15 @@ namespace SubGame
             }
 
             myBoat.Draw(mySpriteBatch);
+
+            foreach (var mine in myMines)
+            {
+                mine.Draw(mySpriteBatch);
+            }
+            foreach (var sinkBomb in mySinkBombs)
+            {
+                sinkBomb.Draw(mySpriteBatch);
+            }
 
             myOcean.Draw(mySpriteBatch);
 

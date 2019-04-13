@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    internal class MovingElement : Element
+    public class MovingElement : Element
     {
         protected GraphicsDeviceManager myManager;
         protected Texture2D myTexture;

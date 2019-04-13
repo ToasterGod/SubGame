@@ -2,16 +2,20 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using SubGame.Types;
 
 namespace SubGame.Elements
 {
-    internal class MineElement : MovingElement
+    public class MineElement : MovingElement
     {
-        public bool AccessReleased { get; set; }
+        private readonly int mySurfaceLevel;
+        private int mySurfaceTime;
+        public bool AccessTimeout { get; set; }
 
-        public MineElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+        public MineElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
+            mySurfaceLevel = aSurfaceLevel;
             //Released = false;
         }
 
@@ -21,7 +25,23 @@ namespace SubGame.Elements
         public override void Update(GameTime aGameTime)
         {
             base.Update(aGameTime);
-            CalcVerticalMovement(AccessSpeed);
+
+            if (AccessPosition.Y > mySurfaceLevel)
+            {
+                CalcVerticalMovement(AccessSpeed);
+            }
+            //else
+            //{
+            //    if (mySurfaceTime == 0)
+            //    {
+            //        mySurfaceTime = aGameTime.TotalGameTime.Seconds;
+            //    }
+            //    else if (aGameTime.TotalGameTime.Seconds > mySurfaceTime + 3)
+            //    {
+            //        AccessTimeout = true;
+            //    }
+            //}
+
         }
 
         public override void Draw(SpriteBatch aSpriteBatch)
