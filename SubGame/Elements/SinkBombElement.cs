@@ -1,22 +1,21 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    internal class MineElement : MovingElement
+    internal class SinkBombElement: MovingElement
     {
-        public bool AccessReleased { get; set; }
+        public bool AccessReleased { get; internal set; }
 
-        public MineElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+        public SinkBombElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
-        {
-            //Released = false;
-        }
+        {}
 
         public override void LoadContent(ContentManager aContentManager, string anAsset)
-            => base.LoadContent(aContentManager, anAsset);
+        {
+            base.LoadContent(aContentManager, anAsset);
+        }
 
         public override void Update(GameTime aGameTime)
         {
@@ -30,10 +29,11 @@ namespace SubGame.Elements
             Vector2 myOrigin = new Vector2(0, 0);
             SpriteEffects myEffects = SpriteEffects.None;
             if (AccessDirection < 0.0f)
+            {
                 myEffects = SpriteEffects.FlipHorizontally;
+            }
             aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
-
-            //base.Draw(spriteBatch);
+            //base.Draw(aSpriteBatch);
         }
     }
 }

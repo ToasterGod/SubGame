@@ -30,7 +30,7 @@ namespace SubGame.Elements
                 //Sky going left outside of left edge
                 AccessOutOfBounds = true;
             }
-            else if (AccessPosition.X > manager.PreferredBackBufferWidth && AccessDirection > 0.0f)
+            else if (AccessPosition.X > myManager.PreferredBackBufferWidth && AccessDirection > 0.0f)
             {
                 //Sky going right outside of right edge
                 AccessOutOfBounds = true;

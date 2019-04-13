@@ -39,7 +39,7 @@ namespace SubGame.Elements
             GetDepth = RandomNumber.Between(450, 850);
             AccessDirection = myDirectionLevels[RandomNumber.Between(1, 2) - 1];
             //Only initial position for Depth value, it will be final after LoadContent
-            AccessPosition = new Vector2(manager.PreferredBackBufferWidth, GetDepth);
+            AccessPosition = new Vector2(myManager.PreferredBackBufferWidth, GetDepth);
             GenerateNewWeapons();
         }
 
@@ -48,7 +48,7 @@ namespace SubGame.Elements
             myMineList = new List<MineElement>();
             for (int i = 0; i < 4; i++)
             {
-                myMineList.Add(new MineElement(1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, manager));
+                myMineList.Add(new MineElement(1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, myManager));
             }
         }
 
@@ -88,7 +88,7 @@ namespace SubGame.Elements
 
             //Set left and right startpoints
             myBehindLeftEdge = 0 - AccessSize.Width;
-            myBehindRightEdge = manager.PreferredBackBufferWidth;
+            myBehindRightEdge = myManager.PreferredBackBufferWidth;
             if (AccessDirection > 0.0f)
             {
                 AccessPosition = new Vector2(myBehindLeftEdge, AccessPosition.Y);
@@ -114,7 +114,7 @@ namespace SubGame.Elements
                 GenerateNewEnemy();
                 LoadContent(myContentManager, myAssets, myWeaponAsset);
             }
-            else if (AccessPosition.X > manager.PreferredBackBufferWidth && AccessDirection > 0.0f)
+            else if (AccessPosition.X > myManager.PreferredBackBufferWidth && AccessDirection > 0.0f)
             {
                 //Sub going right outside of right edge
                 GenerateNewEnemy();

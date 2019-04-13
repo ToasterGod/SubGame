@@ -8,14 +8,14 @@ namespace SubGame.Elements
 {
     internal class MovingElement : Element
     {
-        protected GraphicsDeviceManager manager;
-        protected Texture2D texture;
+        protected GraphicsDeviceManager myManager;
+        protected Texture2D myTexture;
 
         public float AccessDirection { get; set; }
         public float AccessRotation { get; set; }
         public float AccessSpeed { get; set; }
         public float AccessScale { get; set; }
-        public Texture2D MyTexture => texture;
+        public Texture2D MyTexture => myTexture;
 
         public MovingElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aPosition)
@@ -24,27 +24,26 @@ namespace SubGame.Elements
             AccessDirection = aDirection;
             AccessRotation = aRotation;
             AccessSpeed = aSpeed;
-            this.manager = aManager;
+            this.myManager = aManager;
         }
 
         public virtual void LoadContent(ContentManager aContentManager, string anAsset)
         {
-            texture = aContentManager.Load<Texture2D>(anAsset);
-            AccessSize = new Rectangle(0, 0, (int)Math.Round(texture.Width * AccessScale), (int)Math.Round(texture.Height * AccessScale));
+            myTexture = aContentManager.Load<Texture2D>(anAsset);
+            AccessSize = new Rectangle(0, 0, (int)Math.Round(myTexture.Width * AccessScale), (int)Math.Round(myTexture.Height * AccessScale));
         }
 
         public virtual void Update(GameTime aGameTime)
-        {
-        }
+        {}
 
         public virtual void Draw(SpriteBatch aSpriteBatch)
         {
-            Rectangle mySourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            Rectangle mySourceRectangle = new Rectangle(0, 0, myTexture.Width, myTexture.Height);
             Vector2 myOrigin = new Vector2(0, 0);
             SpriteEffects myEffects = SpriteEffects.None;
             if (AccessDirection < 0.0f)
                 myEffects = SpriteEffects.FlipHorizontally;
-            aSpriteBatch.Draw(texture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
+            aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
         }
 
         protected void CalcHorizontalMovement(float aSpeed)
