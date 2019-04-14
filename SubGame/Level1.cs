@@ -118,7 +118,9 @@ namespace SubGame
                 if (mine.HitBox.Intersects(myBoat.HitBox))
                 {
                     myBoatHits++;
-                    myBoat.HasBeenHit(aGameTime);
+                    if (myBoat.AccessBeenHit == false)
+                    { myBoat.HasBeenHit(aGameTime); }
+
                     if (myBoat.AccessBeenHit)
                     {
                         if (aGameTime.TotalGameTime.Ticks + 100000 > myBoat.AccessHitTime)
@@ -138,7 +140,8 @@ namespace SubGame
                     if (sinkBomb.HitBox.Intersects(sub.HitBox))
                     {
                         if (sub.AccessBeenHit == false)
-                            sub.HasBeenHit(aGameTime);
+                        { sub.HasBeenHit(aGameTime); }
+
                         mySubHits++;
                         if (sub.AccessBeenHit)
                         {
