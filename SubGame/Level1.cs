@@ -120,7 +120,7 @@ namespace SubGame
                 //    mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
                 //    mine.AccessTimeout = false;
                 //}
-                if (mine.MyTexture.Bounds.Intersects(myBoat.MyTexture.Bounds))
+                if (mine.HitBox.Intersects(myBoat.HitBox))
                 {
                     myBoat.HasBeenHit();
                 }
