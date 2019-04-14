@@ -10,10 +10,11 @@ namespace SubGame.Elements
     {
         public bool AccessOutOfBounds { get; set; }
 
-        public CloudElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager) 
-            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager) 
+        public CloudElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
             => AccessDirection = -1.0f;
-        
+        //Using Expression '=>' replaces the need of bracelets '{}' if it's a oneliner
+
         public void LoadContent(ContentManager aContentManager, string[] someAssets)
         {
             int tempRandom = RandomNumber.Between(1, someAssets.Length) - 1;
@@ -40,7 +41,7 @@ namespace SubGame.Elements
             base.Update(aGameTime);
         }
 
-        public override void Draw(SpriteBatch aSpriteBatch) 
+        public override void Draw(SpriteBatch aSpriteBatch)
             => base.Draw(aSpriteBatch);
     }
 }

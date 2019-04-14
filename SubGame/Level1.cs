@@ -120,6 +120,10 @@ namespace SubGame
                 //    mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
                 //    mine.AccessTimeout = false;
                 //}
+                if (mine.MyTexture.Bounds.Intersects(myBoat.MyTexture.Bounds))
+                {
+                    myBoat.HasBeenHit();
+                }
             }
             foreach (SinkBombElement sinkBomb in mySinkBombs)
             {
@@ -177,7 +181,8 @@ namespace SubGame
             float tempRandomSpeed = RandomNumber.Between(3, 8) / 10.0f;
 
             //Generate five random clouds initially and place them on the screen from start
-            foreach (int cloudPosition in new int[]{
+            foreach (int cloudPosition in new int[]
+            {
                 RandomNumber.Between(0, myGraphics.PreferredBackBufferWidth/5*1),
                 RandomNumber.Between(myGraphics.PreferredBackBufferWidth/5*1, myGraphics.PreferredBackBufferWidth/5*2),
                 RandomNumber.Between(myGraphics.PreferredBackBufferWidth/5*2, myGraphics.PreferredBackBufferWidth/5*3),
