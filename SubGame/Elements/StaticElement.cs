@@ -4,16 +4,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    internal class StaticElement : Element
+    public class StaticElement : Element
     {
         private Texture2D texture;
         public float AccessAngle { get; set; }
         public float GetScale { get; private set; }
+        public int AccessTimeToLive { get; }
 
-        public StaticElement(float aScale, float anAngle, Vector2 aPosition) : base(aPosition)
+        public StaticElement(float aScale, Vector2 aPosition) 
+            : base(aPosition)
         {
             GetScale = aScale;
-            AccessAngle = anAngle;
+            AccessTimeToLive = -1;
+        }
+
+        public StaticElement(float aScale, Vector2 aPosition, int aTimeToLive)
+            : base(aPosition)
+        {
+            GetScale = aScale;
+            AccessTimeToLive = aTimeToLive;
         }
 
         public virtual void LoadContent(ContentManager aContentManager, string anAssetName) 

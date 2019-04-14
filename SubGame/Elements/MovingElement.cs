@@ -9,10 +9,10 @@ namespace SubGame.Elements
     {
         protected GraphicsDeviceManager myManager;
         protected Texture2D myTexture; //Full access allowed by inheritance
-        private Texture2D myHitSign;
+
         private SpriteEffects myEffects = SpriteEffects.None;
         public bool AccessBeenHit { get; set; }
-        public long AccessHitTime { get; set; }
+        public int AccessHitTime { get; set; }
 
         public float AccessDirection { get; set; }
         public float AccessRotation { get; set; }
@@ -20,6 +20,7 @@ namespace SubGame.Elements
         public float AccessScale { get; set; }
         public Texture2D MyTexture => myTexture;  //Read-only access allowed by instantiation
         public Rectangle HitBox => new Rectangle(AccessPosition.ToPoint(), new Point(AccessSize.Width, AccessSize.Height));
+        public bool IsEnemy { get; set; }
 
         public MovingElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aPosition)
@@ -34,13 +35,11 @@ namespace SubGame.Elements
         public virtual void LoadContent(ContentManager aContentManager, string anAsset)
         {
             myTexture = aContentManager.Load<Texture2D>(anAsset);
-            myHitSign = aContentManager.Load<Texture2D>("Elements/Boom");
             AccessSize = new Rectangle(0, 0, (int)Math.Round(myTexture.Width * AccessScale), (int)Math.Round(myTexture.Height * AccessScale));
         }
 
         public virtual void Update(GameTime aGameTime)
         {
-            
         }
 
         public virtual void Draw(SpriteBatch aSpriteBatch)
@@ -61,11 +60,9 @@ namespace SubGame.Elements
                 myEffects = SpriteEffects.None;
             }
 
-            aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
-            if (AccessBeenHit)
+            if (IsEnemy == false || (IsEnemy == true && AccessBeenHit == false))
             {
-                aSpriteBatch.Draw(myHitSign, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, SpriteEffects.None, 1);
-
+                aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
             }
         }
 
@@ -92,7 +89,7 @@ namespace SubGame.Elements
         public void HasBeenHit(GameTime aGameTime)
         {
             AccessBeenHit = true;
-            AccessHitTime = aGameTime.TotalGameTime.Ticks;
+            AccessHitTime = aGameTime.TotalGameTime.Seconds;
         }
     }
 }
