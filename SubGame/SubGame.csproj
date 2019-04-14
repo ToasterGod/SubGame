@@ -51,6 +51,7 @@
     <Compile Include="Elements\SkyElement.cs" />
     <Compile Include="Elements\StaticElement.cs" />
     <Compile Include="Elements\StaticText.cs" />
+    <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,21 +1,20 @@
-﻿using System;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace SubGame.Elements
 {
     public class MovingElement : Element
     {
         protected GraphicsDeviceManager myManager;
-        protected Texture2D myTexture;
+        protected Texture2D myTexture; //Full access allowed by inheritance
 
         public float AccessDirection { get; set; }
         public float AccessRotation { get; set; }
         public float AccessSpeed { get; set; }
         public float AccessScale { get; set; }
-        public Texture2D MyTexture => myTexture;
+        public Texture2D MyTexture => myTexture; //Read-only access allowed by instantiation
 
         public MovingElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aPosition)
@@ -24,7 +23,7 @@ namespace SubGame.Elements
             AccessDirection = aDirection;
             AccessRotation = aRotation;
             AccessSpeed = aSpeed;
-            this.myManager = aManager;
+            myManager = aManager;
         }
 
         public virtual void LoadContent(ContentManager aContentManager, string anAsset)
@@ -34,7 +33,7 @@ namespace SubGame.Elements
         }
 
         public virtual void Update(GameTime aGameTime)
-        {}
+        { }
 
         public virtual void Draw(SpriteBatch aSpriteBatch)
         {
@@ -42,7 +41,10 @@ namespace SubGame.Elements
             Vector2 myOrigin = new Vector2(0, 0);
             SpriteEffects myEffects = SpriteEffects.None;
             if (AccessDirection < 0.0f)
+            {
                 myEffects = SpriteEffects.FlipHorizontally;
+            }
+
             aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
         }
 

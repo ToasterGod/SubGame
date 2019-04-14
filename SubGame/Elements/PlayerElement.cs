@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SubGame.Elements
 {
@@ -22,10 +21,8 @@ namespace SubGame.Elements
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
 
         public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
-            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
-        {
-            GenerateNewWeapons();
-        }
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager) 
+            => GenerateNewWeapons();
 
         private void GenerateNewWeapons()
         {
@@ -41,7 +38,7 @@ namespace SubGame.Elements
             myContentManager = aContentManager;
             myWeaponAsset = aWeaponAsset;
             LoadContent(aContentManager, anAsset);
-            foreach (var sinkBomb in mySinkBombList)
+            foreach (SinkBombElement sinkBomb in mySinkBombList)
             {
                 sinkBomb.LoadContent(aContentManager, aWeaponAsset);
                 sinkBomb.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
@@ -74,14 +71,13 @@ namespace SubGame.Elements
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-
+                //The else statement below will make this a trigger, it's only valid once, no repetition
                 if (myReleasePressed == false)
                 {
                     myReleasePressed = true;
-                    var sinkBomb = mySinkBombList.FirstOrDefault(s => s.AccessReleased == false);
+                    SinkBombElement sinkBomb = mySinkBombList.FirstOrDefault();
                     if (sinkBomb != null)
                     {
-                        sinkBomb.AccessReleased = true;
                         AccessSinkBombReleased?.Invoke(sinkBomb);
                         mySinkBombList.Remove(sinkBomb);
                     }
@@ -89,6 +85,7 @@ namespace SubGame.Elements
             }
             else
             {
+                //Force to unpress space before it is allowed to drop next sink bomb
                 myReleasePressed = false;
             }
 
@@ -103,25 +100,19 @@ namespace SubGame.Elements
             }
 
             CalcHorizontalMovement(AccessSpeed);
+            AccessWhereIsTheBoat?.Invoke(new Rectangle(AccessPosition.ToPoint(), AccessSize.Size), aGameTime);
 
-            foreach (var sinkBomb in mySinkBombList.Where(s => s.AccessReleased == false))
+            foreach (SinkBombElement sinkBomb in mySinkBombList)
             {
                 sinkBomb.Update(aGameTime);
                 sinkBomb.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
-            }
-
-            foreach (var sinkBomb in mySinkBombList.Where(s => s.AccessReleased == true))
-            {
-                sinkBomb.Update(aGameTime);
             }
         }
 
         public override void Draw(SpriteBatch aSpriteBatch)
         {
-            AccessWhereIsTheBoat?.Invoke(new Rectangle(AccessPosition.ToPoint(), AccessSize.Size));
-
             base.Draw(aSpriteBatch);
-            foreach (var sinkBomb in mySinkBombList)
+            foreach (SinkBombElement sinkBomb in mySinkBombList)
             {
                 sinkBomb.Draw(aSpriteBatch);
             }

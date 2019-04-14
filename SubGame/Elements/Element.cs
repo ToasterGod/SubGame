@@ -8,6 +8,7 @@ namespace SubGame.Elements
         public Rectangle AccessSize { get; set; }
 
 
-        public Element(Vector2 aPosition) => this.AccessPosition = aPosition;
+        public Element(Vector2 aPosition) 
+            => AccessPosition = aPosition;
     }
 }

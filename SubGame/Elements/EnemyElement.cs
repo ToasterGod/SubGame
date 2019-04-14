@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
+using SubGame.Extensions;
 using SubGame.Types;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SubGame.Elements
 {
@@ -27,6 +26,7 @@ namespace SubGame.Elements
         //Mine stuff
         private List<MineElement> myMineList;
         private string myWeaponAsset;
+        private double latestDropped;
         private readonly int mySurfaceLevel;
 
         public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
@@ -58,9 +58,9 @@ namespace SubGame.Elements
 
         public void LoadContent(ContentManager aContentManager, string[] anAssets, string aWeaponAsset)
         {
-            this.myContentManager = aContentManager;
-            this.myAssets = anAssets;
-            this.myWeaponAsset = aWeaponAsset;
+            myContentManager = aContentManager;
+            myAssets = anAssets;
+            myWeaponAsset = aWeaponAsset;
             if (mySubSpeed < 70)
             {
                 //slow sub
@@ -82,7 +82,7 @@ namespace SubGame.Elements
                 myDropFrequency = RandomNumber.Between(400, 600);
                 LoadContent(aContentManager, anAssets[2]);
             }
-            foreach (var mine in myMineList)
+            foreach (MineElement mine in myMineList)
             {
                 mine.LoadContent(aContentManager, aWeaponAsset);
                 mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
@@ -131,12 +131,12 @@ namespace SubGame.Elements
             // Calculate the movement
             CalcHorizontalMovement(AccessSpeed);
 
-            if ((aGameTime.TotalGameTime.Ticks % myDropFrequency) == 0)
-            {
-                ReleaseMine();
-            }
+            //if ((aGameTime.TotalGameTime.Ticks % myDropFrequency) == 0)
+            //{
+            //    ReleaseMine();
+            //}
 
-            foreach (var mine in myMineList)
+            foreach (MineElement mine in myMineList)
             {
                 mine.Update(aGameTime);
                 mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
@@ -145,22 +145,33 @@ namespace SubGame.Elements
 
         public override void Draw(SpriteBatch aSpriteBatch)
         {
-            //Mines are drawn before sub, that way they will be hidden behind the sub
             base.Draw(aSpriteBatch);
-            foreach (var mine in myMineList)
+
+            //Mines belonging to the sub doesn't have to be drawn, so skip the foreach loop once we are done
+            //Drawing mines that are dropped (no longer belongs to the sub) will be handled in the Level1 class
+            foreach (MineElement mine in myMineList)
             {
                 mine.Draw(aSpriteBatch);
             }
         }
 
-        public void BoatIsFoundAt(Rectangle aLocation)
+        public void BoatIsFoundAt(Rectangle aLocation, GameTime gameTime)
         {
-            //throw new NotImplementedException();
+            //Check if we are within -50 - 0 - +50 from the boat
+            if (AccessPosition.NearByHorizontal(aLocation.Center.ToVector2(), 50))
+            {
+                //Allow drop of mines every third second
+                if (gameTime.TotalGameTime.TotalSeconds > latestDropped + 3)
+                {
+                    latestDropped = gameTime.TotalGameTime.TotalSeconds;
+                    ReleaseMine();
+                }
+            }
         }
 
         public void ReleaseMine()
         {
-            var myMine = myMineList.FirstOrDefault();
+            MineElement myMine = myMineList.FirstOrDefault();
             if (myMine != null)
             {
                 myMine.AccessDirection = -1.0f;

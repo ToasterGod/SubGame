@@ -4,18 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    public class SinkBombElement: MovingElement
+    public class SinkBombElement : MovingElement
     {
-        public bool AccessReleased { get; internal set; }
-
         public SinkBombElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
-        {}
+        { }
 
-        public override void LoadContent(ContentManager aContentManager, string anAsset)
-        {
-            base.LoadContent(aContentManager, anAsset);
-        }
+        public override void LoadContent(ContentManager aContentManager, string anAsset) 
+            => base.LoadContent(aContentManager, anAsset);
 
         public override void Update(GameTime aGameTime)
         {

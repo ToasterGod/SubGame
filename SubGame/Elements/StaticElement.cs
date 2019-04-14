@@ -16,10 +16,8 @@ namespace SubGame.Elements
             AccessAngle = anAngle;
         }
 
-        public virtual void LoadContent(ContentManager aContentManager, string anAssetName)
-        {
-            texture = aContentManager.Load<Texture2D>(anAssetName);
-        }
+        public virtual void LoadContent(ContentManager aContentManager, string anAssetName) 
+            => texture = aContentManager.Load<Texture2D>(anAssetName);
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {

@@ -10,12 +10,10 @@ namespace SubGame.Elements
     {
         public bool AccessOutOfBounds { get; set; }
 
-        public SkyElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager) : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
-        {
-            AccessDirection = -1.0f;
-            AccessPosition = new Vector2(aManager.PreferredBackBufferWidth, RandomNumber.Between(1, 50));
-        }
-
+        public SkyElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager) 
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager) 
+            => AccessDirection = -1.0f;
+        
         public void LoadContent(ContentManager aContentManager, string[] someAssets)
         {
             int tempRandom = RandomNumber.Between(1, someAssets.Length) - 1;
@@ -42,9 +40,7 @@ namespace SubGame.Elements
             base.Update(aGameTime);
         }
 
-        public override void Draw(SpriteBatch aSpriteBatch)
-        {
-            base.Draw(aSpriteBatch);
-        }
+        public override void Draw(SpriteBatch aSpriteBatch) 
+            => base.Draw(aSpriteBatch);
     }
 }

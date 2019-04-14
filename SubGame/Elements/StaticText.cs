@@ -9,9 +9,9 @@ namespace SubGame.Elements
         private readonly int myMargin = 20;
 
         private Rectangle myTextArea;
-        private Texture2D myTextTexture;
+        private readonly Texture2D myTextTexture;
         private Rectangle myFrameArea;
-        private Texture2D myFrameTexture;
+        private readonly Texture2D myFrameTexture;
 
         private SpriteFont myFont; // Font to be able to write text
 
@@ -27,10 +27,8 @@ namespace SubGame.Elements
             myFrameTexture.SetData(new[] { Color.Black });
         }
 
-        public virtual void LoadContent(ContentManager aContentManager, string anAssetName)
-        {
-            myFont = aContentManager.Load<SpriteFont>(anAssetName);
-        }
+        public virtual void LoadContent(ContentManager aContentManager, string anAssetName) 
+            => myFont = aContentManager.Load<SpriteFont>(anAssetName);
 
         public void Draw(SpriteBatch aSpriteBatch, string aText)
         {
