@@ -9,6 +9,7 @@ namespace SubGame.Elements
     {
         protected GraphicsDeviceManager myManager;
         protected Texture2D myTexture; //Full access allowed by inheritance
+        private SpriteEffects myEffects = SpriteEffects.None;
 
         public float AccessDirection { get; set; }
         public float AccessRotation { get; set; }
@@ -39,10 +40,18 @@ namespace SubGame.Elements
         {
             Rectangle mySourceRectangle = new Rectangle(0, 0, myTexture.Width, myTexture.Height);
             Vector2 myOrigin = new Vector2(0, 0);
-            SpriteEffects myEffects = SpriteEffects.None;
+
+            //Check direction of object so we always have the front towards moving direction
+            //If it stops it should stay in last known direction
             if (AccessDirection < 0.0f)
             {
+                //The object is moving from right to left, flip the image, default is always from right to left
                 myEffects = SpriteEffects.FlipHorizontally;
+            }
+            else if (AccessDirection > 0.0f)
+            {
+                //The object is moving from left ro right, don't flip the image
+                myEffects = SpriteEffects.None;
             }
 
             aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);

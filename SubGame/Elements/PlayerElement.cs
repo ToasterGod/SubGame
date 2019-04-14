@@ -58,8 +58,6 @@ namespace SubGame.Elements
 
         public override void Update(GameTime aGameTime)
         {
-            AccessDirection = 0.0f;
-
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 AccessDirection = -1.0f;
@@ -68,10 +66,14 @@ namespace SubGame.Elements
             {
                 AccessDirection = 1.0f;
             }
+            else
+            {
+                AccessDirection = 0.0f;
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                //The else statement below will make this a trigger, it's only valid once, no repetition
+                //The else statement below will make this into a "one time trigger"
                 if (myReleasePressed == false)
                 {
                     myReleasePressed = true;
@@ -85,7 +87,7 @@ namespace SubGame.Elements
             }
             else
             {
-                //Force to unpress space before it is allowed to drop next sink bomb
+                //Force to unpress space before it is allowed to drop next sink bomb, "one time trigger"
                 myReleasePressed = false;
             }
 
@@ -104,14 +106,17 @@ namespace SubGame.Elements
 
             foreach (SinkBombElement sinkBomb in mySinkBombList)
             {
-                sinkBomb.Update(aGameTime);
-                sinkBomb.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
+                //Make all not dropped sinkbombs follow the boat
+                sinkBomb.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Center.X, AccessPosition.Y + AccessSize.Center.Y);
             }
         }
 
         public override void Draw(SpriteBatch aSpriteBatch)
         {
             base.Draw(aSpriteBatch);
+
+            //Sinkbombs belonging to the boat doesn't have to be drawn, so skip the foreach loop once we are done
+            //Drawing sinkbombs that are dropped (no longer belongs to the boat) will be handled in the Level1 class
             foreach (SinkBombElement sinkBomb in mySinkBombList)
             {
                 sinkBomb.Draw(aSpriteBatch);

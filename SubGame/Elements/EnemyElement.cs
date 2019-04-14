@@ -114,16 +114,17 @@ namespace SubGame.Elements
             base.Update(aGameTime);
 
             //Add post update stuff here:
+
             // Reset the subs if any of them is outside the left edge
             if (AccessPosition.X + AccessSize.Width < 0 && AccessDirection < 0.0f)
             {
-                //Sub going left outside of left edge
+                //Sub going left outside of left edge, create a new
                 GenerateNewEnemy();
                 LoadContent(myContentManager, myAssets, myWeaponAsset);
             }
             else if (AccessPosition.X > myManager.PreferredBackBufferWidth && AccessDirection > 0.0f)
             {
-                //Sub going right outside of right edge
+                //Sub going right outside of right edge, create a new
                 GenerateNewEnemy();
                 LoadContent(myContentManager, myAssets, myWeaponAsset);
             }
@@ -138,8 +139,8 @@ namespace SubGame.Elements
 
             foreach (MineElement mine in myMineList)
             {
-                mine.Update(aGameTime);
-                mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
+                //Make all not dropped mines follow the sub
+                mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Center.X, AccessPosition.Y + AccessSize.Center.Y);
             }
         }
 

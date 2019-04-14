@@ -18,7 +18,7 @@ namespace SubGame
 
         // All the new
         private readonly int mySurfaceLevel = 280;
-        private List<SkyElement> mySkies;
+        private List<CloudElement> myClouds;
         private StaticElement myOcean;
         private PlayerElement myBoat;
         private List<EnemyElement> mySubs;
@@ -29,7 +29,7 @@ namespace SubGame
 
         private readonly int myBoatHits;
         private readonly int mySubHits;
-        private int myLatestAddedSky;
+        private int myLatestAddedCloud;
 
         public Level1()
         {
@@ -44,8 +44,8 @@ namespace SubGame
 
         protected override void Initialize()
         {
-            mySkies = new List<SkyElement>();
-            GenerateInitialSkies();
+            myClouds = new List<CloudElement>();
+            GenerateInitialClouds();
             myOcean = new StaticElement(1.0f, 0.0f, new Vector2(0, mySurfaceLevel));
             myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
@@ -98,7 +98,7 @@ namespace SubGame
                 Exit();
             }
 
-            foreach (SkyElement sky in mySkies)
+            foreach (CloudElement sky in myClouds)
             {
                 sky.Update(aGameTime);
             }
@@ -135,14 +135,15 @@ namespace SubGame
             mySpriteBatch.Begin();
             // Begin your drawing code here
 
-            if ((gameTime.TotalGameTime.Seconds % 20) == 0 && gameTime.TotalGameTime.Seconds != myLatestAddedSky)
+            //Throw out a cloud randomly
+            if ((gameTime.TotalGameTime.Seconds % 20) == 0 && gameTime.TotalGameTime.Seconds != myLatestAddedCloud)
             {
-                GenerateRandomSkies(gameTime);
+                GenerateRandomCloud(gameTime);
             }
 
-            foreach (SkyElement sky in mySkies)
+            foreach (CloudElement cloud in myClouds)
             {
-                sky.Draw(mySpriteBatch);
+                cloud.Draw(mySpriteBatch);
             }
 
             foreach (EnemyElement sub in mySubs)
@@ -171,11 +172,12 @@ namespace SubGame
             base.Draw(gameTime);
         }
 
-        private void GenerateInitialSkies()
+        private void GenerateInitialClouds()
         {
             float tempRandomSpeed = RandomNumber.Between(3, 8) / 10.0f;
 
-            foreach (int skyLeft in new int[]{
+            //Generate five random clouds initially and place them on the screen from start
+            foreach (int cloudPosition in new int[]{
                 RandomNumber.Between(0, myGraphics.PreferredBackBufferWidth/5*1),
                 RandomNumber.Between(myGraphics.PreferredBackBufferWidth/5*1, myGraphics.PreferredBackBufferWidth/5*2),
                 RandomNumber.Between(myGraphics.PreferredBackBufferWidth/5*2, myGraphics.PreferredBackBufferWidth/5*3),
@@ -183,22 +185,23 @@ namespace SubGame
                 RandomNumber.Between(myGraphics.PreferredBackBufferWidth/5*4, myGraphics.PreferredBackBufferWidth/5*5)
             })
             {
-                SkyElement aSkyElement = new SkyElement(0.6f, -1.0f, 0.0f, tempRandomSpeed, new Vector2(skyLeft, RandomNumber.Between(1, 50)), myGraphics);
-                aSkyElement.LoadContent(Content, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
-                mySkies.Add(aSkyElement);
+                CloudElement aCloudElement = new CloudElement(0.6f, -1.0f, 0.0f, tempRandomSpeed, new Vector2(cloudPosition, RandomNumber.Between(1, 50)), myGraphics);
+                aCloudElement.LoadContent(Content, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
+                myClouds.Add(aCloudElement);
             }
         }
 
-        private void GenerateRandomSkies(GameTime aGameTime)
+        private void GenerateRandomCloud(GameTime aGameTime)
         {
             float tempRandomSpeed = RandomNumber.Between(3, 8) / 10.0f;
-            myLatestAddedSky = aGameTime.TotalGameTime.Seconds;
-            SkyElement aSkyElement = new SkyElement(0.6f, -1.0f, 0.0f, tempRandomSpeed, new Vector2(myGraphics.PreferredBackBufferWidth, RandomNumber.Between(1, 50)), myGraphics);
-            aSkyElement.LoadContent(Content, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
-            mySkies.Add(aSkyElement);
-            foreach (SkyElement sky in mySkies.Where(s => s.AccessOutOfBounds).ToList())
+
+            myLatestAddedCloud = aGameTime.TotalGameTime.Seconds;
+            CloudElement aCloudElement = new CloudElement(0.6f, -1.0f, 0.0f, tempRandomSpeed, new Vector2(myGraphics.PreferredBackBufferWidth, RandomNumber.Between(1, 50)), myGraphics);
+            aCloudElement.LoadContent(Content, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
+            myClouds.Add(aCloudElement);
+            foreach (CloudElement cloud in myClouds.Where(s => s.AccessOutOfBounds).ToList())
             {
-                mySkies.Remove(sky);
+                myClouds.Remove(cloud);
             }
         }
     }

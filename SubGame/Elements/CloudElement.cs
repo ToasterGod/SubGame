@@ -6,11 +6,11 @@ using SubGame.Types;
 
 namespace SubGame.Elements
 {
-    internal class SkyElement : MovingElement
+    internal class CloudElement : MovingElement
     {
         public bool AccessOutOfBounds { get; set; }
 
-        public SkyElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager) 
+        public CloudElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager) 
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager) 
             => AccessDirection = -1.0f;
         
@@ -22,15 +22,15 @@ namespace SubGame.Elements
 
         public override void Update(GameTime aGameTime)
         {
-            //// Reset the sky if it is outside the left or right edge
+            //// Reset the cloud if it is outside the left or right edge
             if (AccessPosition.X + AccessSize.Width < 0 && AccessDirection < 0.0f)
             {
-                //Sky going left outside of left edge
+                //Cloud going left outside of left edge
                 AccessOutOfBounds = true;
             }
             else if (AccessPosition.X > myManager.PreferredBackBufferWidth && AccessDirection > 0.0f)
             {
-                //Sky going right outside of right edge
+                //Cloud going right outside of right edge
                 AccessOutOfBounds = true;
             }
 
