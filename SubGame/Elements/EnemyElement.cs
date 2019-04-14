@@ -119,14 +119,12 @@ namespace SubGame.Elements
             if (AccessPosition.X + AccessSize.Width < 0 && AccessDirection < 0.0f)
             {
                 //Sub going left outside of left edge, create a new
-                GenerateNewEnemy();
-                LoadContent(myContentManager, myAssets, myWeaponAsset);
+                ResetSub();
             }
             else if (AccessPosition.X > myManager.PreferredBackBufferWidth && AccessDirection > 0.0f)
             {
                 //Sub going right outside of right edge, create a new
-                GenerateNewEnemy();
-                LoadContent(myContentManager, myAssets, myWeaponAsset);
+                ResetSub();
             }
 
             // Calculate the movement
@@ -142,6 +140,12 @@ namespace SubGame.Elements
                 //Make all not dropped mines follow the sub
                 mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Center.X, AccessPosition.Y + AccessSize.Center.Y);
             }
+        }
+
+        public void ResetSub()
+        {
+            GenerateNewEnemy();
+            LoadContent(myContentManager, myAssets, myWeaponAsset);
         }
 
         public override void Draw(SpriteBatch aSpriteBatch)

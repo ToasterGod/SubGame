@@ -27,8 +27,8 @@ namespace SubGame
         private StaticText myStatusPanelLeft;
         private StaticText myStatusPanelRight;
 
-        private readonly int myBoatHits;
-        private readonly int mySubHits;
+        private int myBoatHits;
+        private int mySubHits;
         private int myLatestAddedCloud;
 
         public Level1()
@@ -68,10 +68,10 @@ namespace SubGame
             base.Initialize();
         }
 
-        private void SinkBombReleased(SinkBombElement aSinkBomb) 
+        private void SinkBombReleased(SinkBombElement aSinkBomb)
             => mySinkBombs.Add(aSinkBomb);
 
-        private void MineReleased(MineElement aMine) 
+        private void MineReleased(MineElement aMine)
             => myMines.Add(aMine);
 
         protected override void LoadContent()
@@ -112,23 +112,48 @@ namespace SubGame
 
             myBoat.Update(aGameTime);
 
-            foreach (MineElement mine in myMines)
+            foreach (MineElement mine in myMines.ToList())
             {
                 mine.Update(aGameTime);
-                //if (mine.AccessTimeout == true)
-                //{
-                //    mine.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
-                //    mine.AccessTimeout = false;
-                //}
                 if (mine.HitBox.Intersects(myBoat.HitBox))
                 {
-                    myBoat.HasBeenHit();
+                    myBoatHits++;
+                    myBoat.HasBeenHit(aGameTime);
+                    if (myBoat.AccessBeenHit)
+                    {
+                        if (aGameTime.TotalGameTime.Ticks + 100000 > myBoat.AccessHitTime)
+                        {
+                            myBoat.AccessBeenHit = false;
+                            myBoat.AccessHitTime = 0;
+                        }
+                    }
+                    myMines.Remove(mine);
                 }
             }
-            foreach (SinkBombElement sinkBomb in mySinkBombs)
+            foreach (SinkBombElement sinkBomb in mySinkBombs.ToList())
             {
                 sinkBomb.Update(aGameTime);
+                foreach (var sub in mySubs)
+                {
+                    if (sinkBomb.HitBox.Intersects(sub.HitBox))
+                    {
+                        if (sub.AccessBeenHit == false)
+                            sub.HasBeenHit(aGameTime);
+                        mySubHits++;
+                        if (sub.AccessBeenHit)
+                        {
+                            if (aGameTime.TotalGameTime.Ticks + 100000 > sub.AccessHitTime)
+                            {
+                                sub.AccessBeenHit = false;
+                                sub.AccessHitTime = 0;
+                                sub.ResetSub();
+                            }
+                        }
+                        mySinkBombs.Remove(sinkBomb);
+                    }
+                }
             }
+
 
             base.Update(aGameTime);
         }

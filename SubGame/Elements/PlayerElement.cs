@@ -59,6 +59,8 @@ namespace SubGame.Elements
 
         public override void Update(GameTime aGameTime)
         {
+            base.Update(aGameTime);
+
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 AccessDirection = -1.0f;

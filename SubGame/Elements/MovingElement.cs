@@ -9,7 +9,10 @@ namespace SubGame.Elements
     {
         protected GraphicsDeviceManager myManager;
         protected Texture2D myTexture; //Full access allowed by inheritance
+        private Texture2D myHitSign;
         private SpriteEffects myEffects = SpriteEffects.None;
+        public bool AccessBeenHit { get; set; }
+        public long AccessHitTime { get; set; }
 
         public float AccessDirection { get; set; }
         public float AccessRotation { get; set; }
@@ -31,11 +34,14 @@ namespace SubGame.Elements
         public virtual void LoadContent(ContentManager aContentManager, string anAsset)
         {
             myTexture = aContentManager.Load<Texture2D>(anAsset);
+            myHitSign = aContentManager.Load<Texture2D>("Elements/Boom");
             AccessSize = new Rectangle(0, 0, (int)Math.Round(myTexture.Width * AccessScale), (int)Math.Round(myTexture.Height * AccessScale));
         }
 
         public virtual void Update(GameTime aGameTime)
-        { }
+        {
+            
+        }
 
         public virtual void Draw(SpriteBatch aSpriteBatch)
         {
@@ -56,6 +62,11 @@ namespace SubGame.Elements
             }
 
             aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
+            if (AccessBeenHit)
+            {
+                aSpriteBatch.Draw(myHitSign, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, SpriteEffects.None, 1);
+
+            }
         }
 
         protected void CalcHorizontalMovement(float aSpeed)
@@ -78,9 +89,10 @@ namespace SubGame.Elements
             }
         }
 
-        public void HasBeenHit()
+        public void HasBeenHit(GameTime aGameTime)
         {
-            throw new NotImplementedException();
+            AccessBeenHit = true;
+            AccessHitTime = aGameTime.TotalGameTime.Ticks;
         }
     }
 }
