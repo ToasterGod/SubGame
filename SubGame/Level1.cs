@@ -135,8 +135,8 @@ namespace SubGame
                     if (sinkBomb.HitBox.Intersects(sub.HitBox))
                     {
                         mySubHits++;
-                        sub.ResetSub();
                         myBooms.Add(GenerateMyBoom(1.0f, sub.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
+                        sub.ResetSub();
                         mySinkBombs.Remove(sinkBomb);
                     }
                 }

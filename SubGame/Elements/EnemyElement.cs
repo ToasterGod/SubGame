@@ -129,10 +129,7 @@ namespace SubGame.Elements
             }
 
             // Calculate the movement
-            if (AccessBeenHit == false)
-            {
-                CalcHorizontalMovement(AccessSpeed);
-            }
+            CalcHorizontalMovement(AccessSpeed);
 
             foreach (MineElement mine in myMineList)
             {

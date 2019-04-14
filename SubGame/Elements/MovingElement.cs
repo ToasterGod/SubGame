@@ -11,8 +11,8 @@ namespace SubGame.Elements
         protected Texture2D myTexture; //Full access allowed by inheritance
 
         private SpriteEffects myEffects = SpriteEffects.None;
-        public bool AccessBeenHit { get; set; }
-        public int AccessHitTime { get; set; }
+        //public bool AccessBeenHit { get; set; }
+        //public int AccessHitTime { get; set; }
 
         public float AccessDirection { get; set; }
         public float AccessRotation { get; set; }
@@ -60,10 +60,7 @@ namespace SubGame.Elements
                 myEffects = SpriteEffects.None;
             }
 
-            if (IsEnemy == false || (IsEnemy == true && AccessBeenHit == false))
-            {
-                aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
-            }
+            aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
         }
 
         protected void CalcHorizontalMovement(float aSpeed)
@@ -84,12 +81,6 @@ namespace SubGame.Elements
                 tempDirection.Normalize();
                 AccessPosition += tempDirection * aSpeed;
             }
-        }
-
-        public void HasBeenHit(GameTime aGameTime)
-        {
-            AccessBeenHit = true;
-            AccessHitTime = aGameTime.TotalGameTime.Seconds;
         }
     }
 }
