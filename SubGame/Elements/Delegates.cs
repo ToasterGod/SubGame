@@ -2,7 +2,7 @@
 
 namespace SubGame.Elements
 {
-    public delegate void WhereIsTheBoatDelegate(Rectangle location, GameTime gameTime);
-    public delegate void MineReleasedDelegate(MineElement mine);
-    public delegate void SinkBombReleasedDelegate(SinkBombElement sinkBomb);
+    public delegate void WhereIsTheBoatDelegate(Rectangle aLocation, GameTime aGameTime);
+    public delegate void MineReleasedDelegate(MineElement aMine);
+    public delegate void SinkBombReleasedDelegate(SinkBombElement aSinkBomb);
 }

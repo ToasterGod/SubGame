@@ -19,7 +19,7 @@ namespace SubGame.Elements
         public float AccessSpeed { get; set; }
         public float AccessScale { get; set; }
         public Texture2D MyTexture => myTexture;  //Read-only access allowed by instantiation
-        public Rectangle HitBox => new Rectangle(AccessPosition.ToPoint(), new Point(AccessSize.Width, AccessSize.Height));
+        public Rectangle MyHitBox => new Rectangle(AccessPosition.ToPoint(), new Point(AccessSize.Width, AccessSize.Height));
 
         public MovingElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aPosition)

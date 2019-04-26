@@ -6,7 +6,7 @@ namespace SubGame.Elements
 {
     internal class StaticElement : Element
     {
-        private Texture2D texture;
+        private Texture2D myTexture;
         public float AccessAngle { get; set; }
         public float GetScale { get; private set; }
 
@@ -17,13 +17,13 @@ namespace SubGame.Elements
         }
 
         public virtual void LoadContent(ContentManager aContentManager, string anAssetName) 
-            => texture = aContentManager.Load<Texture2D>(anAssetName);
+            => myTexture = aContentManager.Load<Texture2D>(anAssetName);
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle tempSourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            Rectangle tempSourceRectangle = new Rectangle(0, 0, myTexture.Width, myTexture.Height);
 
-            spriteBatch.Draw(texture, AccessPosition, tempSourceRectangle, Color.White, AccessAngle, new Vector2(0, 0), GetScale, SpriteEffects.None, 1);
+            spriteBatch.Draw(myTexture, AccessPosition, tempSourceRectangle, Color.White, AccessAngle, new Vector2(0, 0), GetScale, SpriteEffects.None, 1);
         }
     }
 }

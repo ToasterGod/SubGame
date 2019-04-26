@@ -55,15 +55,15 @@ namespace SubGame
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < 3; i++)
             {
-                EnemyElement sub = new EnemyElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
-                sub.AccessMineReleased += MineReleased;
-                myBoat.AccessWhereIsTheBoat += sub.BoatIsFoundAt;
-                mySubs.Add(sub);
+                EnemyElement mySub = new EnemyElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
+                mySub.AccessMineReleased += MineReleased;
+                myBoat.AccessWhereIsTheBoat += mySub.BoatIsFoundAt;
+                mySubs.Add(mySub);
             }
 
-            int staticTextTop = myGraphics.PreferredBackBufferHeight - 100;
-            myStatusPanelLeft = new StaticText(new Vector2(20, staticTextTop), new Vector2(300, 80), myGraphics);
-            myStatusPanelRight = new StaticText(new Vector2(myGraphics.PreferredBackBufferWidth - 320, staticTextTop), new Vector2(300, 80), myGraphics);
+            int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 100;
+            myStatusPanelLeft = new StaticText(new Vector2(20, tempStaticTextTop), new Vector2(300, 80), myGraphics);
+            myStatusPanelRight = new StaticText(new Vector2(myGraphics.PreferredBackBufferWidth - 320, tempStaticTextTop), new Vector2(300, 80), myGraphics);
 
             base.Initialize();
         }
@@ -115,7 +115,7 @@ namespace SubGame
             foreach (MineElement mine in myMines.ToList())
             {
                 mine.Update(aGameTime);
-                if (mine.HitBox.Intersects(myBoat.HitBox))
+                if (mine.MyHitBox.Intersects(myBoat.MyHitBox))
                 {
                     myBoatHits++;
                     if (myBoat.AccessBeenHit == false)
@@ -137,7 +137,7 @@ namespace SubGame
                 sinkBomb.Update(aGameTime);
                 foreach (var sub in mySubs)
                 {
-                    if (sinkBomb.HitBox.Intersects(sub.HitBox))
+                    if (sinkBomb.MyHitBox.Intersects(sub.MyHitBox))
                     {
                         if (sub.AccessBeenHit == false)
                         { sub.HasBeenHit(aGameTime); }

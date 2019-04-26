@@ -26,7 +26,7 @@ namespace SubGame.Elements
         //Mine stuff
         private List<MineElement> myMineList;
         private string myWeaponAsset;
-        private double latestDropped;
+        private double myLatestDroppedMine;
         private readonly int mySurfaceLevel;
 
         public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
@@ -166,9 +166,9 @@ namespace SubGame.Elements
             if (AccessPosition.NearByHorizontal(aLocation.Center.ToVector2(), 50))
             {
                 //Allow drop of mines every third second
-                if (gameTime.TotalGameTime.TotalSeconds > latestDropped + 3)
+                if (gameTime.TotalGameTime.TotalSeconds > myLatestDroppedMine + 3)
                 {
-                    latestDropped = gameTime.TotalGameTime.TotalSeconds;
+                    myLatestDroppedMine = gameTime.TotalGameTime.TotalSeconds;
                     ReleaseMine();
                 }
             }
