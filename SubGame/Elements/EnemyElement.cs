@@ -33,6 +33,7 @@ namespace SubGame.Elements
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
             mySurfaceLevel = aSurfaceLevel;
+            IsEnemy = true;
             GenerateNewEnemy();
         }
 
@@ -129,11 +130,6 @@ namespace SubGame.Elements
 
             // Calculate the movement
             CalcHorizontalMovement(AccessSpeed);
-
-            //if ((aGameTime.TotalGameTime.Ticks % myDropFrequency) == 0)
-            //{
-            //    ReleaseMine();
-            //}
 
             foreach (MineElement mine in myMineList)
             {

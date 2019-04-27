@@ -22,8 +22,11 @@ namespace SubGame.Elements
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
 
         public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
-            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager) 
-            => GenerateNewWeapons();
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
+        {
+            IsEnemy = false;
+            GenerateNewWeapons();
+        }
 
         private void GenerateNewWeapons()
         {

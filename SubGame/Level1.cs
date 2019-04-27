@@ -24,6 +24,7 @@ namespace SubGame
         private List<EnemyElement> mySubs;
         private List<MineElement> myMines;
         private List<SinkBombElement> mySinkBombs;
+        private List<StaticElement> myBooms;
         private StaticText myStatusPanelLeft;
         private StaticText myStatusPanelRight;
 
@@ -46,12 +47,14 @@ namespace SubGame
         {
             myClouds = new List<CloudElement>();
             GenerateInitialClouds();
-            myOcean = new StaticElement(1.0f, 0.0f, new Vector2(0, mySurfaceLevel));
+            myOcean = new StaticElement(1.0f, new Vector2(0, mySurfaceLevel));
             myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
             mySubs = new List<EnemyElement>();
             myMines = new List<MineElement>();
             mySinkBombs = new List<SinkBombElement>();
+            myBooms = new List<StaticElement>();
+
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < 3; i++)
             {
@@ -118,45 +121,49 @@ namespace SubGame
                 if (mine.MyHitBox.Intersects(myBoat.MyHitBox))
                 {
                     myBoatHits++;
-                    if (myBoat.AccessBeenHit == false)
-                    { myBoat.HasBeenHit(aGameTime); }
-
-                    if (myBoat.AccessBeenHit)
-                    {
-                        if (aGameTime.TotalGameTime.Ticks + 100000 > myBoat.AccessHitTime)
-                        {
-                            myBoat.AccessBeenHit = false;
-                            myBoat.AccessHitTime = 0;
-                        }
-                    }
+                    myBooms.Add(GenerateMyBoom(1.0f, myBoat.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
                     myMines.Remove(mine);
                 }
+                //TODO! Remove mine after time elapsed
             }
+
             foreach (SinkBombElement sinkBomb in mySinkBombs.ToList())
             {
                 sinkBomb.Update(aGameTime);
-                foreach (var sub in mySubs)
+                foreach (EnemyElement sub in mySubs)
                 {
                     if (sinkBomb.MyHitBox.Intersects(sub.MyHitBox))
                     {
-                        if (sub.AccessBeenHit == false)
-                        { sub.HasBeenHit(aGameTime); }
-
                         mySubHits++;
-                        if (sub.AccessBeenHit)
-                        {
-                            if (aGameTime.TotalGameTime.Ticks + 100000 > sub.AccessHitTime)
-                            {
-                                sub.AccessBeenHit = false;
-                                sub.AccessHitTime = 0;
-                                sub.ResetSub();
-                            }
-                        }
+                        myBooms.Add(GenerateMyBoom(1.0f, sub.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
+                        sub.ResetSub();
                         mySinkBombs.Remove(sinkBomb);
                     }
                 }
+                //TODO! If sinkbomb is outside game then remove it
+                //TODO! Add it as an available shootable sinkbomb to myBoat
             }
 
+            //foreach (var sub in mySubs.ToList())
+            //{
+            //    if (sub.AccessBeenHit)
+            //    {
+            //        if (aGameTime.TotalGameTime.Seconds > sub.AccessHitTime + 2)
+            //        {
+            //            sub.AccessBeenHit = false;
+            //            sub.AccessHitTime = 0;
+            //            sub.ResetSub();
+            //        }
+            //    }
+            //}
+
+            foreach (var boom in myBooms.ToList())
+            {
+                if (aGameTime.TotalGameTime.Seconds > boom.AccessTimeToLive)
+                {
+                    myBooms.Remove(boom);
+                }
+            }
 
             base.Update(aGameTime);
         }
@@ -194,6 +201,11 @@ namespace SubGame
                 sinkBomb.Draw(mySpriteBatch);
             }
 
+            foreach (var boom in myBooms)
+            {
+                boom.Draw(mySpriteBatch);
+            }
+
             myOcean.Draw(mySpriteBatch);
 
             myStatusPanelLeft.Draw(mySpriteBatch, $"Boat hits: {myBoatHits}");
@@ -202,6 +214,13 @@ namespace SubGame
             // End your drawing code here
             mySpriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public StaticElement GenerateMyBoom(float aScale, Vector2 aPosition, int aTimeToLive)
+        {
+            var boom = new StaticElement(aScale, aPosition, aTimeToLive);
+            boom.LoadContent(Content, "Elements/Boom");
+            return boom;
         }
 
         private void GenerateInitialClouds()
