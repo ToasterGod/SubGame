@@ -32,6 +32,8 @@ namespace SubGame
         private int mySubHits;
         private int myLatestAddedCloud;
 
+        public bool AccessPaused { get; private set; }
+
         public Level1()
         {
             myGraphics = new GraphicsDeviceManager(this)
@@ -96,6 +98,18 @@ namespace SubGame
 
         protected override void Update(GameTime aGameTime)
         {
+            if (AccessPaused && Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                AccessPaused = false;
+            }
+            else if (!AccessPaused && Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                AccessPaused = true;
+            }
+            if (AccessPaused)
+            {
+                return;
+            }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -124,7 +138,10 @@ namespace SubGame
                     myBooms.Add(GenerateMyBoom(1.0f, myBoat.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
                     myMines.Remove(mine);
                 }
-                //TODO! Remove mine after time elapsed
+                if (mine.AccessSurfaced && mine.AccessSurfacedTime + 3 <= aGameTime.TotalGameTime.Seconds)
+                {
+                    myMines.Remove(mine);
+                }
             }
 
             foreach (SinkBombElement sinkBomb in mySinkBombs.ToList())
@@ -142,6 +159,10 @@ namespace SubGame
                 }
                 //TODO! If sinkbomb is outside game then remove it
                 //TODO! Add it as an available shootable sinkbomb to myBoat
+                if (sinkBomb.AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
+                {
+                    mySinkBombs.Remove(sinkBomb);
+                }
             }
 
             //foreach (var sub in mySubs.ToList())

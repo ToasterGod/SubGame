@@ -8,6 +8,8 @@ namespace SubGame.Elements
     public class MineElement : MovingElement
     {
         private readonly int mySurfaceLevel;
+        public bool AccessSurfaced { get; set; }
+        public int AccessSurfacedTime { get; private set; }
 
         public MineElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
@@ -23,6 +25,11 @@ namespace SubGame.Elements
             if (AccessPosition.Y > mySurfaceLevel)
             {
                 CalcVerticalMovement(AccessSpeed);
+            }
+            if (AccessPosition.Y <= mySurfaceLevel && !AccessSurfaced)
+            {
+                AccessSurfaced = true;
+                AccessSurfacedTime = aGameTime.TotalGameTime.Seconds;
             }
             //else
             //{

@@ -33,7 +33,7 @@ namespace SubGame.Elements
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
             mySurfaceLevel = aSurfaceLevel;
-            IsEnemy = true;
+            AccessIsEnemy = true;
             GenerateNewEnemy();
         }
 

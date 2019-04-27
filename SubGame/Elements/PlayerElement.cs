@@ -24,7 +24,7 @@ namespace SubGame.Elements
         public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
-            IsEnemy = false;
+            AccessIsEnemy = false;
             GenerateNewWeapons();
         }
 
