@@ -1,78 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using SubGame.Elements;
 using SubGame.Types;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace SubGame
+namespace SubGame.Levels
 {
-    public class LevelFactory
+    public class Level1To5 : LevelBase, ILevel
     {
+        #region Inheritance implementation
+        public Level1To5(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelConfig aLevelConfig)
+            : base(aGraphics, aContent, aLevelConfig)
+        {}
+        #endregion
 
-    }
-
-    public class LevelContainerBase
-    {
-        protected readonly GraphicsDeviceManager myGraphics;
-        protected SpriteBatch mySpriteBatch;
-        protected ContentManager myContent;
-
-        
-
-        public LevelContainerBase(GraphicsDeviceManager aGraphics, ContentManager myContent)
-        {
-            this.myGraphics = aGraphics;
-            this.myContent = myContent;
-        }
-
-        public virtual void Initialize()
-        {
-
-        }
-        public virtual void LoadContent()
-        {
-
-        }
-        public virtual void Update(GameTime aGameTime)
-        {
-
-        }
-        public virtual void Draw(SpriteBatch mySpriteBatch, GameTime gameTime)
-        {
-
-        }
-
-    }
-
-    public class Level1 : LevelContainerBase
-    {
-        private readonly int mySurfaceLevel = 280;
-        private List<CloudElement> myClouds;
-        private StaticElement myOcean;
-        private PlayerElement myBoat;
-        private List<EnemyElement> mySubs;
-        private List<MineElement> myMines;
-        private List<SinkBombElement> mySinkBombs;
-        private List<StaticElement> myBooms;
-        private StaticText myStatusPanelLeft;
-        private StaticText myStatusPanelRight;
-
-        private int myBoatHits;
-        private int mySubHits;
-        private int myLatestAddedCloud;
-
-        public Level1(GraphicsDeviceManager myGraphics, ContentManager content) : base(myGraphics, content)
-        {
-
-        }
-
-        public override void Initialize()
+        #region Interface implementation methods
+        public int AccessBoatHits => myBoatHits;
+        public void Initialize()
         {
             myClouds = new List<CloudElement>();
             GenerateInitialClouds(myContent);
@@ -99,13 +45,7 @@ namespace SubGame
 
         }
 
-        private void SinkBombReleased(SinkBombElement aSinkBomb)
-           => mySinkBombs.Add(aSinkBomb);
-
-        private void MineReleased(MineElement aMine)
-            => myMines.Add(aMine);
-
-        public override void LoadContent()
+        public void LoadContent()
         {
             myOcean.LoadContent(myContent, "Backgrounds/SolidOcean");
 
@@ -120,10 +60,9 @@ namespace SubGame
             myStatusPanelRight.LoadContent(myContent, "Status");
 
         }
-        public override void Update(GameTime aGameTime)
-        {
-            
 
+        public void Update(GameTime aGameTime)
+        {
             foreach (CloudElement sky in myClouds)
             {
                 sky.Update(aGameTime);
@@ -133,7 +72,6 @@ namespace SubGame
             {
                 //Sub update will call its mines update
                 sub.Update(aGameTime);
-
             }
 
             myBoat.Update(aGameTime);
@@ -166,7 +104,6 @@ namespace SubGame
                         mySinkBombs.Remove(sinkBomb);
                     }
                 }
-                //TODO! If sinkbomb is outside game then remove it
                 //TODO! Add it as an available shootable sinkbomb to myBoat
                 if (sinkBomb.AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
                 {
@@ -174,31 +111,16 @@ namespace SubGame
                 }
             }
 
-            //foreach (var sub in mySubs.ToList())
-            //{
-            //    if (sub.AccessBeenHit)
-            //    {
-            //        if (aGameTime.TotalGameTime.Seconds > sub.AccessHitTime + 2)
-            //        {
-            //            sub.AccessBeenHit = false;
-            //            sub.AccessHitTime = 0;
-            //            sub.ResetSub();
-            //        }
-            //    }
-            //}
-
-            foreach (var boom in myBooms.ToList())
+            foreach (StaticElement boom in myBooms.ToList())
             {
                 if (aGameTime.TotalGameTime.Seconds > boom.AccessTimeToLive)
                 {
                     myBooms.Remove(boom);
                 }
             }
-
-
         }
 
-        public override void Draw(SpriteBatch mySpriteBatch,  GameTime gameTime)
+        public void Draw(SpriteBatch mySpriteBatch, GameTime gameTime)
         {
             //Throw out a cloud randomly
             if ((gameTime.TotalGameTime.Seconds % 20) == 0 && gameTime.TotalGameTime.Seconds != myLatestAddedCloud)
@@ -227,7 +149,7 @@ namespace SubGame
                 sinkBomb.Draw(mySpriteBatch);
             }
 
-            foreach (var boom in myBooms)
+            foreach (StaticElement boom in myBooms)
             {
                 boom.Draw(mySpriteBatch);
             }
@@ -236,12 +158,19 @@ namespace SubGame
 
             myStatusPanelLeft.Draw(mySpriteBatch, $"Boat hits: {myBoatHits}");
             myStatusPanelRight.Draw(mySpriteBatch, $"Sub hits: {mySubHits}");
-
         }
+        #endregion
+
+        #region Internal methods
+        private void SinkBombReleased(SinkBombElement aSinkBomb)
+           => mySinkBombs.Add(aSinkBomb);
+
+        private void MineReleased(MineElement aMine)
+            => myMines.Add(aMine);
 
         public StaticElement GenerateMyBoom(ContentManager myContent, float aScale, Vector2 aPosition, int aTimeToLive)
         {
-            var boom = new StaticElement(aScale, aPosition, aTimeToLive);
+            StaticElement boom = new StaticElement(aScale, aPosition, aTimeToLive);
             boom.LoadContent(myContent, "Elements/Boom");
             return boom;
         }
@@ -279,5 +208,6 @@ namespace SubGame
                 myClouds.Remove(cloud);
             }
         }
+        #endregion
     }
 }

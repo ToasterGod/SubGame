@@ -6,7 +6,7 @@ using SubGame.Types;
 
 namespace SubGame.Elements
 {
-    internal class CloudElement : MovingElement
+    public class CloudElement : MovingElement
     {
         public bool AccessOutOfBounds { get; set; }
 

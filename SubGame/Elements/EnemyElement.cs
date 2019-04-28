@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SubGame.Elements
 {
-    internal class EnemyElement : MovingElement
+    public class EnemyElement : MovingElement
     {
         public MineReleasedDelegate AccessMineReleased { get; set; }
         private readonly float[] myDirectionLevels = { -1.0f, 1.0f };

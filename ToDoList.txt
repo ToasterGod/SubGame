@@ -1,0 +1,37 @@
+Stuff done already:
+===================
+Remove mines after 3 seconds
+Remove sinkbombs outside screen
+(P)ause & (R)un
+Pause screen
+Restart efter 10 träffar på båt
+
+Stuff todo before ready:
+========================
+Show banner when restarting level
+Powerups, supply ship/helicopter, reset boathits
+Ö av plastsopor som begränsar rörelse
+Fiskar, måsar
+
+Styrkenivåer:
+=============
+Fler sjunkbomber
+Ytterligare vapen
+Bättre båt, mer vapen
+Båt kan lägga minor på olika djup
+
+Svårighetsnivåer:
+=================
+Bana blir svårare efter hand, fler ubåtar
+Ubåt minimidjup
+Minhastighet
+Fler minor
+Fler vapentyper
+Fler ubåtar
+
+Others:
+=======
+Meny
+Animated players, propeller, periskop riktat mot båten
+Save state, started to create it
+Sound effects

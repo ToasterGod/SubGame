@@ -1,0 +1,36 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace SubGame.Levels
+{
+    public class Level6To10 : LevelBase, ILevel
+    {
+        #region Inheritance implementation
+        public Level6To10(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelConfig aLevelConfig)
+            : base(aGraphics, aContent, aLevelConfig)
+        {}
+        #endregion
+
+        #region Interface implementation methods
+        public int AccessBoatHits => myBoatHits;
+        public void Draw(SpriteBatch mySpriteBatch, GameTime gameTime)
+        {
+        }
+        public void Initialize()
+        {
+        }
+
+        public void LoadContent()
+        {
+        }
+
+        public void Update(GameTime aGameTime)
+        {
+        }
+        #endregion
+
+        #region Internal methods
+        #endregion
+    }
+}

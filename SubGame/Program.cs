@@ -1,23 +1,21 @@
-﻿using System;
+﻿using SubGame.Levels;
+using System;
 
 namespace SubGame
 {
 #if WINDOWS || LINUX
 
-    /// <summary>
-    /// The main class.
-    /// </summary>
     public static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         private static void Main()
         {
-            using (MainGame myGame = new MainGame())
+            string savePath = "";
+            using (MainGame myGame = new MainGame(new LevelFactory("Levels.json")))
             {
+                myGame.LoadState(savePath);
                 myGame.Run();
+                myGame.SaveState(savePath);
             }
         }
     }

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SubGame.Elements
 {
-    internal class PlayerElement : MovingElement
+    public class PlayerElement : MovingElement
     {
         private bool myReleasePressed;
         private int myLeftEdge;

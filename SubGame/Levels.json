@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 1,
+    "Name": "Level 1",
+    "Subs": 1,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 2,
+    "Name": "Level 2",
+    "Subs": 3,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 3,
+    "Name": "Level 3",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 4,
+    "Name": "Level 4",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 5,
+    "Name": "Level 5",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 6,
+    "Name": "Level 6",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 7,
+    "Name": "Level 7",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 8,
+    "Name": "Level 8",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 9,
+    "Name": "Level 9",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  },
+  {
+    "Id": 10,
+    "Name": "Level 10",
+    "Subs": 5,
+    "Mines": 1,
+    "Sinkbombs": 5
+  }
+]
