@@ -87,6 +87,7 @@
     <Content Include="Content\Elements\FastSub.png" />
     <Content Include="Content\Elements\MediumSub.png" />
     <Content Include="Content\Elements\SlowSub.png" />
+    <Content Include="Content\Sounds\Bomb.mp3" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

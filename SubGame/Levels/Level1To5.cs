@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SubGame.Elements;
@@ -32,6 +33,7 @@ namespace SubGame.Levels
             myMines = new List<MineElement>();
             mySinkBombs = new List<SinkBombElement>();
             myBooms = new List<StaticElement>();
+            mySoundEffects = new List<SoundEffect>();
 
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < myConfig.Subs; i++)
@@ -59,6 +61,8 @@ namespace SubGame.Levels
 
             myBoat.LoadContent(myContent, "Elements/Boat", "Elements/Sinkbomb");
 
+            mySoundEffects.Add(myContent.Load<SoundEffect>("Sounds/Bomb"));
+
             myStatusPanelLeft.LoadContent(myContent, "Status");
             myStatusPanelRight.LoadContent(myContent, "Status");
 
@@ -84,6 +88,7 @@ namespace SubGame.Levels
                 mine.Update(aGameTime);
                 if (mine.MyHitBox.Intersects(myBoat.MyHitBox))
                 {
+                    mySoundEffects[0].Play();
                     myBoatHits++;
                     myBooms.Add(GenerateMyBoom(myContent, 1.0f, myBoat.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
                     myMines.Remove(mine);
@@ -101,6 +106,7 @@ namespace SubGame.Levels
                 {
                     if (sinkBomb.MyHitBox.Intersects(sub.MyHitBox))
                     {
+                        mySoundEffects[0].Play();
                         mySubHits++;
                         myBooms.Add(GenerateMyBoom(myContent, 1.0f, sub.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
                         sub.ResetSub();

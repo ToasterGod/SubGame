@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using SubGame.Elements;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace SubGame.Levels
         protected List<MineElement> myMines;
         protected List<SinkBombElement> mySinkBombs;
         protected List<StaticElement> myBooms;
+        protected List<SoundEffect> mySoundEffects;
         protected StaticText myStatusPanelLeft;
         protected StaticText myStatusPanelRight;
 
