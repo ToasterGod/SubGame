@@ -7,39 +7,34 @@ Stuff done already:
 *DONE* Support multiple levels
 *DONE* Show what level we are at
 *DONE* Configurable difficulty levels
-*DONE* Game over efter 10 träffar på båt 
-*DONE* Fler sjunkbomber
-*DONE* Bana blir svårare efter hand, fler ubåtar
-*DONE* Fler minor
-*DONE* Större antal ubåtar åt gången
+*DONE* Game over after max hits on ship 
+*DONE* Configurable amount of mines and sinkbombs
+*DONE* Configurable amount of subs
+*DONE* Sound effects, https://www.gamefromscratch.com/post/2015/07/25/MonoGame-Tutorial-Audio.aspx
 
 Stuff todo before ready:
 ========================
-Level failed slut på sjunkbomber utan att ha sänkt de ubåtar som krävs
-Show when we have defeated all subs on a level
-Show banner when restarting level
-Powerups, supply ship/helicopter, reset boathits
-Ö av plastsopor som begränsar rörelse
-Fiskar, måsar
-
-Styrkenivåer:
-=============
-Ytterligare vapen
-Bättre båt, mer vapen
-Båt kan lägga minor på olika djup
-
-Svårighetsnivåer:
-=================
-Ubåt minimidjup
-Minhastighet
-Fler vapentyper
-Config, define what subs will be generated in level
-
-Others:
-=======
-Level6To10 + Iceberg + Cannon on ship
-Meny
-Animated players, propeller, periskop riktat mot båten
 *STARTED* Save state
-*STARTED* Leveleditor, MVVM WPF
-Sound effects
+*STARTED* Level editor, MVVM WPF
+Level failed, no more sinkbombs left without sinking the subs required
+Show when we have defeated all subs on a level
+Show banner when level failed and restarting level
+Powerups, supply ship/helicopter, reset boathits
+Island of plastic garbage limiting movement of ship
+Level6To10 + Iceberg + Cannon on ship
+Menu
+Animated players, propeller, periscope tracking the ship
+Fish, whale, sharks and seagulls
+
+Strength related:
+=================
+Other kind of weapons
+Improved ship, better weapons
+Ship could drop mine at specific depth
+
+Difficulty:
+===========
+Sub, minimal depth
+Speed of mines
+Other kind of weapons
+Config, define what subs will be generated in level. Enum?

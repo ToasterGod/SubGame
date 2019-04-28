@@ -5,7 +5,7 @@
     "Subs": 1,
     "Mines": 1,
     "Sinkbombs": 5,
-    "Health": 1,
+    "Health": 2,
     "RequiredSubHits":  1
   },
   {
@@ -20,29 +20,29 @@
   {
     "Level": 3,
     "Name": "Level 3",
-    "Subs": 5,
+    "Subs": 3,
     "Mines": 1,
     "Sinkbombs": 5,
-    "Health": 1,
-    "RequiredSubHits": 1
+    "Health": 2,
+    "RequiredSubHits": 3
   },
   {
     "Level": 4,
     "Name": "Level 4",
-    "Subs": 5,
+    "Subs": 4,
     "Mines": 1,
     "Sinkbombs": 5,
-    "Health": 1,
-    "RequiredSubHits": 1
+    "Health": 2,
+    "RequiredSubHits": 4
   },
   {
     "Level": 5,
     "Name": "Level 5",
     "Subs": 5,
     "Mines": 1,
-    "Sinkbombs": 5,
-    "Health": 1,
-    "RequiredSubHits": 1
+    "Sinkbombs": 10,
+    "Health": 3,
+    "RequiredSubHits": 5
   },
   {
     "Level": 6,
