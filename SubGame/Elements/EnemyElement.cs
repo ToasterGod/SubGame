@@ -27,13 +27,15 @@ namespace SubGame.Elements
         private List<MineElement> myMineList;
         private string myWeaponAsset;
         private double myLatestDroppedMine;
+        private int myMineCount;
         private readonly int mySurfaceLevel;
 
-        public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+        public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someMines)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
             mySurfaceLevel = aSurfaceLevel;
             AccessIsEnemy = true;
+            myMineCount = someMines;
             GenerateNewEnemy();
         }
 
@@ -51,7 +53,7 @@ namespace SubGame.Elements
         private void GenerateNewWeapons()
         {
             myMineList = new List<MineElement>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < myMineCount; i++)
             {
                 myMineList.Add(new MineElement(mySurfaceLevel, 1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, myManager));
             }

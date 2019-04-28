@@ -70,11 +70,6 @@ namespace SubGame
                 // Pause game
                 AccessPaused = true;
             }
-            if (AccessPaused)
-            {
-                // Don't update if paused
-                return;
-            }
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
@@ -82,10 +77,22 @@ namespace SubGame
                 Exit();
             }
 
-            if (AccessCurrentLevelInstance.AccessBoatHits == 10)
+            if (AccessPaused)
+            {
+                // Don't update if paused, Draw will still be called to keep screen updated with current state
+                return;
+            }
+
+            if (AccessCurrentLevelInstance.AccessBoatHits == AccessCurrentLevelInstance.AccessBoatHitsAllowed)
             {
                 RestartLevel();
                 return;
+            }
+
+            if (AccessCurrentLevelInstance.AccessSubHits == AccessCurrentLevelInstance.AccessSubHitsRequired)
+            {
+                // Next level
+                NextLevel();
             }
 
             AccessCurrentLevelInstance.Update(aGameTime);
@@ -101,7 +108,7 @@ namespace SubGame
             AccessCurrentLevelInstance.Draw(mySpriteBatch, aGameTime);
             if(AccessPaused)
             {
-                pausedBanner.Draw(mySpriteBatch, $"Paused");
+                pausedBanner.Draw(mySpriteBatch, $"Paused... Press Esc to quit or R to resume...");
             }
 
             mySpriteBatch.End();
@@ -110,7 +117,15 @@ namespace SubGame
 
         protected virtual void RestartLevel()
         {
-            AccessCurrentLevelInstance = myLevelFactory.GetLevelInstance(1);
+            AccessCurrentLevelInstance = myLevelFactory.GetLevelInstance(AccessCurrentLevel);
+            AccessCurrentLevelInstance.Initialize();
+            AccessCurrentLevelInstance.LoadContent();
+        }
+
+        protected virtual void NextLevel()
+        {
+            AccessCurrentLevel++;
+            AccessCurrentLevelInstance = myLevelFactory.GetLevelInstance(AccessCurrentLevel);
             AccessCurrentLevelInstance.Initialize();
             AccessCurrentLevelInstance.LoadContent();
         }

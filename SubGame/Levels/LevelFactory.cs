@@ -24,13 +24,13 @@ namespace SubGame.Levels
                 case 3:
                 case 4:
                 case 5:
-                    return new Level1To5(AccessGame.Graphics, AccessGame.Content, LevelConfigs.FirstOrDefault(l => l.Id == level));
+                    return new Level1To5(AccessGame.Graphics, AccessGame.Content, LevelConfigs.FirstOrDefault(l => l.Level == level));
                 case 6:
                 case 7:
                 case 8:
                 case 9:
                 case 10:
-                    return new Level6To10(AccessGame.Graphics, AccessGame.Content, LevelConfigs.FirstOrDefault(l => l.Id == level));
+                    return new Level6To10(AccessGame.Graphics, AccessGame.Content, LevelConfigs.FirstOrDefault(l => l.Level == level));
                 default:
                     break;
             }

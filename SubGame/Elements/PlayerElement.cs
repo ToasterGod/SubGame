@@ -16,22 +16,24 @@ namespace SubGame.Elements
         private List<SinkBombElement> mySinkBombList;
         private string myWeaponAsset;
         private ContentManager myContentManager;
+        private int mySinkBombCount;
 
         public Rectangle AccessCollisionBox { get; internal set; }
         public SinkBombReleasedDelegate AccessSinkBombReleased { get; set; }
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
 
-        public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
+        public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someSinkBombs)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
             AccessIsEnemy = false;
+            mySinkBombCount = someSinkBombs;
             GenerateNewWeapons();
         }
 
         private void GenerateNewWeapons()
         {
             mySinkBombList = new List<SinkBombElement>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < mySinkBombCount; i++)
             {
                 mySinkBombList.Add(new SinkBombElement(1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, myManager));
             }

@@ -14,6 +14,10 @@ namespace SubGame.Levels
 
         #region Interface implementation methods
         public int AccessBoatHits => myBoatHits;
+        public int AccessSubHits => mySubHits;
+        public int AccessBoatHitsAllowed => myConfig.Health;
+        public int AccessSubHitsRequired => myConfig.RequiredSubHits;
+
         public void Draw(SpriteBatch mySpriteBatch, GameTime gameTime)
         {
         }

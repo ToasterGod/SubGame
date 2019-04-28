@@ -1,13 +1,22 @@
 Stuff done already:
 ===================
-Remove mines after 3 seconds
-Remove sinkbombs outside screen
-(P)ause & (R)un
-Pause screen
-Restart efter 10 träffar på båt
+*DONE* Remove mines after 3 seconds
+*DONE* Remove sinkbombs outside screen
+*DONE* (P)ause & (R)un
+*DONE* Pause screen
+*DONE* Support multiple levels
+*DONE* Show what level we are at
+*DONE* Configurable difficulty levels
+*DONE* Game over efter 10 träffar på båt 
+*DONE* Fler sjunkbomber
+*DONE* Bana blir svårare efter hand, fler ubåtar
+*DONE* Fler minor
+*DONE* Större antal ubåtar åt gången
 
 Stuff todo before ready:
 ========================
+Level failed slut på sjunkbomber utan att ha sänkt de ubåtar som krävs
+Show when we have defeated all subs on a level
 Show banner when restarting level
 Powerups, supply ship/helicopter, reset boathits
 Ö av plastsopor som begränsar rörelse
@@ -15,23 +24,22 @@ Fiskar, måsar
 
 Styrkenivåer:
 =============
-Fler sjunkbomber
 Ytterligare vapen
 Bättre båt, mer vapen
 Båt kan lägga minor på olika djup
 
 Svårighetsnivåer:
 =================
-Bana blir svårare efter hand, fler ubåtar
 Ubåt minimidjup
 Minhastighet
-Fler minor
 Fler vapentyper
-Fler ubåtar
+Config, define what subs will be generated in level
 
 Others:
 =======
+Level6To10 + Iceberg + Cannon on ship
 Meny
 Animated players, propeller, periskop riktat mot båten
-Save state, started to create it
+*STARTED* Save state
+*STARTED* Leveleditor, MVVM WPF
 Sound effects

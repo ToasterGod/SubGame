@@ -18,12 +18,15 @@ namespace SubGame.Levels
 
         #region Interface implementation methods
         public int AccessBoatHits => myBoatHits;
+        public int AccessSubHits => mySubHits;
+        public int AccessBoatHitsAllowed => myConfig.Health;
+        public int AccessSubHitsRequired => myConfig.RequiredSubHits;
         public void Initialize()
         {
             myClouds = new List<CloudElement>();
             GenerateInitialClouds(myContent);
             myOcean = new StaticElement(1.0f, new Vector2(0, mySurfaceLevel));
-            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics);
+            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
             mySubs = new List<EnemyElement>();
             myMines = new List<MineElement>();
@@ -31,9 +34,9 @@ namespace SubGame.Levels
             myBooms = new List<StaticElement>();
 
             //Level1 = three subs at the time, each having one mine
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < myConfig.Subs; i++)
             {
-                EnemyElement mySub = new EnemyElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
+                EnemyElement mySub = new EnemyElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics, myConfig.Mines);
                 mySub.AccessMineReleased += MineReleased;
                 myBoat.AccessWhereIsTheBoat += mySub.BoatIsFoundAt;
                 mySubs.Add(mySub);
@@ -144,6 +147,7 @@ namespace SubGame.Levels
             {
                 mine.Draw(mySpriteBatch);
             }
+
             foreach (SinkBombElement sinkBomb in mySinkBombs)
             {
                 sinkBomb.Draw(mySpriteBatch);
@@ -156,8 +160,8 @@ namespace SubGame.Levels
 
             myOcean.Draw(mySpriteBatch);
 
-            myStatusPanelLeft.Draw(mySpriteBatch, $"Boat hits: {myBoatHits}");
-            myStatusPanelRight.Draw(mySpriteBatch, $"Sub hits: {mySubHits}");
+            myStatusPanelLeft.Draw(mySpriteBatch, $"Level: {myConfig.Name}\nBoat hits: {myBoatHits}");
+            myStatusPanelRight.Draw(mySpriteBatch, $"Level: {myConfig.Name}\nSub hits: {mySubHits}");
         }
         #endregion
 
