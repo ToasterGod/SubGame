@@ -12,7 +12,9 @@ namespace SubGameEditor.ViewModels
 {
     public class LevelViewModel : INotifyPropertyChanged
     {
+        private readonly string myPath = @"Levels.json";
         public List<LevelData> Levels { get; set; }
+
         public LevelData SelectedLevel
         {
             get { return selectedLevel; }
@@ -24,9 +26,14 @@ namespace SubGameEditor.ViewModels
 
         public LevelViewModel()
         {
-            string path = @"C:\Repos\SubGame\SubGame\Levels.json";
-            Levels = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(path));
+            Levels = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(myPath));
         }
+
+        ~LevelViewModel()
+        {
+            File.WriteAllText(myPath, JsonConvert.SerializeObject(Levels));
+        }
+
         public void SomethingIsChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
