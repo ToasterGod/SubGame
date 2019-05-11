@@ -77,7 +77,9 @@
   <ItemGroup>
     <Content Include="Content\Elements\Boom.png" />
     <Content Include="Content\Backgrounds\SolidOcean.png" />
+    <Content Include="Content\Elements\MaliciousShark.png" />
     <Content Include="Content\Elements\Mine.png" />
+    <Content Include="Content\Elements\ShittySeagull.png" />
     <Content Include="Content\Elements\SinkBomb.png" />
     <Content Include="Content\Elements\Boat.png" />
     <Content Include="Content\Elements\cloud1.png" />
@@ -87,6 +89,7 @@
     <Content Include="Content\Elements\FastSub.png" />
     <Content Include="Content\Elements\MediumSub.png" />
     <Content Include="Content\Elements\SlowSub.png" />
+    <Content Include="Content\Elements\TraumatizedWhale.png" />
     <Content Include="Content\Sounds\Bomb.mp3" />
     <Content Include="Icon.ico" />
   </ItemGroup>

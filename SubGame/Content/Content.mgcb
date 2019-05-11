@@ -116,6 +116,18 @@
 /processorParam:TextureFormat=Color
 /build:Elements/FastSub.png
 
+#begin Elements/MaliciousShark.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Elements/MaliciousShark.png
+
 #begin Elements/MediumSub.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -140,6 +152,18 @@
 /processorParam:TextureFormat=Color
 /build:Elements/Mine.png
 
+#begin Elements/ShittySeagull.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Elements/ShittySeagull.png
+
 #begin Elements/SinkBomb.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -163,6 +187,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Elements/SlowSub.png
+
+#begin Elements/TraumatizedWhale.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Elements/TraumatizedWhale.png
 
 #begin Sounds/Bomb.mp3
 /importer:Mp3Importer
