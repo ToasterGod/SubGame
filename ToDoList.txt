@@ -12,15 +12,15 @@ Stuff done already:
 *DONE* Configurable amount of subs
 *DONE* Sound effects, https://www.gamefromscratch.com/post/2015/07/25/MonoGame-Tutorial-Audio.aspx
 *DONE* Level editor, MVVM WPF
+*DONE* Level failed, no more sinkbombs left without sinking the subs required
 
 Stuff todo before ready:
 ========================
 *STARTED* Save state
-Level failed, no more sinkbombs left without sinking the subs required
-Show when we have defeated all subs on a level
+Show banner when we have defeated all subs on a level
 Show banner when level failed and restarting level
 Powerups, supply ship/helicopter, reset boathits
-Island of plastic garbage limiting movement of ship
+(Island of plastic garbage limiting movement of ship)
 Level6To10 + Iceberg + Cannon on ship
 Menu
 Animated players, propeller, periscope tracking the ship
@@ -28,7 +28,7 @@ Fish, whale, sharks and seagulls
 
 Add a system where when you pause a menu of the boat comes up where you can assign people to different parts of the boat which increases/decreases stats.
 The maximum amount increases with every new level and the helicopter gives people and sinkbombs instead of stats.
-the stats increased are sinkbomb speed, health/regen(?), and sinkbomb amount
+the stats increased are sinkbomb speed, health/regen(?), and boat speed
 
 Strength related:
 =================

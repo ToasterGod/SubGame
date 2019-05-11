@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SubGame.Elements;
 
 namespace SubGame.Levels
 {
@@ -9,6 +10,9 @@ namespace SubGame.Levels
         int AccessSubHits { get; }
         int AccessBoatHitsAllowed { get; }
         int AccessSubHitsRequired { get; }
+        PlayerElement AccessBoat { get; }
+        int AccessSinkingSinkBombsThatAreSinking { get; }
+
         void Initialize();
         void LoadContent();
         void Update(GameTime aGameTime);

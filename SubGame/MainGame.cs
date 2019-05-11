@@ -95,6 +95,12 @@ namespace SubGame
                 NextLevel();
             }
 
+            if (AccessCurrentLevelInstance.AccessBoat.AccessSinkBombsLeft + AccessCurrentLevelInstance.AccessSubHits + AccessCurrentLevelInstance.AccessSinkingSinkBombsThatAreSinking < AccessCurrentLevelInstance.AccessSubHitsRequired)
+            {
+                RestartLevel();
+                return;
+            }
+
             AccessCurrentLevelInstance.Update(aGameTime);
 
             base.Update(aGameTime);
@@ -132,23 +138,23 @@ namespace SubGame
 
         internal void LoadState(string savePath)
         {
-            string json = "";
-            if (File.Exists("CurrentState.json"))
-            {
-                json = File.ReadAllText("CurrentState.json");
-            }
-            var currentState = JsonConvert.DeserializeObject(json);
+            //string json = "";
+            //if (File.Exists("CurrentState.json"))
+            //{
+            //    json = File.ReadAllText("CurrentState.json");
+            //}
+            //var currentState = JsonConvert.DeserializeObject(json);
         }
 
         internal void SaveState(string savePath)
         {
-            var currentState = new
-            {
-                Level = AccessCurrentLevel,
-                Instance = AccessCurrentLevelInstance
-            };
-            string json = JsonConvert.SerializeObject(currentState);
-            File.WriteAllText("CurrentState.json", json);
+            //var currentState = new
+            //{
+            //    Level = AccessCurrentLevel,
+            //    Instance = AccessCurrentLevelInstance
+            //};
+            //string json = JsonConvert.SerializeObject(currentState);
+            //File.WriteAllText("CurrentState.json", json);
         }
     }
 }

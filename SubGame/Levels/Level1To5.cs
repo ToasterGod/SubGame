@@ -22,6 +22,9 @@ namespace SubGame.Levels
         public int AccessSubHits => mySubHits;
         public int AccessBoatHitsAllowed => myConfig.Health;
         public int AccessSubHitsRequired => myConfig.RequiredSubHits;
+
+
+
         public void Initialize()
         {
             myClouds = new List<CloudElement>();

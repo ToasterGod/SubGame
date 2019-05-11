@@ -28,6 +28,9 @@ namespace SubGame.Levels
         protected ContentManager myContent;
         protected readonly LevelConfig myConfig;
 
+        public PlayerElement AccessBoat => myBoat;
+        public int AccessSinkingSinkBombsThatAreSinking => mySinkBombs.Count;
+
         public LevelBase(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelConfig aLevelConfig)
         {
             myGraphics = aGraphics;

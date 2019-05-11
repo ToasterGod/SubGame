@@ -27,7 +27,7 @@ namespace SubGame.Elements
         private List<MineElement> myMineList;
         private string myWeaponAsset;
         private double myLatestDroppedMine;
-        private int myMineCount;
+        private readonly int myMineCount;
         private readonly int mySurfaceLevel;
 
         public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someMines)

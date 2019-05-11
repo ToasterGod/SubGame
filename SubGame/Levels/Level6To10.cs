@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using SubGame.Elements;
 
 namespace SubGame.Levels
 {
@@ -17,6 +18,7 @@ namespace SubGame.Levels
         public int AccessSubHits => mySubHits;
         public int AccessBoatHitsAllowed => myConfig.Health;
         public int AccessSubHitsRequired => myConfig.RequiredSubHits;
+        
 
         public void Draw(SpriteBatch mySpriteBatch, GameTime gameTime)
         {

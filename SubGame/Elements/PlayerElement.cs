@@ -16,11 +16,12 @@ namespace SubGame.Elements
         private List<SinkBombElement> mySinkBombList;
         private string myWeaponAsset;
         private ContentManager myContentManager;
-        private int mySinkBombCount;
+        private readonly int mySinkBombCount;
 
         public Rectangle AccessCollisionBox { get; internal set; }
         public SinkBombReleasedDelegate AccessSinkBombReleased { get; set; }
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
+        public int AccessSinkBombsLeft => mySinkBombList.Count();
 
         public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someSinkBombs)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
