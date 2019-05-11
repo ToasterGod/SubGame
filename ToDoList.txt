@@ -26,6 +26,10 @@ Menu
 Animated players, propeller, periscope tracking the ship
 Fish, whale, sharks and seagulls
 
+Add a system where when you pause a menu of the sub comes up where you can assign people to different parts of the boat which increases/decreases stats.
+The maximum amount increases with every new level and the helicopter gives people and sinkbombs instead of stats.
+the stats increased are sinkbomb speed, health/regen(?), and sinkbomb amount
+
 Strength related:
 =================
 Other kind of weapons

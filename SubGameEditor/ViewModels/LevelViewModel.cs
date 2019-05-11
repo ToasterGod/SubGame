@@ -24,7 +24,7 @@ namespace SubGameEditor.ViewModels
 
         public LevelViewModel()
         {
-            string path = @"C:\Repos\GitHub\ToasterGod\SubGame\SubGame\bin\Windows\x86\Debug\Levels.json";
+            string path = @"C:\Repos\SubGame\SubGame\Levels.json";
             Levels = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(path));
         }
         public void SomethingIsChanged(string name)
