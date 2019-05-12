@@ -15,19 +15,18 @@ Stuff done already:
 *DONE* Level failed, no more sinkbombs left without sinking the subs required
 *DONE* Seagulls instead of clouds at random intervals
 *DONE* Whales, sharks
- 
+*DONE* Combined datamodel for both programs
+*DONE* Easy, Normal, and Hard mode that add multipliers to the subs and weapons
 
 Stuff todo before ready:
 ========================
 *STARTED* Save state
+Menu
 Show banner when we have defeated all subs on a level
 Show banner when level failed and restarting level
 Powerups, supply ship/helicopter, reset boathits
-(Island of plastic garbage limiting movement of ship)
 Level6To10 + Iceberg + Cannon on ship
-Menu
 Animated players, propeller, periscope tracking the ship
-
 
 Add a system where when you pause a menu of the boat comes up where you can assign people to different parts of the boat which increases/decreases stats.
 The maximum amount increases with every new level and the helicopter gives people and sinkbombs instead of stats.
@@ -44,4 +43,4 @@ Difficulty:
 Sub, minimal depth
 Speed of mines
 Other kind of weapons
-Easy, Normal, and Hard mode that add multipliers to the subs and weapons
+Implement Easy, Normal and Hard mode

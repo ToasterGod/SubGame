@@ -3,10 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:Difficulty="clr-namespace:ConfigModel;assembly=ConfigModel"  
              xmlns:local="clr-namespace:SubGameEditor.Views"
-             xmlns:local2="clr-namespace:SubGameEditor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <!--https://docs.microsoft.com/en-us/dotnet/framework/wpf/data/how-to-bind-to-an-enumeration-->
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="DifficultyValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="Difficulty:LevelDifficulty" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal">
             <Label Content="Level" Width="120"/>
@@ -38,20 +49,11 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Content="MovementDifficulty" Width="120"/>
-            <ComboBox Text="{Binding SelectedLevel.MovementDifficulty}" Width="120"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DifficultyValues}}" SelectedItem="{Binding SelectedLevel.MovementDifficulty}" Width="120" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label Content="WeaponDifficulty" Width="120"/>
-            <ComboBox ItemsSource="{Binding Path=LevelDifficulty}" SelectedItem="{Binding SelectedLevel.WeaponDifficulty}" Width="120">
-                <ComboBox.Resources>
-                    <local2:EnumValueConverter x:Key="EnumValueConverter"/>
-                </ComboBox.Resources>
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource EnumValueConverter}}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding Source={StaticResource DifficultyValues}}" SelectedItem="{Binding SelectedLevel.WeaponDifficulty}" Width="120" />
         </StackPanel>
     </StackPanel>
 </UserControl>
