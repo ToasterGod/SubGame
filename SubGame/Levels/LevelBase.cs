@@ -13,6 +13,7 @@ namespace SubGame.Levels
         protected StaticElement myOcean;
         protected PlayerElement myBoat;
         protected List<EnemyElement> mySubs;
+        protected List<SeaCreatureElement> myCreatures;
         protected List<MineElement> myMines;
         protected List<SinkBombElement> mySinkBombs;
         protected List<StaticElement> myBooms;
