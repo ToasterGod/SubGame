@@ -23,8 +23,6 @@ namespace SubGame.Levels
         public int AccessBoatHitsAllowed => myConfig.Health;
         public int AccessSubHitsRequired => myConfig.RequiredSubHits;
 
-
-
         public void Initialize()
         {
             myClouds = new List<CloudElement>();
@@ -33,6 +31,7 @@ namespace SubGame.Levels
             myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
             mySubs = new List<EnemyElement>();
+            myCreatures = new List<SeaCreatureElement>();
             myMines = new List<MineElement>();
             mySinkBombs = new List<SinkBombElement>();
             myBooms = new List<StaticElement>();
@@ -45,6 +44,11 @@ namespace SubGame.Levels
                 mySub.AccessMineReleased += MineReleased;
                 myBoat.AccessWhereIsTheBoat += mySub.BoatIsFoundAt;
                 mySubs.Add(mySub);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                SeaCreatureElement myCreature= new SeaCreatureElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
+                myCreatures.Add(myCreature);
             }
 
             int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 100;
@@ -60,6 +64,11 @@ namespace SubGame.Levels
             foreach (EnemyElement sub in mySubs)
             {
                 sub.LoadContent(myContent, new string[] { "Elements/SlowSub", "Elements/MediumSub", "Elements/FastSub" }, "Elements/Mine");
+            }
+
+            foreach (SeaCreatureElement creature in myCreatures)
+            {
+                creature.LoadContent(myContent, new string[] { "Elements/TraumatizedWhale", "Elements/MaliciousShark" });
             }
 
             myBoat.LoadContent(myContent, "Elements/Boat", "Elements/Sinkbomb");
@@ -82,6 +91,11 @@ namespace SubGame.Levels
             {
                 //Sub update will call its mines update
                 sub.Update(aGameTime);
+            }
+
+            foreach (SeaCreatureElement creature in myCreatures)
+            {
+                creature.Update(aGameTime);
             }
 
             myBoat.Update(aGameTime);
@@ -150,6 +164,11 @@ namespace SubGame.Levels
                 sub.Draw(mySpriteBatch);
             }
 
+            foreach (SeaCreatureElement creature in myCreatures)
+            {
+                creature.Draw(mySpriteBatch);
+            }
+
             myBoat.Draw(mySpriteBatch);
 
             foreach (MineElement mine in myMines)
@@ -203,7 +222,7 @@ namespace SubGame.Levels
             })
             {
                 CloudElement aCloudElement = new CloudElement(0.6f, -1.0f, 0.0f, tempRandomSpeed, new Vector2(cloudPosition, RandomNumber.Between(1, 50)), myGraphics);
-                aCloudElement.LoadContent(myContent, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
+                aCloudElement.LoadContent(myContent, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4", "Elements/ShittySeagull" });
                 myClouds.Add(aCloudElement);
             }
         }
@@ -214,7 +233,7 @@ namespace SubGame.Levels
 
             myLatestAddedCloud = aGameTime.TotalGameTime.Seconds;
             CloudElement aCloudElement = new CloudElement(0.6f, -1.0f, 0.0f, tempRandomSpeed, new Vector2(myGraphics.PreferredBackBufferWidth, RandomNumber.Between(1, 50)), myGraphics);
-            aCloudElement.LoadContent(myContent, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4" });
+            aCloudElement.LoadContent(myContent, new string[] { "Elements/cloud1", "Elements/cloud2", "Elements/cloud3", "Elements/cloud4", "Elements/ShittySeagull" });
             myClouds.Add(aCloudElement);
             foreach (CloudElement cloud in myClouds.Where(s => s.AccessOutOfBounds).ToList())
             {

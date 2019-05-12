@@ -13,6 +13,7 @@ Stuff done already:
 *DONE* Sound effects, https://www.gamefromscratch.com/post/2015/07/25/MonoGame-Tutorial-Audio.aspx
 *DONE* Level editor, MVVM WPF
 *DONE* Level failed, no more sinkbombs left without sinking the subs required
+*DONE* Seagulls instead of clouds at random intervals
 
 Stuff todo before ready:
 ========================
@@ -24,7 +25,8 @@ Powerups, supply ship/helicopter, reset boathits
 Level6To10 + Iceberg + Cannon on ship
 Menu
 Animated players, propeller, periscope tracking the ship
-Fish, whale, sharks and seagulls
+Whales, sharks 
+
 
 Add a system where when you pause a menu of the boat comes up where you can assign people to different parts of the boat which increases/decreases stats.
 The maximum amount increases with every new level and the helicopter gives people and sinkbombs instead of stats.

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Elements\Delegates.cs" />
     <Compile Include="Elements\Element.cs" />
+    <Compile Include="Elements\SeaCreatureElement.cs" />
     <Compile Include="Elements\EnemyElement.cs" />
     <Compile Include="Elements\MineElement.cs" />
     <Compile Include="Elements\MovingElement.cs" />
