@@ -44,16 +44,16 @@ namespace SubGame.Elements
         {
             myContentManager = aContentManager;
             myAssets = anAssets;
-            if (myCreatureSpeed < 85)
+            if (myCreatureSpeed < 95)
             {
                 // Whale
-                AccessSpeed = 0.5f;
+                AccessSpeed = (float)RandomNumber.Between(4, 8) / 10;
                 LoadContent(aContentManager, anAssets[0]);
             }
             else
             {
                 // Shark
-                AccessSpeed = 1.5f;
+                AccessSpeed = (float)RandomNumber.Between(10, 15) / 10;
                 LoadContent(aContentManager, anAssets[1]);
             }
         }

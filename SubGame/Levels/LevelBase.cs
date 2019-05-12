@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ConfigModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using SubGame.Elements;
@@ -27,12 +28,12 @@ namespace SubGame.Levels
 
         protected readonly GraphicsDeviceManager myGraphics;
         protected ContentManager myContent;
-        protected readonly LevelConfig myConfig;
+        protected readonly LevelData myConfig;
 
         public PlayerElement AccessBoat => myBoat;
         public int AccessSinkingSinkBombsThatAreSinking => mySinkBombs.Count;
 
-        public LevelBase(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelConfig aLevelConfig)
+        public LevelBase(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelData aLevelConfig)
         {
             myGraphics = aGraphics;
             myContent = aContent;

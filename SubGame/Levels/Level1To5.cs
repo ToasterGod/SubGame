@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ConfigModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +13,7 @@ namespace SubGame.Levels
     public class Level1To5 : LevelBase, ILevel
     {
         #region Inheritance implementation
-        public Level1To5(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelConfig aLevelConfig)
+        public Level1To5(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelData aLevelConfig)
             : base(aGraphics, aContent, aLevelConfig)
         {}
         #endregion

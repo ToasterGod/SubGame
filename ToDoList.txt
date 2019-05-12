@@ -14,6 +14,8 @@ Stuff done already:
 *DONE* Level editor, MVVM WPF
 *DONE* Level failed, no more sinkbombs left without sinking the subs required
 *DONE* Seagulls instead of clouds at random intervals
+*DONE* Whales, sharks
+ 
 
 Stuff todo before ready:
 ========================
@@ -25,7 +27,6 @@ Powerups, supply ship/helicopter, reset boathits
 Level6To10 + Iceberg + Cannon on ship
 Menu
 Animated players, propeller, periscope tracking the ship
-Whales, sharks 
 
 
 Add a system where when you pause a menu of the boat comes up where you can assign people to different parts of the boat which increases/decreases stats.
@@ -43,4 +44,4 @@ Difficulty:
 Sub, minimal depth
 Speed of mines
 Other kind of weapons
-Config, define what subs will be generated in level. Enum?
+Easy, Normal, and Hard mode that add multipliers to the subs and weapons

@@ -6,7 +6,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 2,
-    "RequiredSubHits":  1
+    "RequiredSubHits": 1,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 2,
@@ -15,7 +17,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 2,
-    "RequiredSubHits": 2
+    "RequiredSubHits": 2,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 3,
@@ -24,7 +28,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 2,
-    "RequiredSubHits": 3
+    "RequiredSubHits": 3,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 4,
@@ -33,7 +39,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 2,
-    "RequiredSubHits": 4
+    "RequiredSubHits": 4,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 5,
@@ -42,7 +50,9 @@
     "Mines": 1,
     "Sinkbombs": 10,
     "Health": 3,
-    "RequiredSubHits": 5
+    "RequiredSubHits": 5,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 6,
@@ -51,7 +61,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 1,
-    "RequiredSubHits": 1
+    "RequiredSubHits": 1,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 7,
@@ -60,7 +72,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 1,
-    "RequiredSubHits": 1
+    "RequiredSubHits": 1,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 8,
@@ -69,7 +83,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 1,
-    "RequiredSubHits": 1
+    "RequiredSubHits": 1,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 9,
@@ -78,7 +94,9 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 1,
-    "RequiredSubHits": 1
+    "RequiredSubHits": 1,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   },
   {
     "Level": 10,
@@ -87,6 +105,8 @@
     "Mines": 1,
     "Sinkbombs": 5,
     "Health": 1,
-    "RequiredSubHits": 1
+    "RequiredSubHits": 1,
+    "MovementDifficulty": "Easy",
+    "WeaponDifficulty": "Easy"
   }
 ]

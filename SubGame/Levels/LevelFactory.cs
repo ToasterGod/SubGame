@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ConfigModel;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,11 +9,11 @@ namespace SubGame.Levels
     public class LevelFactory
     {
         public MainGame AccessGame { get; set; }
-        public List<LevelConfig> LevelConfigs { get; set; }
+        public List<LevelData> LevelConfigs { get; set; }
 
         public LevelFactory(string aConfigFile)
         {
-            LevelConfigs = JsonConvert.DeserializeObject<List<LevelConfig>>(File.ReadAllText(aConfigFile));
+            LevelConfigs = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(aConfigFile));
         }
 
         public ILevel GetLevelInstance(int level)

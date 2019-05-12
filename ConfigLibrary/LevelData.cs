@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SubGameEditor.Models
+namespace ConfigLibrary
 {
     public class LevelData
     {
@@ -15,5 +11,7 @@ namespace SubGameEditor.Models
         public int Sinkbombs { get; set; }
         public int Health { get; set; }
         public int RequiredSubHits { get; set; }
+        public LevelDifficulty MovementDifficulty { get; set; }
+        public LevelDifficulty WeaponDifficulty { get; set; }
     }
 }
