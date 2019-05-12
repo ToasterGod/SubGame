@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ConfigModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,6 +12,7 @@ namespace SubGame.Elements
         protected Texture2D myTexture; //Full access allowed by inheritance
 
         private SpriteEffects myEffects = SpriteEffects.None;
+
         //public bool AccessBeenHit { get; set; }
         //public int AccessHitTime { get; set; }
 

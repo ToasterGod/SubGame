@@ -1,18 +1,19 @@
 ﻿
+using ConfigModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    public class MineElement : MovingElement
+    public class MineElement : ArmedMovingElement
     {
         private readonly int mySurfaceLevel;
         public bool AccessSurfaced { get; set; }
         public int AccessSurfacedTime { get; private set; }
 
         public MineElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
-            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager, LevelDifficulty.Normal, LevelDifficulty.Normal)
             => mySurfaceLevel = aSurfaceLevel;
 
         public override void LoadContent(ContentManager aContentManager, string anAsset)
@@ -31,19 +32,6 @@ namespace SubGame.Elements
                 AccessSurfaced = true;
                 AccessSurfacedTime = aGameTime.TotalGameTime.Seconds;
             }
-            //else
-            //{
-            //    if (mySurfaceTime == 0)
-            //    {
-            //        mySurfaceTime = aGameTime.TotalGameTime.Seconds;
-            //    }
-            //    else if (aGameTime.TotalGameTime.Seconds > mySurfaceTime + 3)
-            //    {
-            //        AccessTimeout = true;
-            //    }
-            //}
-            // TODO: check if this is needed
-
         }
 
         public override void Draw(SpriteBatch aSpriteBatch)

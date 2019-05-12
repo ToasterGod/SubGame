@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ConfigModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace SubGame.Elements
 {
-    public class PlayerElement : MovingElement
+    public class PlayerElement : ArmedMovingElement
     {
         private bool myReleasePressed;
         private int myLeftEdge;
@@ -23,8 +24,8 @@ namespace SubGame.Elements
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
         public int AccessSinkBombsLeft => mySinkBombList.Count();
 
-        public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someSinkBombs)
-            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
+        public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someSinkBombs, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty)
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager, aMovementDifficulty, aWeaponDifficulty)
         {
             AccessIsEnemy = false;
             mySinkBombCount = someSinkBombs;
@@ -33,10 +34,25 @@ namespace SubGame.Elements
 
         private void GenerateNewWeapons()
         {
+            float tempSinkBombSpeed = 1.0f;
+            switch (myWeaponDifficulty)
+            {
+                case LevelDifficulty.Easy:
+                    tempSinkBombSpeed *= 0.75f;
+                    break;
+                case LevelDifficulty.Normal:
+                    tempSinkBombSpeed *= 1.0f;
+                    break;
+                case LevelDifficulty.Hard:
+                    tempSinkBombSpeed *= 1.5f;
+                    break;
+                default:
+                    break;
+            }
             mySinkBombList = new List<SinkBombElement>();
             for (int i = 0; i < mySinkBombCount; i++)
             {
-                mySinkBombList.Add(new SinkBombElement(1.0f, AccessDirection, AccessRotation, 1.0f, AccessPosition, myManager));
+                mySinkBombList.Add(new SinkBombElement(1.0f, AccessDirection, AccessRotation, tempSinkBombSpeed, AccessPosition, myManager));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ConfigModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SubGame.Extensions;
@@ -8,7 +9,7 @@ using System.Linq;
 
 namespace SubGame.Elements
 {
-    public class EnemyElement : MovingElement
+    public class EnemyElement : ArmedMovingElement
     {
         public MineReleasedDelegate AccessMineReleased { get; set; }
         private readonly float[] myDirectionLevels = { -1.0f, 1.0f };
@@ -30,8 +31,8 @@ namespace SubGame.Elements
         private readonly int myMineCount;
         private readonly int mySurfaceLevel;
 
-        public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someMines)
-            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
+        public EnemyElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someMines, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty)
+            : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager, aMovementDifficulty, aWeaponDifficulty)
         {
             mySurfaceLevel = aSurfaceLevel;
             AccessIsEnemy = true;
@@ -67,21 +68,21 @@ namespace SubGame.Elements
             if (mySubSpeed < 70)
             {
                 //slow sub
-                AccessSpeed = 0.5f;
+                AccessSpeed *= 0.5f;
                 myDropFrequency = RandomNumber.Between(800, 1000);
                 LoadContent(aContentManager, anAssets[0]);
             }
             else if (mySubSpeed < 100)
             {
                 //fast sub
-                AccessSpeed = 0.8f;
+                AccessSpeed *= 0.8f;
                 myDropFrequency = RandomNumber.Between(700, 900);
                 LoadContent(aContentManager, anAssets[1]);
             }
             else
             {
                 // fastest sub
-                AccessSpeed = 1.2f;
+                AccessSpeed *= 1.2f;
                 myDropFrequency = RandomNumber.Between(400, 600);
                 LoadContent(aContentManager, anAssets[2]);
             }

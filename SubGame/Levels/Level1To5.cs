@@ -29,7 +29,7 @@ namespace SubGame.Levels
             myClouds = new List<CloudElement>();
             GenerateInitialClouds(myContent);
             myOcean = new StaticElement(1.0f, new Vector2(0, mySurfaceLevel));
-            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs);
+            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
             mySubs = new List<EnemyElement>();
             myCreatures = new List<SeaCreatureElement>();
@@ -41,7 +41,7 @@ namespace SubGame.Levels
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < myConfig.Subs; i++)
             {
-                EnemyElement mySub = new EnemyElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics, myConfig.Mines);
+                EnemyElement mySub = new EnemyElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics, myConfig.Mines, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
                 mySub.AccessMineReleased += MineReleased;
                 myBoat.AccessWhereIsTheBoat += mySub.BoatIsFoundAt;
                 mySubs.Add(mySub);

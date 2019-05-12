@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ConfigModel;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,7 +10,7 @@ namespace SubGame.Elements
     public class CloudElement : MovingElement
     {
         public bool AccessOutOfBounds { get; set; }
-
+        
         public CloudElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
             => AccessDirection = -1.0f;

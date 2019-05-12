@@ -17,6 +17,8 @@ Stuff done already:
 *DONE* Whales, sharks
 *DONE* Combined datamodel for both programs
 *DONE* Easy, Normal, and Hard mode that add multipliers to the subs and weapons
+*DONE* Implement Easy, Normal and Hard mode
+*DONE* Speed of mines and sinkbombs
 
 Stuff todo before ready:
 ========================
@@ -41,6 +43,4 @@ Ship could drop mine at specific depth
 Difficulty:
 ===========
 Sub, minimal depth
-Speed of mines
 Other kind of weapons
-Implement Easy, Normal and Hard mode
