@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SubGame.Elements
 {
-    public class PlayerElement : ArmedMovingElement
+    public class PlayerElement : ArmedElement
     {
         private bool myReleasePressed;
         private int myLeftEdge;

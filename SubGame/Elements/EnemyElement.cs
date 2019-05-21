@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SubGame.Elements
 {
-    public class EnemyElement : ArmedMovingElement
+    public class EnemyElement : ArmedElement
     {
         public MineReleasedDelegate AccessMineReleased { get; set; }
         private readonly float[] myDirectionLevels = { -1.0f, 1.0f };

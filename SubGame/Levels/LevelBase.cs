@@ -21,7 +21,7 @@ namespace SubGame.Levels
         protected List<SoundEffect> mySoundEffects;
         protected StaticText myStatusPanelLeft;
         protected StaticText myStatusPanelRight;
-
+        
         protected int myBoatHits;
         protected int mySubHits;
         protected int myLatestAddedCloud;

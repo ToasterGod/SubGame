@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    public class SinkBombElement : ArmedMovingElement
+    public class SinkBombElement : ArmedElement
     {
         public SinkBombElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager, LevelDifficulty.Normal, LevelDifficulty.Normal)

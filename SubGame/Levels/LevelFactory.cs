@@ -16,6 +16,7 @@ namespace SubGame.Levels
             LevelConfigs = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(aConfigFile));
         }
 
+        // This is the main reason wthat interface is used on these two classes.
         public ILevel GetLevelInstance(int level)
         {
             switch (level)

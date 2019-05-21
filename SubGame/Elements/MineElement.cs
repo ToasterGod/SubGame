@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SubGame.Elements
 {
-    public class MineElement : ArmedMovingElement
+    public class MineElement : ArmedElement
     {
         private readonly int mySurfaceLevel;
         public bool AccessSurfaced { get; set; }

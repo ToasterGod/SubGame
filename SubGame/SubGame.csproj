@@ -42,7 +42,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Elements\ArmedMovingObject.cs" />
+    <Compile Include="Elements\ArmedElement.cs" />
     <Compile Include="Elements\Delegates.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Elements\SeaCreatureElement.cs" />

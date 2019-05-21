@@ -26,21 +26,24 @@ Stuff todo before ready:
 Menu
 Show banner when we have defeated all subs on a level
 Show banner when level failed and restarting level
-Powerups, supply ship/helicopter, reset boathits
+Split status view
 Level6To10 + Iceberg + Cannon on ship
-Animated players, propeller, periscope tracking the ship
+Animated players, propeller, (periscope tracking the ship)
 
 Add a system where when you pause a menu of the boat comes up where you can assign people to different parts of the boat which increases/decreases stats.
 The maximum amount increases with every new level and the helicopter gives people and sinkbombs instead of stats.
 the stats increased are sinkbomb speed, health/regen(?), and boat speed
 
+rita isberg 
+rita gubbar
+rita helikopter
+rita större båt för level 6-10
+
 Strength related:
 =================
 Other kind of weapons
 Improved ship, better weapons
-Ship could drop mine at specific depth
 
 Difficulty:
 ===========
-Sub, minimal depth
-Other kind of weapons
+Other kind of weapons, torpedoes

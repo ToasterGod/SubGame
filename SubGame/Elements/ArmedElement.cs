@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework;
 
 namespace SubGame.Elements
 {
-    public class ArmedMovingElement : MovingElement
+    public class ArmedElement : MovingElement
     {
         protected LevelDifficulty myMovementDifficulty;
         protected LevelDifficulty myWeaponDifficulty;
 
-        public ArmedMovingElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty) 
+        public ArmedElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty) 
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
             myMovementDifficulty = aMovementDifficulty;
