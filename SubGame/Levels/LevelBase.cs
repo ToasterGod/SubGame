@@ -19,8 +19,9 @@ namespace SubGame.Levels
         protected List<SinkBombElement> mySinkBombs;
         protected List<StaticElement> myBooms;
         protected List<SoundEffect> mySoundEffects;
-        protected StaticText myStatusPanelLeft;
-        protected StaticText myStatusPanelRight;
+        protected ScoreAndLevelBanner myStatusPanelLeft;
+        protected ScoreAndLevelBanner myStatusPanelCenter;
+        protected ScoreAndLevelBanner myStatusPanelRight;
         
         protected int myBoatHits;
         protected int mySubHits;

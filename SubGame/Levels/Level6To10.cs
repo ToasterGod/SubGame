@@ -52,9 +52,11 @@ namespace SubGame.Levels
                 myCreatures.Add(myCreature);
             }
 
-            int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 100;
-            myStatusPanelLeft = new StaticText(new Vector2(20, tempStaticTextTop), new Vector2(300, 80), myGraphics);
-            myStatusPanelRight = new StaticText(new Vector2(myGraphics.PreferredBackBufferWidth - 320, tempStaticTextTop), new Vector2(300, 80), myGraphics);
+            int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 180;
+            //int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 100;
+            myStatusPanelLeft = new ScoreAndLevelBanner(new Vector2(20, tempStaticTextTop), new Vector2(300, 80), myGraphics);
+            myStatusPanelCenter = new ScoreAndLevelBanner(new Vector2(20, tempStaticTextTop), new Vector2(300, 80), myGraphics);
+            myStatusPanelRight = new ScoreAndLevelBanner(new Vector2(myGraphics.PreferredBackBufferWidth - 320, tempStaticTextTop), new Vector2(300, 80), myGraphics);
 
         }
 
@@ -76,8 +78,9 @@ namespace SubGame.Levels
 
             mySoundEffects.Add(myContent.Load<SoundEffect>("Sounds/Bomb"));
 
-            myStatusPanelLeft.LoadContent(myContent, "Status");
-            myStatusPanelRight.LoadContent(myContent, "Status");
+            myStatusPanelLeft.LoadContent(myContent, "Status", "Elements/Panel");
+            myStatusPanelCenter.LoadContent(myContent, "Status", "Elements/Panel");
+            myStatusPanelRight.LoadContent(myContent, "Status", "Elements/Panel");
 
         }
 
@@ -189,8 +192,9 @@ namespace SubGame.Levels
 
             myOcean.Draw(mySpriteBatch);
 
-            myStatusPanelLeft.Draw(mySpriteBatch, $"Level: {myConfig.Name}\nBoat hits: {myBoatHits}");
-            myStatusPanelRight.Draw(mySpriteBatch, $"Level: {myConfig.Name}\nSub hits: {mySubHits}");
+            myStatusPanelLeft.Draw(mySpriteBatch, $"Health: {myConfig.Health - myBoatHits} of {myConfig.Health}");
+            myStatusPanelCenter.Draw(mySpriteBatch, $"Level: {myConfig.Name}");
+            myStatusPanelRight.Draw(mySpriteBatch, $"Sub hits: {mySubHits} of {myConfig.RequiredSubHits}");
         }
         #endregion
 
