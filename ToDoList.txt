@@ -24,13 +24,13 @@ Stuff done already:
 *DONE* rita gubbar
 *DONE* rita helikopter
 *DONE* rita större båt för level 6-10
+*DONE* Show banner when we have defeated all subs on a level
+*DONE* Show banner when level failed and restarting level
 
 Stuff todo before ready:
 ========================
 *STARTED* Save state
 Menu
-Show banner when we have defeated all subs on a level
-Show banner when level failed and restarting level
 Level6To10 + Iceberg + Cannon on ship
 Animated players, propeller, (periscope tracking the ship)
 

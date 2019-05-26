@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Newtonsoft.Json;
 using SubGame.Elements;
 using SubGame.Levels;
 
@@ -20,6 +17,7 @@ namespace SubGame
         public GraphicsDeviceManager Graphics => myGraphics;
 
         public bool AccessPaused { get; set; }
+        public bool AccessBetweenLevels { get; set; }
         public int AccessCurrentLevel { get; set; }
         public ILevel AccessCurrentLevelInstance { get; set; }
 
@@ -44,7 +42,7 @@ namespace SubGame
         protected override void Initialize()
         {
             AccessCurrentLevelInstance.Initialize();
-            pausedBanner = new PausedBanner(new Vector2(0,myGraphics.PreferredBackBufferHeight / 2), new Vector2(myGraphics.PreferredBackBufferWidth, 80), myGraphics);
+            pausedBanner = new PausedBanner(new Vector2(0, myGraphics.PreferredBackBufferHeight / 2), new Vector2(myGraphics.PreferredBackBufferWidth, 80), myGraphics);
 
             // base.Initialize will call LoadContent so we need to call AccessCurrentLevel.Initialize() before that
             base.Initialize();
@@ -60,6 +58,12 @@ namespace SubGame
 
         protected override void Update(GameTime aGameTime)
         {
+            int boatHealth = AccessCurrentLevelInstance.AccessBoatHitsAllowed - AccessCurrentLevelInstance.AccessBoatHits;
+            int subsToBeat = AccessCurrentLevelInstance.AccessSubHitsRequired - AccessCurrentLevelInstance.AccessSubHits;
+            int sinkBombsPossibleHits = AccessCurrentLevelInstance.AccessBoat.AccessSinkBombsLeft + AccessCurrentLevelInstance.AccessSubHits + AccessCurrentLevelInstance.AccessSinkingSinkBombsThatAreSinking;
+            bool lostLevel = false;
+            bool wonLevel = false;
+
             if (AccessPaused && Keyboard.GetState().IsKeyDown(Keys.R))
             {
                 // Resume game
@@ -77,29 +81,49 @@ namespace SubGame
                 Exit();
             }
 
+            if (boatHealth == 0)
+            {
+                // Boat has been beaten
+                lostLevel = true;
+                AccessBetweenLevels = true;
+            }
+
+            if (subsToBeat == 0)
+            {
+                // Next level, all required subs have been beaten
+                wonLevel = true;
+                AccessBetweenLevels = true;
+            }
+
+            if (sinkBombsPossibleHits < AccessCurrentLevelInstance.AccessSubHitsRequired)
+            {
+                // Boat can't sink the subs required
+                lostLevel = true;
+                AccessBetweenLevels = true;
+            }
+
+            if (AccessBetweenLevels)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.C))
+                {
+                    AccessBetweenLevels = false;
+                    if (lostLevel)
+                        RestartLevel();
+                    if (wonLevel)
+                        NextLevel();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             if (AccessPaused)
             {
                 // Don't update if paused, Draw will still be called to keep screen updated with current state
                 return;
             }
 
-            if (AccessCurrentLevelInstance.AccessBoatHits == AccessCurrentLevelInstance.AccessBoatHitsAllowed)
-            {
-                RestartLevel();
-                return;
-            }
-
-            if (AccessCurrentLevelInstance.AccessSubHits == AccessCurrentLevelInstance.AccessSubHitsRequired)
-            {
-                // Next level
-                NextLevel();
-            }
-
-            if (AccessCurrentLevelInstance.AccessBoat.AccessSinkBombsLeft + AccessCurrentLevelInstance.AccessSubHits + AccessCurrentLevelInstance.AccessSinkingSinkBombsThatAreSinking < AccessCurrentLevelInstance.AccessSubHitsRequired)
-            {
-                RestartLevel();
-                return;
-            }
 
             AccessCurrentLevelInstance.Update(aGameTime);
 
@@ -112,9 +136,24 @@ namespace SubGame
             mySpriteBatch.Begin();
 
             AccessCurrentLevelInstance.Draw(mySpriteBatch, aGameTime);
-            if(AccessPaused)
+            if (AccessPaused)
             {
                 pausedBanner.Draw(mySpriteBatch, $"Paused... Press Esc to quit or R to resume...");
+            }
+
+            if (AccessBetweenLevels)
+            {
+                int boatHealth = AccessCurrentLevelInstance.AccessBoatHitsAllowed - AccessCurrentLevelInstance.AccessBoatHits;
+                int subsToBeat = AccessCurrentLevelInstance.AccessSubHitsRequired - AccessCurrentLevelInstance.AccessSubHits;
+                int sinkBombsPossibleHits = AccessCurrentLevelInstance.AccessBoat.AccessSinkBombsLeft + AccessCurrentLevelInstance.AccessSubHits + AccessCurrentLevelInstance.AccessSinkingSinkBombsThatAreSinking;
+                if (boatHealth == 0 || sinkBombsPossibleHits < AccessCurrentLevelInstance.AccessSubHitsRequired)
+                {
+                    pausedBanner.Draw(mySpriteBatch, $"Level lost!!! Press Esc to quit or C to continue...");
+                }
+                else if (subsToBeat==0)
+                {
+                    pausedBanner.Draw(mySpriteBatch, $"Level won!!! Press Esc to quit or C to continue...");
+                }
             }
 
             mySpriteBatch.End();
