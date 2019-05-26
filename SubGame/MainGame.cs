@@ -23,11 +23,11 @@ namespace SubGame
         public int AccessCurrentLevel { get; set; }
         public ILevel AccessCurrentLevelInstance { get; set; }
 
-        public MainGame(LevelFactory aLevelFactory)
+        public MainGame(LevelFactory aLevelFactory, int level)
         {
             myLevelFactory = aLevelFactory;
             aLevelFactory.AccessGame = this;
-            AccessCurrentLevel = 1;
+            AccessCurrentLevel = level;
 
             myGraphics = new GraphicsDeviceManager(this)
             {
