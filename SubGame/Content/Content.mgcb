@@ -32,6 +32,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Banner.spritefont
 
+#begin Elements/BigAssBoat.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Elements/BigAssBoat.png
+
 #begin Elements/Boat.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -104,6 +116,18 @@
 /processorParam:TextureFormat=Color
 /build:Elements/cloud4.png
 
+#begin Elements/Crewmate.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Elements/Crewmate.png
+
 #begin Elements/FastSub.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -115,6 +139,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Elements/FastSub.png
+
+#begin Elements/Helicopter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Elements/Helicopter.png
+
+#begin Elements/Iceberg.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Elements/Iceberg.png
 
 #begin Elements/MaliciousShark.png
 /importer:TextureImporter

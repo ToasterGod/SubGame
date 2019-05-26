@@ -78,8 +78,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Elements\BigAssBoat.png" />
     <Content Include="Content\Elements\Boom.png" />
     <Content Include="Content\Backgrounds\SolidOcean.png" />
+    <Content Include="Content\Elements\Crewmate.png" />
+    <Content Include="Content\Elements\Helicopter.png" />
+    <Content Include="Content\Elements\Iceberg.png" />
     <Content Include="Content\Elements\MaliciousShark.png" />
     <Content Include="Content\Elements\Mine.png" />
     <Content Include="Content\Elements\Panel.png" />
