@@ -29,7 +29,7 @@ namespace SubGame.Levels
             myClouds = new List<CloudElement>();
             GenerateInitialClouds(myContent);
             myOcean = new StaticElement(1.0f, new Vector2(0, mySurfaceLevel));
-            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
+            myBoat = new PlayerElement(0.7f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
             mySubs = new List<EnemyElement>();
             myCreatures = new List<SeaCreatureElement>();
@@ -74,7 +74,7 @@ namespace SubGame.Levels
                 creature.LoadContent(myContent, new string[] { "Elements/TraumatizedWhale", "Elements/MaliciousShark" });
             }
 
-            myBoat.LoadContent(myContent, "Elements/Boat", "Elements/Sinkbomb");
+            myBoat.LoadContent(myContent, "Elements/BigAssBoat", "Elements/Sinkbomb");
 
             mySoundEffects.Add(myContent.Load<SoundEffect>("Sounds/Bomb"));
 

@@ -13,8 +13,11 @@ namespace SubGameEditor.ViewModels
     public class LevelViewModel : INotifyPropertyChanged
     {
         private readonly string myPath = @"Levels.json";
-        public List<LevelData> AccessLevels { get; set; }
 
+        //Beware of changing this name since it's a binding property in LevelView.xaml
+        public List<LevelData> Levels { get; set; }
+
+        //Beware of changing this name since it's a binding property in both LevelView.xaml and DataView.xaml
         public LevelData SelectedLevel
         {
             get { return selectedLevel; }
@@ -26,12 +29,12 @@ namespace SubGameEditor.ViewModels
 
         public LevelViewModel()
         {
-            AccessLevels = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(myPath));
+            Levels = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(myPath));
         }
 
         ~LevelViewModel()
         {
-            File.WriteAllText(myPath, JsonConvert.SerializeObject(AccessLevels));
+            File.WriteAllText(myPath, JsonConvert.SerializeObject(Levels));
         }
 
         public void SomethingIsChanged(string name)
