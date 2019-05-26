@@ -45,8 +45,6 @@ namespace SubGame.Elements
             }
 
             aSpriteBatch.Draw(myTexture, AccessPosition, mySourceRectangle, Color.White, AccessRotation, myOrigin, AccessScale, myEffects, 1);
-
-            //base.Draw(spriteBatch);
         }
     }
 }
