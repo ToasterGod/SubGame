@@ -11,7 +11,7 @@ namespace SubGame.Elements
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager, LevelDifficulty.Normal, LevelDifficulty.Normal)
         { }
 
-        public override void LoadContent(ContentManager aContentManager, string anAsset) 
+        public override void LoadContent(ContentManager aContentManager, string anAsset)
             => base.LoadContent(aContentManager, anAsset);
 
         public override void Update(GameTime aGameTime)

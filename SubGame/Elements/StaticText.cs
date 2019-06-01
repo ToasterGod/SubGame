@@ -27,7 +27,7 @@ namespace SubGame.Elements
             myFrameTexture.SetData(new[] { Color.Black });
         }
 
-        public virtual void LoadContent(ContentManager aContentManager, string anAssetName) 
+        public virtual void LoadContent(ContentManager aContentManager, string anAssetName)
             => myFont = aContentManager.Load<SpriteFont>(anAssetName);
 
         public void Draw(SpriteBatch aSpriteBatch, string aText)

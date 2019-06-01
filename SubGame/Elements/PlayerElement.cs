@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -143,7 +142,7 @@ namespace SubGame.Elements
             mySinkBombList = new List<SinkBombElement>();
             for (int i = 0; i < mySinkBombCount; i++)
             {
-                var sinkBomb = new SinkBombElement(1.0f, 1.0f, AccessRotation, CalcWeaponSpeed(), AccessPosition, myManager);
+                SinkBombElement sinkBomb = new SinkBombElement(1.0f, 1.0f, AccessRotation, CalcWeaponSpeed(), AccessPosition, myManager);
                 mySinkBombList.Add(sinkBomb);
                 sinkBomb.LoadContent(myContentManager, myWeaponAsset);
                 sinkBomb.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);

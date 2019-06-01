@@ -10,9 +10,9 @@ namespace SubGame.Elements
         public float AccessAngle { get; set; }
         public float GetScale { get; private set; }
         public int AccessTimeToLive { get; }
-        public override Rectangle AccessSize { get => new Rectangle(0, 0, myTexture.Width, myTexture.Height); }
+        public override Rectangle AccessSize => new Rectangle(0, 0, myTexture.Width, myTexture.Height);
 
-        public StaticElement(float aScale, Vector2 aPosition) 
+        public StaticElement(float aScale, Vector2 aPosition)
             : base(aPosition)
         {
             GetScale = aScale;
@@ -26,10 +26,7 @@ namespace SubGame.Elements
             AccessTimeToLive = aTimeToLive;
         }
 
-        public virtual void LoadContent(ContentManager aContentManager, string anAssetName)
-        {
-            myTexture = aContentManager.Load<Texture2D>(anAssetName);
-        }
+        public virtual void LoadContent(ContentManager aContentManager, string anAssetName) => myTexture = aContentManager.Load<Texture2D>(anAssetName);
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {

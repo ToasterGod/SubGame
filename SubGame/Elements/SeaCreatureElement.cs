@@ -1,11 +1,7 @@
-﻿using ConfigModel;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using SubGame.Extensions;
 using SubGame.Types;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SubGame.Elements
 {
@@ -21,7 +17,7 @@ namespace SubGame.Elements
 
         private int myBehindLeftEdge;
         private int myBehindRightEdge;
-        
+
         private readonly int mySurfaceLevel;
 
         public SeaCreatureElement(int aSurfaceLevel, float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager)
@@ -107,9 +103,6 @@ namespace SubGame.Elements
             LoadContent(myContentManager, myAssets);
         }
 
-        public override void Draw(SpriteBatch aSpriteBatch)
-        {
-            base.Draw(aSpriteBatch);
-        }
+        public override void Draw(SpriteBatch aSpriteBatch) => base.Draw(aSpriteBatch);
     }
 }

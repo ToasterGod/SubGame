@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConfigModel;
+﻿using ConfigModel;
 using Microsoft.Xna.Framework;
 
 namespace SubGame.Elements
@@ -13,7 +8,7 @@ namespace SubGame.Elements
         protected LevelDifficulty myMovementDifficulty;
         protected LevelDifficulty myWeaponDifficulty;
 
-        public ArmedElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty) 
+        public ArmedElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager)
         {
             myMovementDifficulty = aMovementDifficulty;
@@ -53,7 +48,7 @@ namespace SubGame.Elements
                         break;
                 }
             }
-            
+
         }
     }
 }

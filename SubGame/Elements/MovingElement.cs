@@ -1,5 +1,4 @@
-﻿using ConfigModel;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -10,7 +9,7 @@ namespace SubGame.Elements
     {
         protected GraphicsDeviceManager myManager;
         protected Texture2D myTexture; //Full access allowed by inheritance
-        public override Rectangle AccessSize { get => new Rectangle(0, 0, myTexture.Width, myTexture.Height); }
+        public override Rectangle AccessSize => new Rectangle(0, 0, myTexture.Width, myTexture.Height);
         private SpriteEffects myEffects = SpriteEffects.None;
         public float AccessDirection { get; set; }
         public float AccessRotation { get; set; }

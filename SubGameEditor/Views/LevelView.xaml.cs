@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
 
 namespace SubGameEditor.Views
 {
@@ -20,9 +7,6 @@ namespace SubGameEditor.Views
     /// </summary>
     public partial class LevelView : UserControl
     {
-        public LevelView()
-        {
-            InitializeComponent();
-        }
+        public LevelView() => InitializeComponent();
     }
 }

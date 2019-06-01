@@ -11,10 +11,7 @@ namespace SubGame.Levels
         public MainGame AccessGame { get; set; }
         public List<LevelData> LevelConfigs { get; set; }
 
-        public LevelFactory(string aConfigFile)
-        {
-            LevelConfigs = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(aConfigFile));
-        }
+        public LevelFactory(string aConfigFile) => LevelConfigs = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(aConfigFile));
 
         // This is the main reason wthat interface is used on these two classes.
         public ILevel GetLevelInstance(int level)

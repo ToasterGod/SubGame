@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConfigModel
+﻿namespace ConfigModel
 {
     public class LevelData
     {

@@ -112,9 +112,14 @@ namespace SubGame
                 {
                     AccessBetweenLevels = false;
                     if (lostLevel)
+                    {
                         RestartLevel();
+                    }
+
                     if (wonLevel)
+                    {
                         NextLevel();
+                    }
                 }
                 else
                 {

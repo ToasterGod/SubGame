@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SubGame
+﻿namespace SubGame
 {
 #if WINDOWS || LINUX
 

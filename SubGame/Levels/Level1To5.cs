@@ -15,7 +15,7 @@ namespace SubGame.Levels
         #region Inheritance implementation
         public Level1To5(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelData aLevelConfig)
             : base(aGraphics, aContent, aLevelConfig)
-        {}
+        { }
         #endregion
 
         #region Interface implementation methods
@@ -48,7 +48,7 @@ namespace SubGame.Levels
             }
             for (int i = 0; i < 3; i++)
             {
-                SeaCreatureElement myCreature= new SeaCreatureElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
+                SeaCreatureElement myCreature = new SeaCreatureElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
                 myCreatures.Add(myCreature);
             }
 
@@ -190,7 +190,7 @@ namespace SubGame.Levels
 
             myOcean.Draw(mySpriteBatch);
 
-            myStatusPanelLeft.Draw(mySpriteBatch, $"Health: {myConfig.Health-myBoatHits} of {myConfig.Health}");
+            myStatusPanelLeft.Draw(mySpriteBatch, $"Health: {myConfig.Health - myBoatHits} of {myConfig.Health}");
             myStatusPanelCenter.Draw(mySpriteBatch, $"Level: {myConfig.Name}");
             myStatusPanelRight.Draw(mySpriteBatch, $"Sub hits: {mySubHits} of {myConfig.RequiredSubHits}");
         }

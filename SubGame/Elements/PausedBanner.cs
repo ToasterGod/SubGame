@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubGame.Elements
 {
@@ -20,7 +15,7 @@ namespace SubGame.Elements
 
         private SpriteFont myFont; // Font to be able to write text
 
-        public PausedBanner(Vector2 aPosition, Vector2 aSize, GraphicsDeviceManager aManager) 
+        public PausedBanner(Vector2 aPosition, Vector2 aSize, GraphicsDeviceManager aManager)
             : base(aPosition)
         {
             myTextArea = new Rectangle(aPosition.ToPoint(), aSize.ToPoint());

@@ -31,11 +31,12 @@ Stuff done already:
 *DONE* Helicopter adding Sinkbombs when sinkbombs are out
 *DONE* Helicopter resetting health
 *DONE* Empty Level when level 11 is reached, should contain End Game! YOU WON!
+*DONE* Level6To10 Iceberg
 
 Stuff todo before ready:
 ========================
 *STARTED* Save state
-*STARTED* Level6To10 + Iceberg + Cannon on ship
+*STARTED* Level6To10 + Cannon on ship
 Animated propeller
 Animated periscope tracking the ship
 Helicopter adding crewmembers

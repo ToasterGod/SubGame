@@ -22,7 +22,7 @@ namespace SubGame.Levels
         protected ScoreAndLevelBanner myStatusPanelLeft;
         protected ScoreAndLevelBanner myStatusPanelCenter;
         protected ScoreAndLevelBanner myStatusPanelRight;
-        
+
         protected int myBoatHits;
         protected int mySubHits;
         protected int myLatestAddedCloud;
