@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SubGame.Elements;
 using SubGame.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace SubGame.Levels
     public class Level6To10 : LevelBase, ILevel
     {
         private HelicopterElement myHelicopter;
+        private StaticElement myIceberg;
         #region Inheritance implementation
         public Level6To10(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelData aLevelConfig)
             : base(aGraphics, aContent, aLevelConfig)
@@ -56,6 +58,8 @@ namespace SubGame.Levels
                 SeaCreatureElement myCreature = new SeaCreatureElement(mySurfaceLevel, 0.6f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
                 myCreatures.Add(myCreature);
             }
+
+            GenerateInitialIceberg(myContent);
 
             int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 180;
             myStatusPanelLeft = new ScoreAndLevelBanner(new Vector2(20, tempStaticTextTop), new Vector2(300, 80), myGraphics);
@@ -109,7 +113,7 @@ namespace SubGame.Levels
             }
 
             // Always update boat
-            myBoat.Update(aGameTime);
+            myBoat.Update(Convert.ToInt32(myIceberg.AccessPosition.X - 60 - myBoat.AccessSize.Width * myBoat.AccessScale), aGameTime);
 
             // Check if helicopter is not active and if so, check if we need to activate it because boat if without sinkbombs
             if (myHelicopter.AccessActive == false && myBoat.AccessSinkBombsLeft == 0)
@@ -185,7 +189,7 @@ namespace SubGame.Levels
             //Throw out a cloud randomly
             if ((gameTime.TotalGameTime.Seconds % 20) == 0 && gameTime.TotalGameTime.Seconds != myLatestAddedCloud)
             {
-                GenerateRandomCloud(myContent, myGraphics, gameTime);
+                GenerateContinuousClouds(myContent, myGraphics, gameTime);
             }
 
             foreach (CloudElement cloud in myClouds)
@@ -221,6 +225,8 @@ namespace SubGame.Levels
                 boom.Draw(mySpriteBatch);
             }
 
+            myIceberg.Draw(mySpriteBatch);
+
             myOcean.Draw(mySpriteBatch);
 
             myStatusPanelLeft.Draw(mySpriteBatch, $"Health: {myConfig.Health - myBoatHits} of {myConfig.Health}");
@@ -243,6 +249,17 @@ namespace SubGame.Levels
             return boom;
         }
 
+        private void GenerateInitialIceberg(ContentManager myContent)
+        {
+            myIceberg = new StaticElement(1.0f, new Vector2(0, 0));
+            myIceberg.LoadContent(myContent, "Elements/Iceberg");
+            int minX = ((myGraphics.PreferredBackBufferWidth / myIceberg.AccessSize.Width) - 2) * myIceberg.AccessSize.Width;
+            int maxX = myGraphics.PreferredBackBufferWidth - myIceberg.AccessSize.Width;
+            int icebergX = RandomNumber.Between(minX, maxX);
+            int icebergY = 130;
+            myIceberg.AccessPosition = new Vector2(icebergX, icebergY);
+        }
+
         private void GenerateInitialClouds(ContentManager myContent)
         {
             float tempRandomSpeed = RandomNumber.Between(3, 8) / 10.0f;
@@ -263,7 +280,7 @@ namespace SubGame.Levels
             }
         }
 
-        private void GenerateRandomCloud(ContentManager myContent, GraphicsDeviceManager myGraphics, GameTime aGameTime)
+        private void GenerateContinuousClouds(ContentManager myContent, GraphicsDeviceManager myGraphics, GameTime aGameTime)
         {
             float tempRandomSpeed = RandomNumber.Between(3, 8) / 10.0f;
 

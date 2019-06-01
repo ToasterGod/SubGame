@@ -49,6 +49,12 @@ namespace SubGame.Elements
             AccessPosition = new Vector2(myLeftEdge, AccessPosition.Y - AccessSize.Height * 0.7f);
         }
 
+        public void Update(int aRightEdge, GameTime aGameTime)
+        {
+            myRightEdge = aRightEdge; // Initial the right edge to the Iceberg if we have one...
+            Update(aGameTime); // Call the one below
+        }
+
         public override void Update(GameTime aGameTime)
         {
             base.Update(aGameTime);
