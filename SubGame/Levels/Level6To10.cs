@@ -19,13 +19,15 @@ namespace SubGame.Levels
         { }
         #endregion
 
-        #region Interface implementation methods
+        #region Interface implementation properties
         public int AccessBoatHits => myBoatHits;
         public int AccessSubHits => mySubHits;
         public Rectangle AccessCollisionBox { get; internal set; }
         public int AccessBoatHitsAllowed => myConfig.Health;
         public int AccessSubHitsRequired => myConfig.RequiredSubHits;
+        #endregion
 
+        #region Interface implementation methods
         public void Initialize()
         {
             myClouds = new List<CloudElement>();
@@ -131,15 +133,13 @@ namespace SubGame.Levels
             {
                 mine.Update(aGameTime);
                 // If a mine is within the hitbox for the boat
-                // TODO! Restore functionality
-                //if (mine.MyHitBox.Intersects(myBoat.MyHitBox))
-                //{
-                //    mySoundEffects[0].Play();
-                //    myBoatHits++;
-                //    myBooms.Add(GenerateMyBoom(myContent, 1.0f, myBoat.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
-                //    myMines.Remove(mine); // Remove the mine
-                //}
-                myBoatHits = 0;
+                if (mine.MyHitBox.Intersects(myBoat.MyHitBox))
+                {
+                    mySoundEffects[0].Play();
+                    myBoatHits++;
+                    myBooms.Add(GenerateMyBoom(myContent, 1.0f, myBoat.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
+                    myMines.Remove(mine); // Remove the mine
+                }
                 // Remove mines that have timed out (3 seconds at surface)
                 if (mine.AccessSurfaced && mine.AccessSurfacedTime + 3 <= aGameTime.TotalGameTime.Seconds)
                 {
@@ -154,16 +154,14 @@ namespace SubGame.Levels
                 foreach (EnemyElement sub in mySubs)
                 {
                     // If sinkbomb is within the hitbox for a sub
-                    // TODO! Restore functionality
-                    //if (sinkBomb.MyHitBox.Intersects(sub.MyHitBox))
-                    //{
-                    //    mySoundEffects[0].Play();
-                    //    mySubHits++;
-                    //    myBooms.Add(GenerateMyBoom(myContent, 1.0f, sub.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
-                    //    sub.ResetSub(); // Remove the sub
-                    //    mySinkBombs.Remove(sinkBomb); // Remove the sinkbomb
-                    //}
-                    mySubHits = 0;
+                    if (sinkBomb.MyHitBox.Intersects(sub.MyHitBox))
+                    {
+                        mySoundEffects[0].Play();
+                        mySubHits++;
+                        myBooms.Add(GenerateMyBoom(myContent, 1.0f, sub.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
+                        sub.ResetSub(); // Remove the sub
+                        mySinkBombs.Remove(sinkBomb); // Remove the sinkbomb
+                    }
                 }
                 // Remove sinkbombs that are out of view
                 if (sinkBomb.AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
