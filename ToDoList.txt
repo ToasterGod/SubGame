@@ -26,24 +26,21 @@ Stuff done already:
 *DONE* rita större båt för level 6-10
 *DONE* Show banner when we have defeated all subs on a level
 *DONE* Show banner when level failed and restarting level
+*DONE* Bug in Level6To10, it reports game lost if player doesn't have sinkbombs to sink required subs, but helicopter will refill these!
+*DONE* Helicopter refill weapons
+*DONE* Helicopter adding Sinkbombs when sinkbombs are out
+*DONE* Helicopter resetting health
+*DONE* Empty Level when level 11 is reached, should contain End Game! YOU WON!
 
 Stuff todo before ready:
 ========================
 *STARTED* Save state
-Menu
-Level6To10 + Iceberg + Cannon on ship
-Animated players, propeller, (periscope tracking the ship)
+*STARTED* Level6To10 + Iceberg + Cannon on ship
+Animated propeller
+Animated periscope tracking the ship
+Helicopter adding crewmembers
 
-Add a system where when you pause a menu of the boat comes up where you can assign people to different parts of the boat which increases/decreases stats.
-The maximum amount increases with every new level and the helicopter gives people and sinkbombs instead of stats.
-the stats increased are sinkbomb speed, health/regen(?), and boat speed
-
-
-Strength related:
-=================
+Add a system where when you pause a menu of the boat comes up where you can assign crew to different parts of the boat.
+The crew amount enables increased sinkbomb speed, sinkbomb amount, and boat speed
 Other kind of weapons
 Improved ship, better weapons
-
-Difficulty:
-===========
-Other kind of weapons, torpedoes

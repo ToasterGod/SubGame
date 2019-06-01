@@ -12,15 +12,17 @@ namespace SubGame.Levels
 {
     public class Level6To10 : LevelBase, ILevel
     {
+        private HelicopterElement myHelicopter;
         #region Inheritance implementation
         public Level6To10(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelData aLevelConfig)
             : base(aGraphics, aContent, aLevelConfig)
-        {}
+        { }
         #endregion
 
         #region Interface implementation methods
         public int AccessBoatHits => myBoatHits;
         public int AccessSubHits => mySubHits;
+        public Rectangle AccessCollisionBox { get; internal set; }
         public int AccessBoatHitsAllowed => myConfig.Health;
         public int AccessSubHitsRequired => myConfig.RequiredSubHits;
 
@@ -29,7 +31,7 @@ namespace SubGame.Levels
             myClouds = new List<CloudElement>();
             GenerateInitialClouds(myContent);
             myOcean = new StaticElement(1.0f, new Vector2(0, mySurfaceLevel));
-            myBoat = new PlayerElement(0.7f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
+            myBoat = new PlayerElement(0.7f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel + 90), myGraphics, myConfig.Sinkbombs, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
             mySubs = new List<EnemyElement>();
             myCreatures = new List<SeaCreatureElement>();
@@ -37,6 +39,7 @@ namespace SubGame.Levels
             mySinkBombs = new List<SinkBombElement>();
             myBooms = new List<StaticElement>();
             mySoundEffects = new List<SoundEffect>();
+            myHelicopter = new HelicopterElement(1.0f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
 
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < myConfig.Subs; i++)
@@ -53,9 +56,8 @@ namespace SubGame.Levels
             }
 
             int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 180;
-            //int tempStaticTextTop = myGraphics.PreferredBackBufferHeight - 100;
             myStatusPanelLeft = new ScoreAndLevelBanner(new Vector2(20, tempStaticTextTop), new Vector2(300, 80), myGraphics);
-            myStatusPanelCenter = new ScoreAndLevelBanner(new Vector2(20, tempStaticTextTop), new Vector2(300, 80), myGraphics);
+            myStatusPanelCenter = new ScoreAndLevelBanner(new Vector2((myGraphics.PreferredBackBufferWidth / 2) - 160, tempStaticTextTop), new Vector2(300, 80), myGraphics);
             myStatusPanelRight = new ScoreAndLevelBanner(new Vector2(myGraphics.PreferredBackBufferWidth - 320, tempStaticTextTop), new Vector2(300, 80), myGraphics);
 
         }
@@ -75,6 +77,7 @@ namespace SubGame.Levels
             }
 
             myBoat.LoadContent(myContent, "Elements/BigAssBoat", "Elements/Sinkbomb");
+            myHelicopter.LoadContent(myContent, "Elements/Helicopter");
 
             mySoundEffects.Add(myContent.Load<SoundEffect>("Sounds/Bomb"));
 
@@ -97,50 +100,79 @@ namespace SubGame.Levels
                 sub.Update(aGameTime);
             }
 
+            // Always update all sea creatures
             foreach (SeaCreatureElement creature in myCreatures)
             {
                 creature.Update(aGameTime);
             }
 
+            // Always update boat
             myBoat.Update(aGameTime);
 
+            // Check if helicopter is not active and if so, check if we need to activate it because boat if without sinkbombs
+            if (myHelicopter.AccessActive == false && myBoat.AccessSinkBombsLeft == 0)
+            {
+                myHelicopter.SetActive();
+            }
+
+            if (myHelicopter.AccessActive)
+            {
+                if (myHelicopter.AccessHovering && myBoat.MyHitBox.Intersects(myHelicopter.MyHitBox) && myHelicopter.AccessLoadedWeapons == false)
+                {
+                    myBoat.Reload();
+                    myBoatHits = 0;
+                    myHelicopter.AccessLoadedWeapons = true;
+                }
+                myHelicopter.Update(aGameTime);
+            }
+
+            // Update all mines that are owned by the game (not released mines are owned by each sub)
             foreach (MineElement mine in myMines.ToList())
             {
                 mine.Update(aGameTime);
-                if (mine.MyHitBox.Intersects(myBoat.MyHitBox))
-                {
-                    mySoundEffects[0].Play();
-                    myBoatHits++;
-                    myBooms.Add(GenerateMyBoom(myContent, 1.0f, myBoat.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
-                    myMines.Remove(mine);
-                }
+                // If a mine is within the hitbox for the boat
+                // TODO! Restore functionality
+                //if (mine.MyHitBox.Intersects(myBoat.MyHitBox))
+                //{
+                //    mySoundEffects[0].Play();
+                //    myBoatHits++;
+                //    myBooms.Add(GenerateMyBoom(myContent, 1.0f, myBoat.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
+                //    myMines.Remove(mine); // Remove the mine
+                //}
+                myBoatHits = 0;
+                // Remove mines that have timed out (3 seconds at surface)
                 if (mine.AccessSurfaced && mine.AccessSurfacedTime + 3 <= aGameTime.TotalGameTime.Seconds)
                 {
                     myMines.Remove(mine);
                 }
             }
 
+            // Update all sinkbombs that are owned by the game (not released sinkbombs are owned by the boat)
             foreach (SinkBombElement sinkBomb in mySinkBombs.ToList())
             {
                 sinkBomb.Update(aGameTime);
                 foreach (EnemyElement sub in mySubs)
                 {
-                    if (sinkBomb.MyHitBox.Intersects(sub.MyHitBox))
-                    {
-                        mySoundEffects[0].Play();
-                        mySubHits++;
-                        myBooms.Add(GenerateMyBoom(myContent, 1.0f, sub.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
-                        sub.ResetSub();
-                        mySinkBombs.Remove(sinkBomb);
-                    }
+                    // If sinkbomb is within the hitbox for a sub
+                    // TODO! Restore functionality
+                    //if (sinkBomb.MyHitBox.Intersects(sub.MyHitBox))
+                    //{
+                    //    mySoundEffects[0].Play();
+                    //    mySubHits++;
+                    //    myBooms.Add(GenerateMyBoom(myContent, 1.0f, sub.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
+                    //    sub.ResetSub(); // Remove the sub
+                    //    mySinkBombs.Remove(sinkBomb); // Remove the sinkbomb
+                    //}
+                    mySubHits = 0;
                 }
-                //TODO! Add it as an available shootable sinkbomb to myBoat
+                // Remove sinkbombs that are out of view
                 if (sinkBomb.AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
                 {
                     mySinkBombs.Remove(sinkBomb);
                 }
             }
 
+            // Clean up visual booms that has timed out
             foreach (StaticElement boom in myBooms.ToList())
             {
                 if (aGameTime.TotalGameTime.Seconds > boom.AccessTimeToLive)
@@ -174,6 +206,7 @@ namespace SubGame.Levels
             }
 
             myBoat.Draw(mySpriteBatch);
+            myHelicopter.Draw(mySpriteBatch);
 
             foreach (MineElement mine in myMines)
             {

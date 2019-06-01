@@ -11,7 +11,8 @@ namespace SubGame.Elements
 {
     public class PlayerElement : ArmedElement
     {
-        private bool myReleasePressed;
+        private bool mySpacePressed;
+        private bool myEnterPressed;
         private int myLeftEdge;
         private int myRightEdge;
         private List<SinkBombElement> mySinkBombList;
@@ -19,7 +20,6 @@ namespace SubGame.Elements
         private ContentManager myContentManager;
         private readonly int mySinkBombCount;
 
-        public Rectangle AccessCollisionBox { get; internal set; }
         public SinkBombReleasedDelegate AccessSinkBombReleased { get; set; }
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
         public int AccessSinkBombsLeft => mySinkBombList.Count();
@@ -29,45 +29,15 @@ namespace SubGame.Elements
         {
             AccessIsEnemy = false;
             mySinkBombCount = someSinkBombs;
-            GenerateNewWeapons();
-        }
-
-        private void GenerateNewWeapons()
-        {
-            float tempSinkBombSpeed = 1.0f;
-            switch (myWeaponDifficulty)
-            {
-                case LevelDifficulty.Easy:
-                    tempSinkBombSpeed *= 0.75f;
-                    break;
-                case LevelDifficulty.Normal:
-                    tempSinkBombSpeed *= 1.0f;
-                    break;
-                case LevelDifficulty.Hard:
-                    tempSinkBombSpeed *= 1.5f;
-                    break;
-                default:
-                    break;
-            }
-            mySinkBombList = new List<SinkBombElement>();
-            for (int i = 0; i < mySinkBombCount; i++)
-            {
-                mySinkBombList.Add(new SinkBombElement(1.0f, AccessDirection, AccessRotation, tempSinkBombSpeed, AccessPosition, myManager));
-            }
         }
 
         public void LoadContent(ContentManager aContentManager, string anAsset, string aWeaponAsset)
         {
+            LoadContent(aContentManager, anAsset);
             myContentManager = aContentManager;
             myWeaponAsset = aWeaponAsset;
-            LoadContent(aContentManager, anAsset);
-            foreach (SinkBombElement sinkBomb in mySinkBombList)
-            {
-                sinkBomb.LoadContent(aContentManager, aWeaponAsset);
-                sinkBomb.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
-            }
             //Skapa och Ladda vapen
-            //textureSinkbomb = contentManager.Load<Texture2D>(weaponAsset);
+            Reload();
         }
 
         public override void LoadContent(ContentManager aContentManager, string anAsset)
@@ -99,9 +69,9 @@ namespace SubGame.Elements
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 //The else statement below will make this into a "one time trigger"
-                if (myReleasePressed == false)
+                if (mySpacePressed == false)
                 {
-                    myReleasePressed = true;
+                    mySpacePressed = true;
                     SinkBombElement sinkBomb = mySinkBombList.FirstOrDefault();
                     if (sinkBomb != null)
                     {
@@ -113,7 +83,21 @@ namespace SubGame.Elements
             else
             {
                 //Force to unpress space before it is allowed to drop next sink bomb, "one time trigger"
-                myReleasePressed = false;
+                mySpacePressed = false;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                //The else statement below will make this into a "one time trigger"
+                if (myEnterPressed == false)
+                {
+                    myEnterPressed = true;
+                }
+            }
+            else
+            {
+                //Force to unpress space before it is allowed to drop next sink bomb, "one time trigger"
+                myEnterPressed = false;
             }
 
             //Keep the boat within screens left and right edge
@@ -147,5 +131,38 @@ namespace SubGame.Elements
                 sinkBomb.Draw(aSpriteBatch);
             }
         }
+
+        internal void Reload()
+        {
+            mySinkBombList = new List<SinkBombElement>();
+            for (int i = 0; i < mySinkBombCount; i++)
+            {
+                var sinkBomb = new SinkBombElement(1.0f, 1.0f, AccessRotation, CalcWeaponSpeed(), AccessPosition, myManager);
+                mySinkBombList.Add(sinkBomb);
+                sinkBomb.LoadContent(myContentManager, myWeaponAsset);
+                sinkBomb.AccessPosition = new Vector2(AccessPosition.X + AccessSize.Width / 2, AccessPosition.Y + AccessSize.Height / 2);
+            }
+        }
+
+        private float CalcWeaponSpeed()
+        {
+            float tempSinkBombSpeed = 1.0f;
+            switch (myWeaponDifficulty)
+            {
+                case LevelDifficulty.Easy:
+                    tempSinkBombSpeed *= 0.75f;
+                    break;
+                case LevelDifficulty.Normal:
+                    tempSinkBombSpeed *= 1.0f;
+                    break;
+                case LevelDifficulty.Hard:
+                    tempSinkBombSpeed *= 1.5f;
+                    break;
+                default:
+                    break;
+            }
+            return tempSinkBombSpeed;
+        }
+
     }
 }

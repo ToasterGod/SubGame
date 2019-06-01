@@ -95,11 +95,15 @@ namespace SubGame
                 AccessBetweenLevels = true;
             }
 
-            if (sinkBombsPossibleHits < AccessCurrentLevelInstance.AccessSubHitsRequired)
+            // If level is > 5 then this shouldn't happen because the helicopter will refill
+            if (AccessCurrentLevel < 6)
             {
-                // Boat can't sink the subs required
-                lostLevel = true;
-                AccessBetweenLevels = true;
+                if (sinkBombsPossibleHits < AccessCurrentLevelInstance.AccessSubHitsRequired)
+                {
+                    // Boat can't sink the subs required
+                    lostLevel = true;
+                    AccessBetweenLevels = true;
+                }
             }
 
             if (AccessBetweenLevels)
@@ -146,11 +150,11 @@ namespace SubGame
                 int boatHealth = AccessCurrentLevelInstance.AccessBoatHitsAllowed - AccessCurrentLevelInstance.AccessBoatHits;
                 int subsToBeat = AccessCurrentLevelInstance.AccessSubHitsRequired - AccessCurrentLevelInstance.AccessSubHits;
                 int sinkBombsPossibleHits = AccessCurrentLevelInstance.AccessBoat.AccessSinkBombsLeft + AccessCurrentLevelInstance.AccessSubHits + AccessCurrentLevelInstance.AccessSinkingSinkBombsThatAreSinking;
-                if (boatHealth == 0 || sinkBombsPossibleHits < AccessCurrentLevelInstance.AccessSubHitsRequired)
+                if (boatHealth == 0 || (AccessCurrentLevel < 6 && sinkBombsPossibleHits < AccessCurrentLevelInstance.AccessSubHitsRequired))
                 {
                     pausedBanner.Draw(mySpriteBatch, $"Level lost!!! Press Esc to quit or C to continue...");
                 }
-                else if (subsToBeat==0)
+                else if (subsToBeat == 0)
                 {
                     pausedBanner.Draw(mySpriteBatch, $"Level won!!! Press Esc to quit or C to continue...");
                 }

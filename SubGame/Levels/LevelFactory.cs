@@ -34,9 +34,10 @@ namespace SubGame.Levels
                 case 10:
                     return new Level6To10(AccessGame.Graphics, AccessGame.Content, LevelConfigs.FirstOrDefault(l => l.Level == level));
                 default:
-                    break;
+                    // Any other level above 10 returns empty game...
+                    return new Level11To15(AccessGame.Graphics, AccessGame.Content, LevelConfigs.FirstOrDefault(l => l.Level == 10));
             }
-            return null;
+            //return null;
         }
     }
 }
