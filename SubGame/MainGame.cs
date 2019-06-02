@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using SubGame.Elements;
 using SubGame.Levels;
+using System;
+using System.IO;
 
 namespace SubGame
 {
@@ -14,6 +17,7 @@ namespace SubGame
         // All the additional
         private readonly LevelFactory myLevelFactory;
         private PausedBanner pausedBanner;
+        [JsonIgnore]
         public GraphicsDeviceManager Graphics => myGraphics;
 
         public bool AccessPaused { get; set; }
@@ -182,27 +186,6 @@ namespace SubGame
             AccessCurrentLevelInstance = myLevelFactory.GetLevelInstance(AccessCurrentLevel);
             AccessCurrentLevelInstance.Initialize();
             AccessCurrentLevelInstance.LoadContent();
-        }
-
-        internal void LoadState(string savePath)
-        {
-            //string json = "";
-            //if (File.Exists("CurrentState.json"))
-            //{
-            //    json = File.ReadAllText("CurrentState.json");
-            //}
-            //var currentState = JsonConvert.DeserializeObject(json);
-        }
-
-        internal void SaveState(string savePath)
-        {
-            //var currentState = new
-            //{
-            //    Level = AccessCurrentLevel,
-            //    Instance = AccessCurrentLevelInstance
-            //};
-            //string json = JsonConvert.SerializeObject(currentState);
-            //File.WriteAllText("CurrentState.json", json);
         }
     }
 }

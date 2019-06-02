@@ -15,6 +15,8 @@ namespace SubGame.Levels
     {
         private HelicopterElement myHelicopter;
         private StaticElement myIceberg;
+        private List<Bullet> myBullets;
+
         #region Inheritance implementation
         public Level6To10(GraphicsDeviceManager aGraphics, ContentManager aContent, LevelData aLevelConfig)
             : base(aGraphics, aContent, aLevelConfig)
@@ -35,8 +37,9 @@ namespace SubGame.Levels
             myClouds = new List<CloudElement>();
             GenerateInitialClouds(myContent);
             myOcean = new StaticElement(1.0f, new Vector2(0, mySurfaceLevel));
-            myBoat = new PlayerElement(0.7f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel + 90), myGraphics, myConfig.Sinkbombs, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
+            myBoat = new PlayerElement(0.7f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel + 90), myGraphics, myConfig.Sinkbombs, myConfig.Level, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
+            myBoat.BulletFired += BulletFired;
             mySubs = new List<EnemyElement>();
             myCreatures = new List<SeaCreatureElement>();
             myMines = new List<MineElement>();
@@ -44,6 +47,7 @@ namespace SubGame.Levels
             myBooms = new List<StaticElement>();
             mySoundEffects = new List<SoundEffect>();
             myHelicopter = new HelicopterElement(1.0f, 0.0f, 0.0f, 1.0f, new Vector2(0, 0), myGraphics);
+            myBullets = new List<Bullet>();
 
             //Level1 = three subs at the time, each having one mine
             for (int i = 0; i < myConfig.Subs; i++)
@@ -82,7 +86,7 @@ namespace SubGame.Levels
                 creature.LoadContent(myContent, new string[] { "Elements/TraumatizedWhale", "Elements/MaliciousShark" });
             }
 
-            myBoat.LoadContent(myContent, "Elements/BigAssBoat", "Elements/Sinkbomb");
+            myBoat.LoadContent(myContent, "Elements/BigAssBoat", "Elements/Sinkbomb", "Elements/Bullet");
             myHelicopter.LoadContent(myContent, "Elements/Helicopter");
 
             mySoundEffects.Add(myContent.Load<SoundEffect>("Sounds/Bomb"));
@@ -113,7 +117,14 @@ namespace SubGame.Levels
             }
 
             // Always update boat
-            myBoat.Update(Convert.ToInt32(myIceberg.AccessPosition.X - 60 - myBoat.AccessSize.Width * myBoat.AccessScale), aGameTime);
+            if (myIceberg == null)
+            {
+                myBoat.Update(Convert.ToInt32(myGraphics.PreferredBackBufferWidth - 60 - myBoat.AccessSize.Width * myBoat.AccessScale), aGameTime);
+            }
+            else
+            {
+                myBoat.Update(Convert.ToInt32(myIceberg.AccessPosition.X - 60 - myBoat.AccessSize.Width * myBoat.AccessScale), aGameTime);
+            }
 
             // Check if helicopter is not active and if so, check if we need to activate it because boat if without sinkbombs
             if (myHelicopter.AccessActive == false && myBoat.AccessSinkBombsLeft == 0)
@@ -125,7 +136,7 @@ namespace SubGame.Levels
             {
                 if (myHelicopter.AccessHovering && myBoat.MyHitBox.Intersects(myHelicopter.MyHitBox) && myHelicopter.AccessLoadedWeapons == false)
                 {
-                    myBoat.Reload();
+                    myBoat.ReloadMines();
                     myBoatHits = 0;
                     myHelicopter.AccessLoadedWeapons = true;
                 }
@@ -171,6 +182,22 @@ namespace SubGame.Levels
                 if (sinkBomb.AccessPosition.Y > myGraphics.PreferredBackBufferHeight)
                 {
                     mySinkBombs.Remove(sinkBomb);
+                }
+            }
+
+            foreach (Bullet bullet in myBullets.ToList())
+            {
+                bullet.Update(aGameTime);
+                if (myIceberg != null && bullet.MyHitBox.Intersects(myIceberg.MyHitBox))
+                {
+                    mySoundEffects[0].Play();
+                    myBooms.Add(GenerateMyBoom(myContent, 1.0f, myIceberg.AccessPosition, aGameTime.TotalGameTime.Seconds + 2));
+                    myBullets.Remove(bullet);
+                    myIceberg = null;
+                }
+                if (bullet.MyHitBox.X > myGraphics.PreferredBackBufferWidth)
+                {
+                    myBullets.Remove(bullet);
                 }
             }
 
@@ -220,12 +247,17 @@ namespace SubGame.Levels
                 sinkBomb.Draw(mySpriteBatch);
             }
 
+            myIceberg?.Draw(mySpriteBatch);
+
+            foreach (Bullet bullet in myBullets)
+            {
+                bullet.Draw(mySpriteBatch);
+            }
+
             foreach (StaticElement boom in myBooms)
             {
                 boom.Draw(mySpriteBatch);
             }
-
-            myIceberg.Draw(mySpriteBatch);
 
             myOcean.Draw(mySpriteBatch);
 
@@ -241,6 +273,11 @@ namespace SubGame.Levels
 
         private void MineReleased(MineElement aMine)
             => myMines.Add(aMine);
+
+        private void BulletFired(Bullet aBullet)
+            => myBullets.Add(aBullet);
+
+
 
         public StaticElement GenerateMyBoom(ContentManager myContent, float aScale, Vector2 aPosition, int aTimeToLive)
         {

@@ -18,19 +18,22 @@ namespace SubGame.Levels
         { }
         #endregion
 
-        #region Interface implementation methods
+        #region Interface implementation properties
         public int AccessBoatHits => myBoatHits;
         public int AccessSubHits => mySubHits;
         public int AccessBoatHitsAllowed => myConfig.Health;
         public int AccessSubHitsRequired => myConfig.RequiredSubHits;
+        #endregion
 
+        #region Interface implementation methods
         public void Initialize()
         {
             myClouds = new List<CloudElement>();
             GenerateInitialClouds(myContent);
             myOcean = new StaticElement(1.0f, new Vector2(0, mySurfaceLevel));
-            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
+            myBoat = new PlayerElement(1.0f, 0.01f, 0.0f, 1.5f, new Vector2(0, mySurfaceLevel), myGraphics, myConfig.Sinkbombs, myConfig.Level, myConfig.MovementDifficulty, myConfig.WeaponDifficulty);
             myBoat.AccessSinkBombReleased += SinkBombReleased;
+            //myBoat.BulletFired += BulletFired; //Not used in these levels
             mySubs = new List<EnemyElement>();
             myCreatures = new List<SeaCreatureElement>();
             myMines = new List<MineElement>();
@@ -72,7 +75,7 @@ namespace SubGame.Levels
                 creature.LoadContent(myContent, new string[] { "Elements/TraumatizedWhale", "Elements/MaliciousShark" });
             }
 
-            myBoat.LoadContent(myContent, "Elements/Boat", "Elements/Sinkbomb");
+            myBoat.LoadContent(myContent, "Elements/Boat", "Elements/Sinkbomb", ""); //Empty string is for bullet which is not used in these levels
 
             mySoundEffects.Add(myContent.Load<SoundEffect>("Sounds/Bomb"));
 

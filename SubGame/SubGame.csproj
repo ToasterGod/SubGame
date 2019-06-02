@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Elements\ArmedElement.cs" />
+    <Compile Include="Elements\Bullet.cs" />
     <Compile Include="Elements\Delegates.cs" />
     <Compile Include="Elements\Element.cs" />
     <Compile Include="Elements\HelicopterElement.cs" />
@@ -83,6 +84,7 @@
     <Content Include="Content\Elements\BigAssBoat.png" />
     <Content Include="Content\Elements\Boom.png" />
     <Content Include="Content\Backgrounds\SolidOcean.png" />
+    <Content Include="Content\Elements\Bullet.png" />
     <Content Include="Content\Elements\Crewmate.png" />
     <Content Include="Content\Elements\Helicopter.png" />
     <Content Include="Content\Elements\Iceberg.png" />

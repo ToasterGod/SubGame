@@ -1,5 +1,6 @@
 ﻿using ConfigModel;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -8,7 +9,8 @@ namespace SubGameEditor.ViewModels
 {
     public class LevelViewModel : INotifyPropertyChanged
     {
-        private readonly string myPath = @"Levels.json";
+        private readonly string fileName = @"Levels.json";
+        private readonly string savePath = AppDomain.CurrentDomain.BaseDirectory;
 
         //Beware of changing this name since it's a binding property in LevelView.xaml
         public List<LevelData> Levels { get; set; }
@@ -23,11 +25,14 @@ namespace SubGameEditor.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public LevelViewModel() => Levels = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(myPath));
+        public LevelViewModel()
+        {
+            Levels = JsonConvert.DeserializeObject<List<LevelData>>(File.ReadAllText(Path.Combine(savePath, fileName)));
+        }
 
         ~LevelViewModel()
         {
-            File.WriteAllText(myPath, JsonConvert.SerializeObject(Levels));
+            File.WriteAllText(Path.Combine(savePath, fileName), JsonConvert.SerializeObject(Levels));
         }
 
         public void SomethingIsChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

@@ -30,18 +30,17 @@ Stuff done already:
 *DONE* Helicopter refill weapons
 *DONE* Helicopter adding Sinkbombs when sinkbombs are out
 *DONE* Helicopter resetting health
-*DONE* Empty Level when level 11 is reached, should contain End Game! YOU WON!
+*DONE* Empty Level when level 11 is reached
 *DONE* Level6To10 Iceberg
+*DONE* Level6To10 Cannon on ship, shoots iceberg
 
 Stuff todo before ready:
 ========================
 *STARTED* Save state
-*STARTED* Level6To10 + Cannon on ship
 Animated propeller
 Animated periscope tracking the ship
-Helicopter adding crewmembers
+Level 11, should contain End Game! YOU WON!
 
 Add a system where when you pause a menu of the boat comes up where you can assign crew to different parts of the boat.
 The crew amount enables increased sinkbomb speed, sinkbomb amount, and boat speed
-Other kind of weapons
-Improved ship, better weapons
+Helicopter adding crewmembers

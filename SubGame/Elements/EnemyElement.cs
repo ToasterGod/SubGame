@@ -153,10 +153,10 @@ namespace SubGame.Elements
 
             //Mines belonging to the sub doesn't have to be drawn, so skip the foreach loop once we are done
             //Drawing mines that are dropped (no longer belongs to the sub) will be handled in the Level1 class
-            foreach (MineElement mine in myMineList)
-            {
-                mine.Draw(aSpriteBatch);
-            }
+            //foreach (MineElement mine in myMineList)
+            //{
+            //    mine.Draw(aSpriteBatch);
+            //}
         }
 
         public void BoatIsFoundAt(Rectangle aLocation, GameTime gameTime)

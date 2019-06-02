@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,38 +17,52 @@ namespace SubGame.Elements
         private int myRightEdge;
         private List<SinkBombElement> mySinkBombList;
         private string myWeaponAsset;
+        private string myBulletAsset;
+        private Texture2D myBulletTexture;
         private ContentManager myContentManager;
         private readonly int mySinkBombCount;
+        private readonly int myLevel;
 
         public SinkBombReleasedDelegate AccessSinkBombReleased { get; set; }
+        public BulletFiredDelegate BulletFired { get; set; }
         public WhereIsTheBoatDelegate AccessWhereIsTheBoat { get; set; }
         public int AccessSinkBombsLeft => mySinkBombList.Count();
 
-        public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someSinkBombs, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty)
+        public PlayerElement(float aScale, float aDirection, float aRotation, float aSpeed, Vector2 aPosition, GraphicsDeviceManager aManager, int someSinkBombs, int aLevel, LevelDifficulty aMovementDifficulty, LevelDifficulty aWeaponDifficulty)
             : base(aScale, aDirection, aRotation, aSpeed, aPosition, aManager, aMovementDifficulty, aWeaponDifficulty)
         {
             AccessIsEnemy = false;
             mySinkBombCount = someSinkBombs;
+            myLevel = aLevel;
         }
 
-        public void LoadContent(ContentManager aContentManager, string anAsset, string aWeaponAsset)
+        public void LoadContent(ContentManager aContentManager, string anAsset, string aWeaponAsset, string aBulletAsset)
         {
-            LoadContent(aContentManager, anAsset);
             myContentManager = aContentManager;
             myWeaponAsset = aWeaponAsset;
-            //Skapa och Ladda vapen
-            Reload();
+            myBulletAsset = aBulletAsset;
+
+            LoadContent(myContentManager, anAsset);
+            if (!string.IsNullOrWhiteSpace(aBulletAsset))
+            {
+                myBulletTexture = aContentManager.Load<Texture2D>(myBulletAsset);
+            }
+
+            //Skapa och ladda vapen
+            ReloadMines();
         }
 
         public override void LoadContent(ContentManager aContentManager, string anAsset)
         {
             base.LoadContent(aContentManager, anAsset);
+
             //Level boat at sealevel and set left and right endpoints
             myLeftEdge = 60;
             myRightEdge = myManager.PreferredBackBufferWidth - 60 - AccessSize.Width;
             AccessPosition = new Vector2(myLeftEdge, AccessPosition.Y - AccessSize.Height * 0.7f);
         }
 
+        //Wrapper around Update so we can handle setting of right edge if we have icebergs in this level
         public void Update(int aRightEdge, GameTime aGameTime)
         {
             myRightEdge = aRightEdge; // Initial the right edge to the Iceberg if we have one...
@@ -91,17 +106,26 @@ namespace SubGame.Elements
                 mySpacePressed = false;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            if (myLevel > 5 && AccessDirection > 0.0f && Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
                 //The else statement below will make this into a "one time trigger"
                 if (myEnterPressed == false)
                 {
                     myEnterPressed = true;
+                    //TODO! Add proper values
+                    Vector2 bulletOrigin = new Vector2(AccessPosition.X + (AccessSize.Width * AccessScale), AccessPosition.Y);
+                    float bulletSpeed = 120.0f;
+                    float bulletAngle = 50.2f;
+                    Bullet bullet = new Bullet(myBulletTexture, bulletOrigin, bulletSpeed, bulletAngle);
+                    if (bullet != null)
+                    {
+                        BulletFired?.Invoke(bullet);
+                    }
                 }
             }
             else
             {
-                //Force to unpress space before it is allowed to drop next sink bomb, "one time trigger"
+                //Force to unpress enter before it is allowed to shoot next bullet, "one time trigger"
                 myEnterPressed = false;
             }
 
@@ -131,13 +155,13 @@ namespace SubGame.Elements
 
             //Sinkbombs belonging to the boat doesn't have to be drawn, so skip the foreach loop once we are done
             //Drawing sinkbombs that are dropped (no longer belongs to the boat) will be handled in the Level1 class
-            foreach (SinkBombElement sinkBomb in mySinkBombList)
-            {
-                sinkBomb.Draw(aSpriteBatch);
-            }
+            //foreach (SinkBombElement sinkBomb in mySinkBombList)
+            //{
+            //    sinkBomb.Draw(aSpriteBatch);
+            //}
         }
 
-        internal void Reload()
+        internal void ReloadMines()
         {
             mySinkBombList = new List<SinkBombElement>();
             for (int i = 0; i < mySinkBombCount; i++)
